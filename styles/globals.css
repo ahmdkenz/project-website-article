@@ -1,0 +1,479 @@
+@import "./flashcard.css";
+@import "./footer.css";
+@import "./header.css";
+@import "./homepage-articles.css";
+@import "./homepage.css";
+@import "./responsive.css";
+@import "./search-bar.css";
+@import "./style.css";
+
+/* ====== VARIABEL TOMBOL (GLOBAL) ====== */
+:root {
+  /* default: pakai warna primer */
+  --btn-bg: var(--primary-color);
+  --btn-text: var(--primary-text-color);
+}
+
+/* ====== FLASHCARD FLIP ====== */
+
+/* Flashcard dark mode fix */
+html.dark .flashcard-back {
+  color: #ffffff !important;
+}
+
+.flashcard {
+  background-color: transparent;
+  height: 200px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+.flashcard-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+.flashcard-front, .flashcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+}
+.flashcard-front {
+  background-color: var(--surface-color);
+}
+.flashcard-back {
+  background-color: var(--primary-color);
+  color: var(--primary-text-color);
+  transform: rotateY(180deg);
+}
+
+/* ====== MODE — override variabel per mode ====== */
+html.mode-friendly:root {
+  --primary-color: #7624d4;              /* Biru  */
+  --ring-color: rgba(22, 163, 74, 0.35);
+}
+html.mode-moderate:root {
+  --primary-color: #0284c7;              /* Biru moderat */
+  --ring-color: rgba(2, 132, 199, 0.35);
+}
+
+/* ====== THEME DARK — override variabel saat gelap ====== */
+html.dark:root {
+  --bg-color: #0b1220;
+  --surface-color: #0f172a;
+  --text-color: #e5e7eb;
+  --muted-color: #94a3b8;
+  --border-color: #1f2937;
+  --primary-text-color: #0b1220;         /* teks di atas primary di dark mode */
+  --shadow: 0 8px 20px rgba(0,0,0,0.45);
+  /* tombol ikut primary secara default */
+  --btn-bg: var(--primary-color);
+  --btn-text: var(--primary-text-color);
+}
+/* === Tombol agar teks tetap putih di dark mode === */
+html.dark .btn-primary {
+  color: #ffffff !important;
+}
+
+/* ====== ELEMEN UMUM ====== */
+body {
+  background: var(--bg-color);
+  color: var(--text-color);
+  transition: background .25s ease, color .25s ease;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: .2rem .5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--surface-color);
+  margin-right: .5rem;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 12px;
+  padding: .2rem .5rem;
+  border-radius: 6px;
+  border: 1px dashed var(--border-color);
+  margin-right: .35rem;
+  color: var(--muted-color);
+}
+
+/* ====== BUTTONS ====== */
+.btn {
+  border: 1px solid var(--border-color);
+  background: var(--surface-color);
+  padding: .6rem .9rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease, border-color .2s ease, transform .15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:focus-visible {
+  outline: 2px solid transparent; /* reset */
+  box-shadow: 0 0 0 4px var(--ring-color);
+}
+
+.btn:disabled,
+.btn[disabled] {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+/* Tombol primer mengikuti mode & theme melalui variabel */
+.btn-primary {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border-color: transparent;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.05);
+}
+
+.btn-ghost {
+  background: transparent;
+}
+
+/* ====== PENYESUAIAN KHUSUS (opsional) ======
+   Jika ingin warna tombol berbeda antara friendly/moderate
+   tanpa mengubah warna primer global, aktifkan block ini:
+
+html.mode-friendly:root {
+  --btn-bg: #16a34a;
+  --btn-text: #ffffff;
+}
+html.mode-moderate:root {
+  --btn-bg: #0284c7;
+  --btn-text: #ffffff;
+}
+*/
+/* === BTN MODERN (uses your existing CSS variables) === */
+
+/* Variabel khusus tombol */
+:root {
+  --btn-radius: 12px;
+  --btn-shadow: 0 6px 14px rgba(0,0,0,.08);
+  --btn-shadow-hover: 0 10px 22px rgba(0,0,0,.12);
+  --btn-border: rgba(0,0,0,.06);
+  --btn-border-dark: rgba(255,255,255,.08);
+}
+
+/* Container util (opsional) untuk baris tombol */
+.btn-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .9rem;
+}
+
+.btn,
+.btn-primary,
+.btn-ghost,
+.btn-outline {
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  border: 1px solid var(--btn-border);
+  background: var(--surface-color);
+  color: var(--text-color);
+  padding: .85rem 1.05rem;
+  border-radius: var(--btn-radius);
+  font-weight: 700;
+  letter-spacing: .2px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--btn-shadow);
+  transition:
+    transform .15s ease,
+    box-shadow .2s ease,
+    background .2s ease,
+    border-color .2s ease,
+    color .2s ease,
+    filter .2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  text-decoration: none;
+  user-select: none;
+}
+
+.btn:hover,
+.btn-primary:hover,
+.btn-ghost:hover,
+.btn-outline:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--btn-shadow-hover);
+  filter: brightness(1.03);
+}
+
+.btn:active,
+.btn-primary:active,
+.btn-ghost:active,
+.btn-outline:active {
+  transform: translateY(0);
+  filter: none;
+}
+
+.btn:focus-visible,
+.btn-primary:focus-visible,
+.btn-ghost:focus-visible,
+.btn-outline:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 4px var(--ring-color), var(--btn-shadow-hover);
+}
+
+/* Ukuran util */
+.btn-lg { padding: 1rem 1.2rem; font-size: 1.05rem; }
+.btn-sm { padding: .6rem .8rem; font-size: .92rem; border-radius: 10px; }
+
+/* Variants */
+.btn-primary {
+  /* pakai variabel tombol yang sudah kamu set: --btn-bg & --btn-text */
+  background: linear-gradient(180deg, color-mix(in oklab, var(--btn-bg) 88%, #fff 12%), var(--btn-bg));
+  color: var(--btn-text);
+  border-color: transparent;
+}
+
+html.dark .btn,
+html.dark .btn-ghost,
+html.dark .btn-outline {
+  border-color: var(--btn-border-dark);
+  box-shadow: none;
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-color);
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+/* State */
+.btn:disabled,
+.btn[disabled] {
+  opacity: .6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Icon wrapper (optional—pakai span.icon saja) */
+.btn .icon {
+  display: inline-flex;
+  width: 1.2em;
+  height: 1.2em;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsif: tombol full width di mobile sempit */
+@media (max-width: 480px) {
+  .btn, .btn-primary, .btn-ghost, .btn-outline { width: 100%; }
+}
+
+/* High contrast hover di dark */
+html.dark .btn-primary:hover {
+  filter: brightness(1.06);
+}
+
+/* Friendly/Moderate override (opsional—aktifkan jika mau warna primer unik per mode)
+html.mode-friendly:root { --btn-bg: #16a34a; --btn-text: #ffffff; }
+html.mode-moderate:root { --btn-bg: #0284c7; --btn-text: #ffffff; }
+*/
+/* ====== ARTICLE BODY (gaya ala PDF) ====== */
+.article-body {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+  margin-top: 1rem;
+  color: var(--text-color);
+  /* batasi lebar agar nyaman dibaca, tetapi fleksibel */
+  max-width: 100%;
+  display: block !important;
+}
+
+/* Headings */
+.article-body h1,
+.article-body h2,
+.article-body h3,
+.article-body h4 {
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 1rem 0 .6rem 0;
+}
+
+.article-body h1 { font-size: clamp(1.6rem, 2.6vw, 2.2rem); }
+.article-body h2 { font-size: clamp(1.4rem, 2.2vw, 1.8rem); }
+.article-body h3 { font-size: clamp(1.2rem, 1.8vw, 1.4rem); }
+.article-body h4 { font-size: clamp(1.05rem, 1.6vw, 1.2rem); }
+
+/* Paragraphs */
+.article-body p {
+  margin: .6rem 0;
+  line-height: 1.75;
+}
+
+/* Lists */
+.article-body ul,
+.article-body ol {
+  margin: .6rem 0 .9rem 0;
+  padding-left: 1.25rem;
+}
+.article-body ul { list-style: disc; }
+.article-body ol { list-style: decimal; }
+.article-body li { margin: .25rem 0; }
+
+/* Blockquote (kutipan) */
+.article-body blockquote {
+  margin: .9rem 0;
+  padding: .6rem .9rem;
+  border-left: 4px solid var(--primary-color);
+  background: color-mix(in oklab, var(--surface-color), var(--primary-color) 7%);
+  border-radius: 8px;
+}
+
+/* Kode inline & pre */
+.article-body code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .95em;
+  background: color-mix(in oklab, var(--surface-color), #888 10%);
+  padding: .1rem .35rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+.article-body pre {
+  overflow: auto;
+  padding: .9rem;
+  border-radius: 10px;
+  background: #0b1220;
+  color: #e5e7eb;
+  border: 1px solid var(--border-color);
+}
+
+/* Tabel */
+.article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: .9rem 0;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+.article-body th,
+.article-body td {
+  padding: .6rem .75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+.article-body thead th {
+  background: color-mix(in oklab, var(--surface-color), var(--text-color) 8%);
+  text-align: left;
+  font-weight: 700;
+}
+.article-body tbody tr:nth-child(odd) {
+  background: color-mix(in oklab, var(--surface-color), #888 6%);
+}
+
+/* Gambar */
+.article-body img,
+.article-body video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+  margin: .75rem auto;
+  border: 1px solid var(--border-color);
+}
+
+/* Link */
+.article-body a {
+  text-decoration: none;
+  border-bottom: 1px dashed color-mix(in oklab, var(--primary-color), var(--text-color) 30%);
+  color: color-mix(in oklab, var(--primary-color), var(--text-color) 10%);
+}
+.article-body a:hover {
+  border-bottom-style: solid;
+}
+
+/* Separator */
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 1rem 0;
+}
+
+/* Dark mode penyesuaian halus */
+html.dark .article-body blockquote {
+  background: color-mix(in oklab, var(--surface-color), var(--primary-color) 9%);
+}
+html.dark .article-body thead th {
+  background: color-mix(in oklab, var(--surface-color), #fff 6%);
+}
+/* Progress bar baca artikel */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: var(--primary-color);
+  z-index: 9999;
+  transition: width 0.15s ease-out;
+}
+
+/* Fokus input/textarea komentar */
+#commentName:focus,
+#commentText:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ring-color);
+  border-color: transparent;
+}
+
+/* Aksesibilitas: sembunyikan visual label tapi tetap untuk screen reader */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  clip: rect(0 0 0 0) !important;
+  overflow: hidden !important;
+}
+/* Ring fokus halus untuk tombol kecil */
+.btn-sm:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ring-color);
+  border-color: transparent;
+}

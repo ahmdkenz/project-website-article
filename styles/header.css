@@ -1,0 +1,124 @@
+/* css/header.css */
+
+/* === HEADER / NAVBAR MODERN === */
+
+/* Wadah utama header */
+.navbar {
+  /* Efek 'kaca' dengan latar belakang semi-transparan dan blur */
+  background-color: rgba(255, 255, 255, 0.7); /* Latar belakang untuk light mode */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Dukungan untuk browser Safari */
+  
+  /* Posisi tetap di atas saat di-scroll */
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Memastikan header selalu di paling depan */
+  
+  /* Garis bawah tipis sebagai pemisah */
+  border-bottom: 1px solid var(--border-color);
+  
+  /* Transisi halus saat berganti tema */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Penyesuaian untuk Dark Mode */
+html.dark .navbar {
+  background-color: rgba(15, 23, 42, 0.7); /* Latar belakang lebih gelap untuk dark mode */
+}
+
+/* Konten di dalam header (logo, navigasi, tombol) */
+.navbar .container {
+  display: flex;
+  justify-content: space-between; /* Mendorong item ke ujung (logo kiri, nav kanan) */
+  align-items: center;
+  padding: 1rem 0; /* Memberi sedikit ruang vertikal */
+  height: 60px; /* Tinggi header yang konsisten */
+  box-sizing: border-box;
+}
+
+/* Logo */
+.navbar .logo {
+  font-size: 1.25rem; /* Ukuran font lebih besar untuk penekanan */
+  font-weight: 700;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.navbar .logo:hover {
+  color: var(--primary-color); /* Warna berubah saat disentuh mouse */
+}
+
+/* Menu Navigasi */
+.navbar nav {
+  display: flex; /* Membuat link navigasi sejajar */
+  gap: 1.5rem; /* Jarak antar link navigasi */
+}
+
+.navbar nav a {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-color);
+  text-decoration: none;
+  position: relative; /* Diperlukan untuk garis bawah animasi */
+  padding: 0.25rem 0;
+  transition: color 0.2s ease;
+}
+
+/* Efek hover pada link navigasi */
+.navbar nav a:hover {
+  color: var(--primary-color); /* Warna teks berubah */
+}
+
+/* Garis bawah animasi saat hover */
+.navbar nav a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-color);
+  bottom: 0;
+  left: 0;
+  transform: scaleX(0); /* Garis awalnya tidak terlihat */
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+}
+.navbar nav a:hover::after {
+  transform: scaleX(1); /* Garis memanjang dari kiri ke kanan */
+  transform-origin: bottom left;
+}
+
+
+/* Tombol Dark Mode */
+#darkModeToggle {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem; /* Ukuran ikon bulan/matahari */
+  padding: 0.25rem;
+  line-height: 1; /* Menghilangkan spasi ekstra */
+  margin-left: 1rem; /* Jarak dari menu navigasi */
+  border-radius: 8px;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+#darkModeToggle:hover {
+  transform: scale(1.1) rotate(15deg); /* Sedikit membesar dan berputar saat disentuh */
+}
+#darkModeToggle:focus-visible {
+  outline: 3px solid var(--ring-color); /* Aksen fokus untuk aksesibilitas */
+  outline-offset: 2px;
+}
+
+
+/* === DESAIN RESPONSIVE UNTUK MOBILE === */
+@media (max-width: 768px) {
+  /* Sembunyikan navigasi desktop di layar kecil */
+  .navbar nav {
+    display: none;
+  }
+  
+  /* Atur agar logo dan tombol tetap terlihat */
+  .navbar .container {
+    padding: 0.75rem 0;
+  }
+}

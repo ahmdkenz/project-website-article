@@ -1,0 +1,59 @@
+/* === HOMEPAGE ARTICLES: 2 KOLOM SEJAJAR === */
+.homepage-articles-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.homepage-articles {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.homepage-articles h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  border-left: 4px solid var(--primary-color);
+  padding-left: 0.6rem;
+}
+
+.homepage-articles .articles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.homepage-articles .articles-list article {
+  padding: 1rem 1.2rem;
+  border-left: 3px solid var(--primary-color);
+  border-radius: 8px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.homepage-articles .articles-list article:hover {
+  background-color: rgba(37, 99, 235, 0.05);
+  transform: translateX(4px);
+}
+
+.homepage-articles .articles-list h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.homepage-articles .articles-list p {
+  margin: 0 0 0.3rem;
+  font-size: 0.9rem;
+  color: var(--muted-color);
+}
+
+.homepage-articles .articles-list small {
+  font-size: 0.8rem;
+  color: var(--muted-color);
+}

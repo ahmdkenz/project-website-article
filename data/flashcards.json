@@ -1,0 +1,122 @@
+[
+  {
+    "term": "Anggaran",
+    "definitionFriendly": "Rencana sederhana untuk mengatur uang bulanan agar tidak lebih banyak keluar daripada masuk.",
+    "definitionModerate": "Rencana keuangan terstruktur yang membagi pendapatan ke pos kebutuhan, keinginan, tabungan, dan investasi.",
+    "category": "Keuangan Pribadi"
+  },
+  {
+    "term": "Tabungan Darurat",
+    "definitionFriendly": "Uang simpanan untuk keadaan mendesak, misalnya sakit atau kehilangan pekerjaan.",
+    "definitionModerate": "Dana likuid minimal 3-6 bulan pengeluaran untuk mengantisipasi keadaan darurat finansial.",
+    "category": "Keuangan Pribadi"
+  },
+  {
+    "term": "Cash Flow",
+    "definitionFriendly": "Arus keluar dan masuknya uang dalam hidup kita.",
+    "definitionModerate": "Catatan pergerakan uang masuk (income) dan keluar (expenses) untuk menilai kesehatan finansial.",
+    "category": "Keuangan Pribadi"
+  },
+  {
+    "term": "Financial Goal",
+    "definitionFriendly": "Target keuangan yang ingin dicapai, seperti beli rumah atau liburan.",
+    "definitionModerate": "Sasaran finansial jangka pendek, menengah, dan panjang yang terukur serta terencana.",
+    "category": "Keuangan Pribadi"
+  },
+  {
+    "term": "Investasi",
+    "definitionFriendly": "Menaruh uang di tempat yang bisa bertumbuh, seperti emas atau reksa dana.",
+    "definitionModerate": "Penempatan aset pada instrumen keuangan untuk memperoleh imbal hasil jangka panjang.",
+    "category": "Investasi"
+  },
+  {
+    "term": "Diversifikasi",
+    "definitionFriendly": "Menyebar investasi ke banyak tempat supaya lebih aman.",
+    "definitionModerate": "Strategi alokasi aset dengan membagi investasi pada instrumen berbeda untuk meminimalisir risiko.",
+    "category": "Investasi"
+  },
+  {
+    "term": "Reksa Dana",
+    "definitionFriendly": "Investasi patungan yang dikelola oleh manajer, cocok untuk pemula.",
+    "definitionModerate": "Wadah investasi kolektif yang dikelola manajer investasi, berisi portofolio saham, obligasi, atau pasar uang.",
+    "category": "Investasi"
+  },
+  {
+    "term": "Saham",
+    "definitionFriendly": "Bukti punya sebagian kecil perusahaan.",
+    "definitionModerate": "Instrumen ekuitas yang merepresentasikan kepemilikan atas sebagian modal perusahaan.",
+    "category": "Investasi"
+  },
+  {
+    "term": "Obligasi",
+    "definitionFriendly": "Pinjaman yang kita berikan ke pemerintah atau perusahaan, lalu dapat bunga.",
+    "definitionModerate": "Surat utang jangka menengah/panjang yang diterbitkan oleh entitas untuk membiayai kebutuhan modal.",
+    "category": "Investasi"
+  },
+  {
+    "term": "Risiko Investasi",
+    "definitionFriendly": "Kemungkinan rugi dari sebuah investasi.",
+    "definitionModerate": "Ketidakpastian hasil investasi yang dapat menyebabkan perbedaan antara return aktual dan return yang diharapkan.",
+    "category": "Investasi"
+  },
+  {
+    "term": "Inflasi",
+    "definitionFriendly": "Naiknya harga barang dan jasa dari waktu ke waktu.",
+    "definitionModerate": "Kenaikan harga umum secara terus-menerus yang mengurangi daya beli uang.",
+    "category": "Ekonomi"
+  },
+  {
+    "term": "Deflasi",
+    "definitionFriendly": "Turunnya harga barang secara umum.",
+    "definitionModerate": "Penurunan harga barang/jasa dalam periode tertentu yang dapat memperlambat pertumbuhan ekonomi.",
+    "category": "Ekonomi"
+  },
+  {
+    "term": "Produk Domestik Bruto (PDB)",
+    "definitionFriendly": "Jumlah semua barang dan jasa yang diproduksi suatu negara.",
+    "definitionModerate": "Nilai total output barang dan jasa akhir yang dihasilkan dalam suatu negara pada periode tertentu.",
+    "category": "Ekonomi"
+  },
+  {
+    "term": "Utang Produktif",
+    "definitionFriendly": "Pinjaman yang dipakai untuk hal bermanfaat, misalnya modal usaha.",
+    "definitionModerate": "Kredit yang digunakan untuk aset atau kegiatan yang berpotensi menghasilkan pendapatan.",
+    "category": "Utang"
+  },
+  {
+    "term": "Utang Konsumtif",
+    "definitionFriendly": "Pinjaman yang hanya habis untuk gaya hidup atau belanja.",
+    "definitionModerate": "Pinjaman untuk kebutuhan konsumsi yang tidak menambah nilai aset jangka panjang.",
+    "category": "Utang"
+  },
+  {
+    "term": "Cicilan",
+    "definitionFriendly": "Bayar utang secara bertahap tiap bulan.",
+    "definitionModerate": "Kewajiban pembayaran utang secara berkala dalam jumlah tertentu hingga lunas.",
+    "category": "Utang"
+  },
+  {
+    "term": "Bunga Majemuk",
+    "definitionFriendly": "Bunga yang terus bertambah karena dihitung dari pokok dan bunga sebelumnya.",
+    "definitionModerate": "Bunga yang dihitung dari pokok pinjaman/investasi awal ditambah bunga yang sudah diperoleh sebelumnya.",
+    "category": "Keuangan"
+  },
+  {
+    "term": "Likuiditas",
+    "definitionFriendly": "Seberapa mudah uang atau aset bisa dipakai.",
+    "definitionModerate": "Tingkat kemudahan suatu aset untuk dikonversi menjadi uang tunai tanpa kehilangan nilai signifikan.",
+    "category": "Keuangan"
+  },
+  {
+    "term": "Aset",
+    "definitionFriendly": "Segala sesuatu yang kita punya dan bernilai, seperti uang atau rumah.",
+    "definitionModerate": "Sumber daya ekonomi yang dimiliki individu/perusahaan dan memiliki potensi memberikan manfaat ekonomi di masa depan.",
+    "category": "Keuangan"
+  },
+  {
+    "term": "Laporan Keuangan",
+    "definitionFriendly": "Catatan tentang keluar-masuk uang perusahaan.",
+    "definitionModerate": "Dokumen formal yang menggambarkan posisi keuangan, kinerja, dan arus kas suatu entitas dalam periode tertentu.",
+    "category": "Akuntansi"
+  }
+]

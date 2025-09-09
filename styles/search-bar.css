@@ -1,0 +1,140 @@
+/* css/search-bar.css */
+
+/* === MODERN SEARCH BAR STYLE === */
+
+/* Wadah utama untuk search bar */
+.search-area {
+  max-width: 700px;
+  margin: 2rem auto;
+}
+
+/* Pembungkus input, digunakan untuk memposisikan ikon */
+.search-wrapper {
+  position: relative;
+}
+
+/* Input field utama */
+#articleSearchInput {
+  width: 100%;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif; /* Pastikan font konsisten */
+  
+  /* Padding diatur agar ada ruang untuk ikon di kiri */
+  padding: 0.9rem 1rem 0.9rem 3rem; 
+  
+  color: var(--text-color);
+  background-color: var(--surface-color);
+  
+  border: 1px solid var(--border-color);
+  border-radius: 12px; /* Radius lebih besar untuk tampilan modern */
+  
+  /* Menghilangkan outline default browser */
+  outline: none;
+  
+  box-sizing: border-box; /* Mencegah padding mengubah lebar total */
+  box-shadow: var(--shadow);
+  
+  /* Transisi halus untuk semua perubahan */
+  transition: all 0.3s ease;
+}
+
+/* Ikon Pencarian (dibuat dengan pseudo-element) */
+.search-wrapper::before {
+  content: '🔍'; /* Emoji sebagai ikon simpel */
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  opacity: 0.5; /* Dibuat sedikit transparan */
+  transition: opacity 0.3s ease;
+}
+
+/* --- EFEK INTERAKTIF --- */
+
+/* Saat wrapper atau input di dalamnya mendapat fokus */
+.search-wrapper:focus-within {
+  box-shadow: 0 0 0 4px var(--ring-color); /* Efek 'ring' modern */
+  border-radius: 12px; /* Pastikan radius sama dengan input */
+}
+
+.search-wrapper:focus-within::before {
+  opacity: 1; /* Ikon menjadi lebih jelas saat fokus */
+}
+
+/* Saat input field mendapat fokus secara langsung */
+#articleSearchInput:focus {
+  border-color: var(--primary-color); /* Warna border berubah menjadi warna primer */
+  background-color: var(--bg-color); /* Latar sedikit berubah untuk menandakan fokus */
+}
+
+/* Placeholder text style */
+#articleSearchInput::placeholder {
+  color: var(--muted-color);
+  opacity: 1; /* Override default browser opacity */
+}
+
+/* css/search-bar.css */
+
+/* === MODERN SEARCH BAR STYLE === */
+
+.search-area {
+  max-width: 700px;
+  margin: 2rem auto;
+}
+
+.search-wrapper {
+  position: relative;
+}
+
+/* Style ini akan berlaku untuk SEMUA input di dalam .search-wrapper */
+.search-wrapper input[type="text"] {
+  width: 100%;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  
+  padding: 0.9rem 1rem 0.9rem 3rem; 
+  
+  color: var(--text-color);
+  background-color: var(--surface-color);
+  
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  
+  outline: none;
+  
+  box-sizing: border-box;
+  box-shadow: var(--shadow);
+  
+  transition: all 0.3s ease;
+}
+
+.search-wrapper::before {
+  content: '🔍';
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.search-wrapper:focus-within {
+  box-shadow: 0 0 0 4px var(--ring-color);
+  border-radius: 12px;
+}
+
+.search-wrapper:focus-within::before {
+  opacity: 1;
+}
+
+.search-wrapper input[type="text"]:focus {
+  border-color: var(--primary-color);
+  background-color: var(--bg-color);
+}
+
+.search-wrapper input[type="text"]::placeholder {
+  color: var(--muted-color);
+  opacity: 1;
+}

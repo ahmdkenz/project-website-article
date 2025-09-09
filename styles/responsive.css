@@ -1,0 +1,70 @@
+/* responsive.css */
+/* === RESPONSIVE DESIGN === */
+
+/* Mobile First (default sudah untuk layar kecil) */
+
+/* Tablet */
+@media (min-width: 600px) {
+  .hero {
+    padding: 60px 0;
+  }
+
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 48px);
+  }
+
+  .options-grid,
+  .articles-grid,
+  .flashcards-grid,
+  .card-grid { /* Ditambahkan .card-grid di sini */
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+
+  .search-area {
+    padding: 24px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 992px) {
+  header nav {
+    display: flex;
+    gap: 24px;
+  }
+
+  .content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 24px;
+  }
+
+  .article-detail {
+    font-size: 1.15rem;
+    line-height: 1.8;
+  }
+
+  .hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .flashcards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+/* Extra Large Desktop */
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero h1 {
+    font-size: 56px;
+  }
+
+  .articles-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

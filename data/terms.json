@@ -1,0 +1,85 @@
+{
+  "Dasar Keuangan": [
+    {
+      "term": "Aktiva (Aset)",
+      "definitionFriendly": "Segala sesuatu yang kita miliki yang punya nilai, seperti uang, rumah, atau mobil.",
+      "definitionModerate": "Aktiva adalah sumber daya ekonomi yang dimiliki oleh individu atau entitas, yang diharapkan memberi manfaat ekonomi di masa depan, termasuk kas, piutang, persediaan, properti, dan investasi."
+    },
+    {
+      "term": "Hutang (Liabilitas)",
+      "definitionFriendly": "Pinjaman atau kewajiban yang harus kita bayar di masa depan, misalnya cicilan atau kartu kredit.",
+      "definitionModerate": "Liabilitas adalah kewajiban keuangan perusahaan atau individu yang timbul akibat transaksi masa lalu, yang penyelesaiannya akan mengakibatkan pengeluaran sumber daya ekonomi."
+    },
+    {
+      "term": "Dana Darurat",
+      "definitionFriendly": "Tabungan khusus untuk keadaan mendesak, misalnya sakit atau kehilangan pekerjaan.",
+      "definitionModerate": "Dana darurat adalah cadangan kas yang disisihkan untuk membiayai kebutuhan mendesak di luar rencana, guna menjaga stabilitas keuangan."
+    },
+    {
+      "term": "Inflasi",
+      "definitionFriendly": "Kenaikan harga barang-barang sehingga uang jadi berkurang nilainya.",
+      "definitionModerate": "Inflasi adalah kenaikan harga barang dan jasa secara umum dan terus-menerus dalam periode tertentu yang mengakibatkan penurunan daya beli."
+    }
+  ],
+  "Investasi": [
+    {
+      "term": "Investasi",
+      "definitionFriendly": "Cara menumbuhkan uang dengan menaruhnya di saham, emas, atau properti.",
+      "definitionModerate": "Investasi adalah penempatan dana pada instrumen atau aset tertentu dengan harapan memperoleh imbal hasil di masa depan, disertai dengan risiko kerugian."
+    },
+    {
+      "term": "Diversifikasi",
+      "definitionFriendly": "Membagi uang ke beberapa tempat supaya lebih aman, misalnya saham + emas.",
+      "definitionModerate": "Diversifikasi adalah strategi manajemen risiko dengan menyebarkan alokasi dana ke berbagai instrumen atau sektor untuk meminimalisir potensi kerugian."
+    },
+    {
+      "term": "Saham",
+      "definitionFriendly": "Bukti kalau kita punya bagian dari sebuah perusahaan.",
+      "definitionModerate": "Saham adalah instrumen ekuitas yang menunjukkan kepemilikan atas suatu perusahaan, memberi hak atas dividen dan potensi capital gain."
+    },
+    {
+      "term": "Obligasi",
+      "definitionFriendly": "Surat utang yang bisa kita beli, nanti dibayar kembali dengan bunga.",
+      "definitionModerate": "Obligasi adalah surat berharga berupa pernyataan utang dari penerbit (pemerintah atau perusahaan) kepada investor, dengan kewajiban pembayaran bunga (kupon) dan pokok pada saat jatuh tempo."
+    }
+  ],
+  "Perbankan": [
+    {
+      "term": "Kredit",
+      "definitionFriendly": "Uang pinjaman dari bank yang harus dibayar kembali dengan bunga.",
+      "definitionModerate": "Kredit adalah penyediaan dana oleh bank kepada nasabah berdasarkan perjanjian pinjam-meminjam, yang mewajibkan pelunasan pokok dan bunga dalam jangka waktu tertentu."
+    },
+    {
+      "term": "Tabungan",
+      "definitionFriendly": "Uang yang kita simpan di bank untuk digunakan nanti.",
+      "definitionModerate": "Tabungan adalah simpanan di bank yang penyetorannya tidak dibatasi, dapat ditarik sewaktu-waktu, biasanya dengan imbal hasil bunga rendah."
+    },
+    {
+      "term": "Suku Bunga",
+      "definitionFriendly": "Biaya atau imbalan karena meminjamkan atau meminjam uang.",
+      "definitionModerate": "Suku bunga adalah persentase tertentu dari pokok pinjaman atau simpanan yang dibayarkan sebagai imbal hasil kepada kreditur atau deposan."
+    }
+  ],
+  "Laporan Keuangan": [
+    {
+      "term": "Neraca Keuangan",
+      "definitionFriendly": "Laporan yang menunjukkan apa yang kita punya dan apa yang kita hutang.",
+      "definitionModerate": "Neraca keuangan adalah laporan yang menggambarkan posisi aset, kewajiban, dan ekuitas suatu entitas pada periode tertentu."
+    },
+    {
+      "term": "Beban",
+      "definitionFriendly": "Biaya yang keluar, misalnya bayar listrik atau gaji karyawan.",
+      "definitionModerate": "Beban adalah pengorbanan sumber daya ekonomi yang digunakan untuk menghasilkan pendapatan dalam suatu periode akuntansi."
+    },
+    {
+      "term": "Break Even Point (BEP)",
+      "definitionFriendly": "Titik di mana usaha tidak untung tapi juga tidak rugi.",
+      "definitionModerate": "Break Even Point adalah titik di mana total pendapatan sama dengan total biaya, sehingga perusahaan berada pada kondisi tidak untung maupun rugi."
+    },
+    {
+      "term": "Return",
+      "definitionFriendly": "Hasil dari investasi, bisa untung atau rugi.",
+      "definitionModerate": "Return adalah tingkat keuntungan atau kerugian yang diperoleh dari suatu investasi dalam periode tertentu."
+    }
+  ]
+}
