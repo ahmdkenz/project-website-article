@@ -7,6 +7,7 @@ import ReadingProgress from "@/components/ReadingProgress";
 import BookmarkButton from "@/components/BookmarkButton";
 import Comments from "@/components/Comments"; 
 import QuickReactions from "@/components/QuickReactions";
+import ShareButtons from "@/components/ShareButton";
 
 
 export const revalidate = 60;
@@ -86,6 +87,10 @@ export default async function ArticleDetailPage({ params }) {
       >
         <ArticleContentClient article={article} />
       </main>
+{/* ✅ Tombol share */}
+      <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+        <ShareButtons title={article.title} slug={article.slug} />
+      </div>
 
 {/* ✅ Reaksi cepat */}
 <div style={{ maxWidth: "800px", margin: "0 auto" }}>
