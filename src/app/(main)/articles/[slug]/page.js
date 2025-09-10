@@ -7,6 +7,7 @@ import BookmarkButton from "@/components/BookmarkButton";
 import ShareButtons from "@/components/ShareButtons";
 import QuickReactions from "@/components/QuickReactions";
 import Comments from "@/components/Comments";
+import ViewTracker from "@/components/ViewTracker";
 
 /* ✅ import CSS Module khusus halaman ini */
 import styles from "@/styles/articles-detail-modules.css";
@@ -25,29 +26,6 @@ function scoreRelated(base, cand) {
       ? 1
       : 0;
   return shared * 2 + sameCategory;
-}
-
-// 🔹 Komponen client kecil untuk increment view
-"use client";
-import { useEffect } from "react";
-import { db } from "@/lib/firebase";
-import { doc, updateDoc, increment, setDoc, getDoc } from "firebase/firestore";
-
-function ViewTracker({ slug }) {
-  useEffect(() => {
-    const incrementView = async () => {
-      const ref = doc(db, "articles", slug);
-      const snap = await getDoc(ref);
-      if (!snap.exists()) {
-        await setDoc(ref, { views: 1 });
-      } else {
-        await updateDoc(ref, { views: increment(1) });
-      }
-    };
-    incrementView();
-  }, [slug]);
-
-  return null;
 }
 
 export default async function ArticleDetailPage({ params }) {
