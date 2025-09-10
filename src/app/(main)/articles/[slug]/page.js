@@ -1,4 +1,3 @@
-// app/(main)/articles/[slug]/page.js
 import { notFound } from "next/navigation";
 import { getAllArticles } from "@/lib/data";
 import ArticleContentClient from "@/components/ArticleContentClient";
@@ -28,6 +27,29 @@ function scoreRelated(base, cand) {
   return shared * 2 + sameCategory;
 }
 
+// 🔹 Komponen client kecil untuk increment view
+"use client";
+import { useEffect } from "react";
+import { db } from "@/lib/firebase";
+import { doc, updateDoc, increment, setDoc, getDoc } from "firebase/firestore";
+
+function ViewTracker({ slug }) {
+  useEffect(() => {
+    const incrementView = async () => {
+      const ref = doc(db, "articles", slug);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) {
+        await setDoc(ref, { views: 1 });
+      } else {
+        await updateDoc(ref, { views: increment(1) });
+      }
+    };
+    incrementView();
+  }, [slug]);
+
+  return null;
+}
+
 export default async function ArticleDetailPage({ params }) {
   const { slug } = params;
   const all = await getAllArticles();
@@ -53,9 +75,11 @@ export default async function ArticleDetailPage({ params }) {
       {/* Progress bar */}
       <ReadingProgress />
 
+      {/* Tracker untuk increment view */}
+      <ViewTracker slug={article.slug} />
+
       {/* Wrapper halaman (scoped) */}
       <div className={styles.page}>
-        {/* Header: judul + bookmark (pakai CSS Module) */}
         <section className={styles.header}>
           <div className={styles.headerInner}>
             <div style={{ flex: "1 1 auto", minWidth: 0 }}>
@@ -68,28 +92,23 @@ export default async function ArticleDetailPage({ params }) {
           </div>
         </section>
 
-        {/* Konten artikel (tidak pakai .container supaya tidak ketularan grid) */}
         <main className={styles.main} aria-label="Konten artikel">
           <ArticleContentClient article={article} />
         </main>
 
-        {/* Share */}
         <div className={styles.section}>
           <ShareButtons title={article.title} slug={article.slug} />
         </div>
 
-        {/* Reaksi cepat */}
         <div className={styles.section}>
           <QuickReactions slug={article.slug} />
         </div>
 
-        {/* Komentar */}
         <div className={styles.section}>
           <Comments slug={article.slug} />
         </div>
       </div>
 
-      {/* Related Articles di bawah (biarkan styling komponennya) */}
       <RelatedArticles items={related} />
     </>
   );

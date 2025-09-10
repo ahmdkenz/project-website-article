@@ -1,83 +1,62 @@
-// components/Comments.js
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-
-const STORAGE_PREFIX = "comments:";
-const NAME_KEY = "comments:profile_name";
-
-function loadComments(slug) {
-  try {
-    const raw = localStorage.getItem(STORAGE_PREFIX + slug);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-function saveComments(slug, items) {
-  try {
-    localStorage.setItem(STORAGE_PREFIX + slug, JSON.stringify(items));
-  } catch {}
-}
-function loadName() {
-  try {
-    return localStorage.getItem(NAME_KEY) || "";
-  } catch {
-    return "";
-  }
-}
-function saveName(name) {
-  try {
-    localStorage.setItem(NAME_KEY, name || "");
-  } catch {}
-}
+import { useEffect, useState } from "react";
+import { db, serverTimestamp } from "@/lib/firebase";
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 
 export default function Comments({ slug }) {
   const [items, setItems] = useState([]);
-  const [name, setName] = useState(loadName());
+  const [name, setName] = useState("");
   const [text, setText] = useState("");
 
-  // bootstrap dari localStorage saat mount
+  // 🔹 Listener realtime dari Firestore
   useEffect(() => {
-    setItems(loadComments(slug));
+    const q = query(
+      collection(db, "comments"),
+      where("articleId", "==", slug),
+      orderBy("createdAt", "desc")
+    );
+    const unsub = onSnapshot(q, (snapshot) => {
+      setItems(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
+    });
+    return () => unsub();
   }, [slug]);
 
-  const count = items.length;
-  const sorted = useMemo(
-    () => [...items].sort((a, b) => b.ts - a.ts),
-    [items]
-  );
-
-  const addComment = (e) => {
+  const addComment = async (e) => {
     e.preventDefault();
     const trimmed = (text || "").trim();
     if (!trimmed) return;
 
-    const entry = {
-      id: (globalThis.crypto?.randomUUID?.() || Date.now().toString()) + Math.random().toString(16).slice(2),
-      name: (name || "").trim() || "Anonim",
+    await addDoc(collection(db, "comments"), {
+      articleId: slug,
+      name: name || "Anonim",
       text: trimmed,
-      ts: Date.now(),
-    };
+      createdAt: serverTimestamp(),
+    });
 
-    const next = [entry, ...items];
-    setItems(next);
-    saveComments(slug, next);
-    saveName(name);
     setText("");
   };
 
-  const removeComment = (id) => {
-    const next = items.filter((c) => c.id !== id);
-    setItems(next);
-    saveComments(slug, next);
+  const removeComment = async (id) => {
+    await deleteDoc(doc(db, "comments", id));
   };
 
   const fmt = (ts) =>
-    new Intl.DateTimeFormat("id-ID", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    }).format(new Date(ts));
+    ts?.toDate?.()
+      ? new Intl.DateTimeFormat("id-ID", {
+          dateStyle: "medium",
+          timeStyle: "short",
+        }).format(ts.toDate())
+      : "";
 
   return (
     <section
@@ -99,14 +78,21 @@ export default function Comments({ slug }) {
       >
         <h3 style={{ margin: 0 }}>Komentar</h3>
         <span className="muted" style={{ fontSize: ".9rem" }}>
-          {count} komentar
+          {items.length} komentar
         </span>
       </div>
 
       {/* Form komentar */}
-      <form onSubmit={addComment} style={{ display: "grid", gap: ".6rem", marginBottom: "1rem" }}>
+      <form
+        onSubmit={addComment}
+        style={{ display: "grid", gap: ".6rem", marginBottom: "1rem" }}
+      >
         <div style={{ display: "grid", gap: ".35rem" }}>
-          <label htmlFor="commentName" className="muted" style={{ fontSize: ".9rem" }}>
+          <label
+            htmlFor="commentName"
+            className="muted"
+            style={{ fontSize: ".9rem" }}
+          >
             Nama (opsional)
           </label>
           <input
@@ -128,7 +114,9 @@ export default function Comments({ slug }) {
         </div>
 
         <div style={{ display: "grid", gap: ".35rem" }}>
-          <label htmlFor="commentText" className="visually-hidden">Komentar</label>
+          <label htmlFor="commentText" className="visually-hidden">
+            Komentar
+          </label>
           <textarea
             id="commentText"
             value={text}
@@ -158,10 +146,10 @@ export default function Comments({ slug }) {
 
       {/* Daftar komentar */}
       <div style={{ display: "grid", gap: ".75rem" }}>
-        {sorted.length === 0 ? (
+        {items.length === 0 ? (
           <p className="muted">Belum ada komentar. Jadilah yang pertama!</p>
         ) : (
-          sorted.map((c) => (
+          items.map((c) => (
             <article
               key={c.id}
               className="article-card"
@@ -182,17 +170,25 @@ export default function Comments({ slug }) {
               >
                 <div>
                   <strong>{c.name || "Anonim"}</strong>
-                  <div className="muted" style={{ fontSize: ".85rem" }}>{fmt(c.ts)}</div>
+                  <div className="muted" style={{ fontSize: ".85rem" }}>
+                    {fmt(c.createdAt)}
+                  </div>
                 </div>
                 <button
                   className="btn btn-sm"
                   onClick={() => removeComment(c.id)}
-                  title="Hapus komentar ini (lokal)"
+                  title="Hapus komentar ini"
                 >
                   Hapus
                 </button>
               </div>
-              <p style={{ marginTop: ".6rem", whiteSpace: "pre-wrap", lineHeight: 1.7 }}>
+              <p
+                style={{
+                  marginTop: ".6rem",
+                  whiteSpace: "pre-wrap",
+                  lineHeight: 1.7,
+                }}
+              >
                 {c.text}
               </p>
             </article>
