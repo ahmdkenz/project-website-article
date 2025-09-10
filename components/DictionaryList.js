@@ -42,7 +42,7 @@ export default function DictionaryList({ allTerms = [] }) {
       {/* Hasil Pencarian */}
       <div id="searchResult" className="search-result">
         {q && results.length === 0 ? (
-          <p className="muted">Tidak ada hasil untuk "{q}"</p>
+          <p className="muted">Tidak ada hasil untuk &quot;{q}&quot;</p>
         ) : !q ? (
           <p className="muted">Hasil pencarian akan muncul di sini.</p>
         ) : (
