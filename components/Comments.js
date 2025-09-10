@@ -8,7 +8,6 @@ import {
   onSnapshot,
   query,
   where,
-  orderBy,
   deleteDoc,
   doc,
 } from "firebase/firestore";
@@ -20,14 +19,23 @@ export default function Comments({ slug }) {
 
   // 🔹 Listener realtime dari Firestore
   useEffect(() => {
-    const q = query(
-      collection(db, "comments"),
-      where("articleId", "==", slug),
-      orderBy("createdAt", "desc")
-    );
+    const q = query(collection(db, "comments"), where("articleId", "==", slug));
+
     const unsub = onSnapshot(q, (snapshot) => {
-      setItems(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
+      const data = snapshot.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+      }));
+
+      // 🔹 Sort manual berdasarkan createdAt (biar tetap muncul meskipun null)
+      const sorted = data.sort(
+        (a, b) =>
+          (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0)
+      );
+
+      setItems(sorted);
     });
+
     return () => unsub();
   }, [slug]);
 
