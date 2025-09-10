@@ -1,7 +1,8 @@
 // app/(main)/articles/page.js
-import { getAllArticles } from '@/lib/data';
-import ArticleList from '@/components/ArticleList';
-import Link from 'next/link';
+import { Suspense } from "react";
+import { getAllArticles } from "@/lib/data";
+import ArticleList from "@/components/ArticleList";
+import Link from "next/link";
 
 export default async function ArticlesPage() {
   const articles = await getAllArticles();
@@ -22,7 +23,10 @@ export default async function ArticlesPage() {
         </p>
       </section>
 
-      <ArticleList allArticles={articles} />
+      {/* ✅ Bungkus ArticleList dengan Suspense */}
+      <Suspense fallback={<p>Loading articles...</p>}>
+        <ArticleList allArticles={articles} />
+      </Suspense>
 
       {/* Tags Section sebelum footer */}
       {allTags.length > 0 && (
