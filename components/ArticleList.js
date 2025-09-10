@@ -1,9 +1,9 @@
-// components/ArticleList.js
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
+import RealtimeViewCounter from "@/components/RealtimeViewCounter";
 
 /** Util kecil */
 const norm = (s) => (s || "").toString().toLowerCase().trim();
@@ -22,16 +22,13 @@ export default function ArticleList({ allArticles }) {
   const [tags, setTags] = useState(urlTags);
 
   // --- derive kategori & tag unik dari data ---
-  const { categories, allTags } = useMemo(() => {
+  const { categories } = useMemo(() => {
     const catSet = new Set();
-    const tagSet = new Set();
     (allArticles || []).forEach(a => {
       if (a?.category) catSet.add(a.category);
-      if (Array.isArray(a?.tags)) a.tags.forEach(t => t && tagSet.add(t));
     });
     return {
       categories: Array.from(catSet).sort((a, b) => a.localeCompare(b)),
-      allTags: Array.from(tagSet).sort((a, b) => a.localeCompare(b)),
     };
   }, [allArticles]);
 
@@ -55,14 +52,9 @@ export default function ArticleList({ allArticles }) {
     const tagSet = new Set(tags.map(norm));
 
     return (allArticles || []).filter((a) => {
-      // by search
       const hay = `${a?.title ?? ""} ${a?.excerpt ?? ""}`.toLowerCase();
       const matchQ = nQ ? hay.includes(nQ) : true;
-
-      // by category
       const matchCat = nCat ? norm(a?.category) === nCat : true;
-
-      // by tags (semua tag terpilih harus ada pada artikel)
       const aTags = Array.isArray(a?.tags) ? a.tags.map(norm) : [];
       const matchTags = tagSet.size
         ? Array.from(tagSet).every((t) => aTags.includes(t))
@@ -71,13 +63,6 @@ export default function ArticleList({ allArticles }) {
       return matchQ && matchCat && matchTags;
     });
   }, [allArticles, q, category, tags]);
-
-  // --- helper toggle tag ---
-  const toggleTag = (t) => {
-    setTags((prev) =>
-      prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]
-    );
-  };
 
   const clearFilters = () => {
     setQ("");
@@ -102,16 +87,7 @@ export default function ArticleList({ allArticles }) {
       </section>
 
       {/* Filter Bar */}
-      <section
-        className="filters"
-        style={{
-          display: "grid",
-          gap: ".75rem",
-          gridTemplateColumns: "1fr",
-          margin: "0 0 1rem 0",
-        }}
-      >
-        {/* Kategori */}
+      <section className="filters" style={{ marginBottom: "1rem" }}>
         <div style={{ display: "flex", gap: ".5rem", alignItems: "center", flexWrap: "wrap" }}>
           <label htmlFor="categorySelect" className="muted" style={{ minWidth: 76 }}>
             Kategori
@@ -129,62 +105,61 @@ export default function ArticleList({ allArticles }) {
             ))}
           </select>
 
-          <button className="btn-ghost" onClick={clearFilters} title="Reset filter">
+          <button className="btn-ghost" onClick={clearFilters}>
             Reset
           </button>
         </div>
       </section>
 
-{/* Hasil */}
-<section className="card-grid" style={{ marginTop: "1rem" }}>
-  {filteredArticles.length > 0 ? (
-    filteredArticles.map((article) => (
-      <article key={article.slug} className="article-card">
-        <div className="article-content">
-          <h3>{article.title}</h3>
-          {article.excerpt && <p className="muted">{article.excerpt}</p>}
+      {/* Hasil */}
+      <section className="card-grid" style={{ marginTop: "1rem" }}>
+        {filteredArticles.length > 0 ? (
+          filteredArticles.map((article) => (
+            <article key={article.slug} className="article-card">
+              <div className="article-content">
+                <h3>{article.title}</h3>
+                {article.excerpt && <p className="muted">{article.excerpt}</p>}
 
-          {/* Kategori (badge kecil) */}
-          {article.category ? (
-            <div style={{ marginTop: ".25rem" }}>
-              <span className="badge">{article.category}</span>
-            </div>
-          ) : null}
+                {/* Kategori + Views */}
+                <div style={{ marginTop: ".25rem", display: "flex", gap: ".75rem", flexWrap: "wrap" }}>
+                  {article.category && <span className="badge">{article.category}</span>}
+                  <RealtimeViewCounter slug={article.slug} />
+                </div>
 
-          {/* Aksi */}
-          <div className="card-actions" style={{ marginTop: ".75rem" }}>
-            <Link href={`/articles/${article.slug}`} className="btn btn-ghost">
-              Baca Selengkapnya
-            </Link>
-          </div>
+                {/* Aksi */}
+                <div className="card-actions" style={{ marginTop: ".75rem" }}>
+                  <Link href={`/articles/${article.slug}`} className="btn btn-ghost">
+                    Baca Selengkapnya
+                  </Link>
+                </div>
 
-          {/* ✅ Tambahkan kembali tags di bawah tombol */}
-          {Array.isArray(article.tags) && article.tags.length > 0 && (
-            <div
-              className="tags-row"
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: ".35rem",
-                marginTop: ".75rem",
-                paddingTop: ".5rem",
-                borderTop: "1px solid var(--border-color)",
-              }}
-            >
-              {article.tags.map((t) => (
-                <span key={t} className="tag">#{t}</span>
-              ))}
-            </div>
-          )}
-        </div>
-      </article>
-    ))
-  ) : (
-    <p style={{ gridColumn: "1 / -1", textAlign: "center" }}>
-      Tidak ada artikel yang cocok dengan filter saat ini.
-    </p>
-  )}
-</section>
+                {/* Tags */}
+                {Array.isArray(article.tags) && article.tags.length > 0 && (
+                  <div
+                    className="tags-row"
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: ".35rem",
+                      marginTop: ".75rem",
+                      paddingTop: ".5rem",
+                      borderTop: "1px solid var(--border-color)",
+                    }}
+                  >
+                    {article.tags.map((t) => (
+                      <span key={t} className="tag">#{t}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </article>
+          ))
+        ) : (
+          <p style={{ gridColumn: "1 / -1", textAlign: "center" }}>
+            Tidak ada artikel yang cocok dengan filter saat ini.
+          </p>
+        )}
+      </section>
     </>
   );
 }

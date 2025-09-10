@@ -1,15 +1,23 @@
 // app/(main)/articles/page.js
 import { Suspense } from "react";
 import { getAllArticles } from "@/lib/data";
+import { getAllViews } from "@/lib/views";
 import ArticleList from "@/components/ArticleList";
 import Link from "next/link";
 
 export default async function ArticlesPage() {
   const articles = await getAllArticles();
+  const viewsMap = await getAllViews();
+
+  // gabungkan views ke setiap artikel
+  const enrichedArticles = articles.map((a) => ({
+    ...a,
+    views: viewsMap[a.slug] || 0,
+  }));
 
   // kumpulkan semua tags unik
   const tagSet = new Set();
-  articles.forEach((a) => {
+  enrichedArticles.forEach((a) => {
     if (Array.isArray(a.tags)) a.tags.forEach((t) => tagSet.add(t));
   });
   const allTags = Array.from(tagSet).sort((a, b) => a.localeCompare(b));
@@ -25,7 +33,7 @@ export default async function ArticlesPage() {
 
       {/* ✅ Bungkus ArticleList dengan Suspense */}
       <Suspense fallback={<p>Loading articles...</p>}>
-        <ArticleList allArticles={articles} />
+        <ArticleList allArticles={enrichedArticles} />
       </Suspense>
 
       {/* Tags Section sebelum footer */}
