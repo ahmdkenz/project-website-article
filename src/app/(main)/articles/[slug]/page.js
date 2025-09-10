@@ -9,8 +9,9 @@ import QuickReactions from "@/components/QuickReactions";
 import Comments from "@/components/Comments";
 import ViewTracker from "@/components/ViewTracker";
 
-/* ✅ import CSS Module khusus halaman ini */
-import styles from "@/styles/articles-detail-modules.css";
+/* ✅ Ganti file ke CSS Module: ubah nama file fisiknya jadi:
+   /styles/articles-detail.module.css */
+import styles from "@/styles/articles-detail-modules.css"; // ✅
 
 export const revalidate = 60;
 
@@ -28,8 +29,15 @@ function scoreRelated(base, cand) {
   return shared * 2 + sameCategory;
 }
 
+/* ✅ (Opsional tapi direkomendasikan) prerenderr semua slug agar stabil */
+export async function generateStaticParams() {
+  const all = await getAllArticles();
+  return all.map((a) => ({ slug: a.slug }));
+}
+
 export default async function ArticleDetailPage({ params }) {
-  const { slug } = params;
+  const { slug } = await params; // ✅ wajib await
+
   const all = await getAllArticles();
   const article = all.find((a) => a.slug === slug);
   if (!article) notFound();
@@ -38,7 +46,11 @@ export default async function ArticleDetailPage({ params }) {
     .filter((a) => a.slug !== slug)
     .map((a) => ({ a, s: scoreRelated(article, a) }))
     .filter(({ s }) => s > 0)
-    .sort((x, y) => y.s - x.s || new Date(y.a.date || 0) - new Date(x.a.date || 0))
+    .sort(
+      (x, y) =>
+        y.s - x.s ||
+        new Date(y.a.date || 0).getTime() - new Date(x.a.date || 0).getTime()
+    )
     .slice(0, 3)
     .map(({ a }) => a);
 

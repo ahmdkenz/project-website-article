@@ -1,99 +1,129 @@
-// components/QuickReactions.js
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { db } from "@/lib/firebase";
+import {
+  doc,
+  onSnapshot,
+  runTransaction,
+  getDoc,
+  setDoc,
+} from "firebase/firestore";
 
-const STORAGE_PREFIX = "reactions:";
+const EMOJIS = [
+  { key: "like",  emoji: "👍", label: "Bermanfaat" },
+  { key: "love",  emoji: "❤️", label: "Menarik" },
+  { key: "think", emoji: "🤔", label: "Masih Bingung" },
+  { key: "fire",  emoji: "🔥", label: "Keren!" },
+];
 
-/**
- * Struktur data di localStorage:
- * key: reactions:<slug>
- * value:
- * {
- *   counts: { like: number, love: number, think: number, fire: number },
- *   mine:   { like: boolean, love: boolean, think: boolean, fire: boolean }
- * }
- */
-function loadReactions(slug) {
+// generate atau ambil uid browser (tanpa Auth)
+function getOrCreateUID() {
   try {
-    const raw = localStorage.getItem(STORAGE_PREFIX + slug);
-    if (!raw) {
-      return {
-        counts: { like: 0, love: 0, think: 0, fire: 0 },
-        mine: { like: false, love: false, think: false, fire: false },
-      };
+    const k = "uid";
+    let id = localStorage.getItem(k);
+    if (!id) {
+      // crypto.randomUUID tersedia di browser modern
+      id = crypto?.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2);
+      localStorage.setItem(k, id);
     }
-    const parsed = JSON.parse(raw);
-    return {
-      counts: { like: 0, love: 0, think: 0, fire: 0, ...(parsed.counts || {}) },
-      mine:   { like: false, love: false, think: false, fire: false, ...(parsed.mine || {}) },
-    };
+    return id;
   } catch {
-    return {
-      counts: { like: 0, love: 0, think: 0, fire: 0 },
-      mine: { like: false, love: false, think: false, fire: false },
-    };
+    // fallback kalau localStorage non-available
+    return "anon";
   }
 }
 
-function saveReactions(slug, state) {
-  try {
-    localStorage.setItem(STORAGE_PREFIX + slug, JSON.stringify(state));
-  } catch {}
-}
-
 export default function QuickReactions({ slug }) {
-  const [state, setState] = useState(() => ({
-    counts: { like: 0, love: 0, think: 0, fire: 0 },
-    mine: { like: false, love: false, think: false, fire: false },
-  }));
-
-  useEffect(() => {
-    setState(loadReactions(slug));
-  }, [slug]);
-
+  const [counts, setCounts] = useState({ like: 0, love: 0, think: 0, fire: 0 });
+  const [mine, setMine]     = useState(null); // null | "like" | "love" | "think" | "fire"
   const total = useMemo(
-    () =>
-      (state.counts.like ?? 0) +
-      (state.counts.love ?? 0) +
-      (state.counts.think ?? 0) +
-      (state.counts.fire ?? 0),
-    [state]
+    () => (counts.like ?? 0) + (counts.love ?? 0) + (counts.think ?? 0) + (counts.fire ?? 0),
+    [counts]
   );
 
-  const toggle = (key) => {
-    setState((prev) => {
-      const next = JSON.parse(JSON.stringify(prev));
-      const wasActive = !!next.mine[key];
-      next.mine[key] = !wasActive;
-      // increment/decrement count, jangan sampai minus
-      if (!wasActive) next.counts[key] = (next.counts[key] ?? 0) + 1;
-      else next.counts[key] = Math.max(0, (next.counts[key] ?? 0) - 1);
-      saveReactions(slug, next);
-      return next;
-    });
-  };
+  // Realtime: dengar perubahan counts di artikel
+  useEffect(() => {
+    if (!slug) return;
+    const artRef = doc(db, "articles", slug);
 
-  const Btn = ({ k, label, emoji }) => {
-    const active = !!state.mine[k];
-    const count = state.counts[k] ?? 0;
-    return (
-      <button
-        type="button"
-        onClick={() => toggle(k)}
-        className={active ? "btn-primary btn-sm" : "btn btn-sm"}
-        title={label}
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: ".45rem",
-          borderRadius: "999px",
-        }}
-      >
-        <span aria-hidden>{emoji}</span>
-        <span style={{ fontWeight: 600 }}>{count}</span>
-      </button>
-    );
+    const unsub = onSnapshot(artRef, (snap) => {
+      const data = snap.data() || {};
+      const r = data.reactions || {};
+      setCounts({
+        like:  r.like  || 0,
+        love:  r.love  || 0,
+        think: r.think || 0,
+        fire:  r.fire  || 0,
+      });
+    });
+
+    return () => unsub();
+  }, [slug]);
+
+  // Ambil reaction milikku (user ini) untuk artikel ini
+  useEffect(() => {
+    if (!slug) return;
+    const uid = getOrCreateUID();
+    const mineRef = doc(db, "articles", slug, "reactions", uid);
+
+    (async () => {
+      const snap = await getDoc(mineRef);
+      if (snap.exists()) {
+        setMine(snap.data()?.type ?? null);
+      } else {
+        setMine(null);
+      }
+    })();
+  }, [slug]);
+
+  // Click handler: enforce 1 orang = 1 reaction (toggle / switch) via transaction
+  const handleReact = async (type) => {
+    const uid = getOrCreateUID();
+    const artRef  = doc(db, "articles", slug);
+    const mineRef = doc(db, "articles", slug, "reactions", uid);
+
+    try {
+      await runTransaction(db, async (tx) => {
+        const artSnap  = await tx.get(artRef);
+        const mineSnap = await tx.get(mineRef);
+
+        const base = artSnap.exists() ? (artSnap.data() || {}) : {};
+        const reactions = { like: 0, love: 0, think: 0, fire: 0, ...(base.reactions || {}) };
+
+        if (mineSnap.exists()) {
+          const prevType = mineSnap.data().type;
+          if (prevType === type) {
+            // Case A: klik emoji yg sama -> HAPUS reaction
+            reactions[prevType] = Math.max(0, (reactions[prevType] || 0) - 1);
+            tx.set(artRef, { reactions }, { merge: true });
+            // hapus dokumen user reaction
+            tx.set(mineRef, { type: null }, { merge: false }); // optional: bisa tx.delete(mineRef)
+            // Lebih konsisten pakai delete:
+            // tx.delete(mineRef);
+          } else {
+            // Case B: ganti reaction -> decrement lama, increment baru
+            if (prevType) reactions[prevType] = Math.max(0, (reactions[prevType] || 0) - 1);
+            reactions[type] = (reactions[type] || 0) + 1;
+
+            tx.set(artRef, { reactions }, { merge: true });
+            tx.set(mineRef, { type, updatedAt: Date.now() }, { merge: true });
+          }
+        } else {
+          // Case C: belum pernah react -> tambah baru
+          reactions[type] = (reactions[type] || 0) + 1;
+          // pastikan dokumen artikel ada
+          tx.set(artRef, { reactions }, { merge: true });
+          // set dokumen milik user
+          tx.set(mineRef, { type, createdAt: Date.now() }, { merge: true });
+        }
+      });
+
+      // Optimistic UI (sinkron dengan hasil transaksi):
+      setMine((prev) => (prev === type ? null : type));
+    } catch (e) {
+      console.error("Reaction failed:", e);
+    }
   };
 
   return (
@@ -115,10 +145,29 @@ export default function QuickReactions({ slug }) {
         }}
       >
         <div style={{ display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
-          <Btn k="like"  emoji="👍" label="Bermanfaat" />
-          <Btn k="love"  emoji="❤️" label="Menarik" />
-          <Btn k="think" emoji="🤔" label="Masih Bingung" />
-          <Btn k="fire"  emoji="🔥" label="Keren!" />
+          {EMOJIS.map(({ key, emoji, label }) => {
+            const active = mine === key;
+            const count = counts[key] ?? 0;
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => handleReact(key)}
+                className={active ? "btn-primary btn-sm" : "btn btn-sm"}
+                title={label}
+                aria-pressed={active}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: ".45rem",
+                  borderRadius: "999px",
+                }}
+              >
+                <span aria-hidden>{emoji}</span>
+                <span style={{ fontWeight: 600 }}>{count}</span>
+              </button>
+            );
+          })}
         </div>
 
         <span className="muted" style={{ fontSize: ".9rem" }}>
