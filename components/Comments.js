@@ -191,13 +191,6 @@ export default function Comments({ slug }) {
                     {fmt(c.createdAt)}
                   </div>
                 </div>
-                <button
-                  className="btn btn-sm"
-                  onClick={() => removeComment(c.id)}
-                  title="Hapus komentar ini"
-                >
-                  Hapus
-                </button>
               </div>
               <p
                 style={{
