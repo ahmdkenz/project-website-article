@@ -8,6 +8,7 @@ import {
   onSnapshot,
   query,
   where,
+  or,
   deleteDoc,
   doc,
 } from "firebase/firestore";
@@ -19,7 +20,11 @@ export default function Comments({ slug }) {
 
   // 🔹 Listener realtime dari Firestore
   useEffect(() => {
-    const q = query(collection(db, "comments"), where("articleId", "==", slug));
+    // Ambil komentar berdasarkan articleId atau slug
+    const q = query(
+      collection(db, "comments"),
+      or(where("articleId", "==", slug), where("slug", "==", slug))
+    );
 
     const unsub = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((d) => ({
@@ -27,7 +32,10 @@ export default function Comments({ slug }) {
         ...d.data(),
       }));
 
-      // 🔹 Sort manual berdasarkan createdAt (biar tetap muncul meskipun null)
+      // 🔹 Debug (hapus kalau sudah yakin jalan)
+      console.log("🔥 Komentar snapshot:", data);
+
+      // Sort manual berdasarkan createdAt
       const sorted = data.sort(
         (a, b) =>
           (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0)
@@ -45,7 +53,8 @@ export default function Comments({ slug }) {
     if (!trimmed) return;
 
     await addDoc(collection(db, "comments"), {
-      articleId: slug,
+      articleId: slug, // simpan dengan konsisten
+      slug: slug, // tambahan biar lebih aman
       name: name || "Anonim",
       text: trimmed,
       createdAt: serverTimestamp(),
