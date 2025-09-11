@@ -1,4 +1,4 @@
-// app/(main)/home/page.js
+// src/app/(main)/home/page.js
 export const revalidate = 60; // re-generate max tiap 60 detik
 
 import { getAllArticles } from "@/lib/data";

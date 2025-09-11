@@ -1,5 +1,5 @@
-// app/(main)/articles/page.js
-import { Suspense } from "react";
+// src/app/(main)/articles/page.js
+import React from "react"; // gunakan React.Suspense, hindari duplikat identifier
 import { getAllArticles } from "@/lib/data";
 import { getAllViews } from "@/lib/views";
 import ArticleList from "@/components/ArticleList";
@@ -31,10 +31,10 @@ export default async function ArticlesPage() {
         </p>
       </section>
 
-      {/* ✅ Bungkus ArticleList dengan Suspense */}
-      <Suspense fallback={<p>Loading articles...</p>}>
+      {/* Bungkus ArticleList dengan React.Suspense */}
+      <React.Suspense fallback={<p>Loading articles...</p>}>
         <ArticleList allArticles={enrichedArticles} />
-      </Suspense>
+      </React.Suspense>
 
       {/* Tags Section sebelum footer */}
       {allTags.length > 0 && (

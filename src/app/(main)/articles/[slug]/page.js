@@ -1,5 +1,6 @@
+// src/app/(main)/articles/[slug]/page.js
 import { notFound } from "next/navigation";
-import { getAllArticles } from "@/lib/data";
+import { getAllArticles, getArticleBySlug } from "@/lib/data";
 import ArticleContentClient from "@/components/ArticleContentClient";
 import RelatedArticles from "@/components/RelatedArticles";
 import ReadingProgress from "@/components/ReadingProgress";
@@ -8,10 +9,7 @@ import ShareButtons from "@/components/ShareButtons";
 import QuickReactions from "@/components/QuickReactions";
 import Comments from "@/components/Comments";
 import ViewTracker from "@/components/ViewTracker";
-
-/* ✅ Ganti file ke CSS Module: ubah nama file fisiknya jadi:
-   /styles/articles-detail.module.css */
-import styles from "@/styles/articles-detail-modules.css"; // ✅
+import styles from "@/styles/articles-detail.module.css";
 
 export const revalidate = 60;
 
@@ -23,25 +21,29 @@ function scoreRelated(base, cand) {
   let shared = 0;
   for (const t of candTags) if (baseTags.has(t)) shared++;
   const sameCategory =
-    (base.category || "").toLowerCase() === (cand.category || "").toLowerCase()
-      ? 1
-      : 0;
+    (base.category || "").toLowerCase() === (cand.category || "").toLowerCase() ? 1 : 0;
   return shared * 2 + sameCategory;
 }
 
-/* ✅ (Opsional tapi direkomendasikan) prerenderr semua slug agar stabil */
+/* (Opsional, direkomendasikan) prerender semua slug */
 export async function generateStaticParams() {
-  const all = await getAllArticles();
+  const all = await getAllArticles(); // metadata list (tanpa content)
   return all.map((a) => ({ slug: a.slug }));
 }
 
 export default async function ArticleDetailPage({ params }) {
-  const { slug } = await params; // ✅ wajib await
+  // ✅ Next.js 15: dynamic API harus di-await
+  const { slug } = await params;
 
+  // 1) Ambil konten MDX untuk slug ini
+  const result = await getArticleBySlug(slug); // { meta, content } dari lib/github
+  if (!result) notFound();
+
+  // 2) Map ke bentuk yang dipakai komponen lain
+  const article = { ...result.meta, content: result.content };
+
+  // 3) Ambil semua artikel (metadata) untuk related
   const all = await getAllArticles();
-  const article = all.find((a) => a.slug === slug);
-  if (!article) notFound();
-
   const related = [...all]
     .filter((a) => a.slug !== slug)
     .map((a) => ({ a, s: scoreRelated(article, a) }))
@@ -55,9 +57,7 @@ export default async function ArticleDetailPage({ params }) {
     .map(({ a }) => a);
 
   const dateText = article?.date
-    ? new Intl.DateTimeFormat("id-ID", { dateStyle: "long" }).format(
-        new Date(article.date)
-      )
+    ? new Intl.DateTimeFormat("id-ID", { dateStyle: "long" }).format(new Date(article.date))
     : "";
 
   return (
@@ -68,7 +68,6 @@ export default async function ArticleDetailPage({ params }) {
       {/* Tracker untuk increment view */}
       <ViewTracker slug={article.slug} />
 
-      {/* Wrapper halaman (scoped) */}
       <div className={styles.page}>
         <section className={styles.header}>
           <div className={styles.headerInner}>

@@ -1,11 +1,10 @@
-// context/ModeContext.js
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 const ModeContext = createContext({
-  mode: "friendly",          // friendly | moderate
-  theme: "light",            // light | dark
+  mode: "friendly",   // friendly | moderate
+  theme: "light",     // light | dark
   setMode: () => {},
   setTheme: () => {},
 });
@@ -18,24 +17,31 @@ export function ModeProvider({ children }) {
   useEffect(() => {
     try {
       const savedMode = localStorage.getItem("theme_mode");
-      if (savedMode === "friendly" || savedMode === "moderate") setMode(savedMode);
+      if (savedMode === "friendly" || savedMode === "moderate") {
+        setMode(savedMode);
+      }
       const savedTheme = localStorage.getItem("theme_color");
-      if (savedTheme === "dark" || savedTheme === "light") setTheme(savedTheme);
+      if (savedTheme === "dark" || savedTheme === "light") {
+        setTheme(savedTheme);
+      }
     } catch {}
   }, []);
 
-  // persist & apply ke <html> class
+  // persist + apply kelas <html> untuk mode konten
   useEffect(() => {
-    try { localStorage.setItem("theme_mode", mode); } catch {}
+    try {
+      localStorage.setItem("theme_mode", mode);
+    } catch {}
     const root = document.documentElement;
-    // bersihkan kelas lama
     root.classList.remove("mode-friendly", "mode-moderate");
-    // terapkan kelas sesuai mode
     root.classList.add(mode === "moderate" ? "mode-moderate" : "mode-friendly");
   }, [mode]);
 
+  // persist + apply kelas <html> untuk tema (light/dark)
   useEffect(() => {
-    try { localStorage.setItem("theme_color", theme); } catch {}
+    try {
+      localStorage.setItem("theme_color", theme);
+    } catch {}
     const root = document.documentElement;
     root.classList.toggle("dark", theme === "dark");
   }, [theme]);
