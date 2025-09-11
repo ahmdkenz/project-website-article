@@ -27,9 +27,15 @@ function scoreRelated(base, cand) {
 
 /* (Opsional, direkomendasikan) prerender semua slug */
 export async function generateStaticParams() {
-  const all = await getAllArticles(); // metadata list (tanpa content)
-  return all.map((a) => ({ slug: a.slug }));
+  try {
+    const all = await getAllArticles(); // yang ujungnya pakai listArticles()
+    return all.map(a => ({ slug: a.slug }));
+  } catch (e) {
+    console.warn("[generateStaticParams] skip pre-render:", e?.message || e);
+    return []; // biarkan dinamis saat runtime
+  }
 }
+export const dynamicParams = true;
 
 export default async function ArticleDetailPage({ params }) {
   // ✅ Next.js 15: dynamic API harus di-await
