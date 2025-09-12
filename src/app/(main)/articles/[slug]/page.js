@@ -12,9 +12,9 @@ import styles from "@/styles/articles-detail.module.css";
 
 export const revalidate = 60;
 
-// Fungsi skor related sederhana (tag + kategori)
+/** Skor related sederhana: tag (2 poin/tag yang sama) + 1 poin jika kategori sama */
 function scoreRelated(base, cand) {
-  if (!cand || cand.slug === base.slug) return -1;
+  if (!base || !cand || cand.slug === base.slug) return -1;
   const baseTags = new Set((base.tags || []).map((t) => String(t).toLowerCase()));
   const candTags = new Set((cand.tags || []).map((t) => String(t).toLowerCase()));
   let shared = 0;
@@ -24,90 +24,94 @@ function scoreRelated(base, cand) {
   return shared * 2 + sameCategory;
 }
 
-// (Opsional, direkomendasikan) prerender semua slug
+/** (Opsional) Prerender semua slug untuk ISR */
 export async function generateStaticParams() {
   try {
     const all = await getAllArticles();
-    // [DIPERBAIKI] Menambahkan pengecekan untuk memastikan 'all' adalah array
     if (!Array.isArray(all)) {
-        console.warn("generateStaticParams: getAllArticles tidak mengembalikan array.");
-        return [];
+      console.warn("generateStaticParams: getAllArticles tidak mengembalikan array.");
+      return [];
     }
-    return all.map(a => ({ slug: a.slug }));
+    return all
+      .filter((a) => a?.slug)
+      .map((a) => ({ slug: String(a.slug) }));
   } catch (e) {
     console.warn("generateStaticParams gagal:", e);
     return [];
   }
 }
+
 export const dynamicParams = true;
 
+/** (Opsional) Metadata berbasis slug */
+export async function generateMetadata({ params }) {
+  const { slug } = await params; // <- Dynamic APIs async
+  if (!slug) return { title: "Artikel" };
+  return { title: `Artikel: ${slug}` };
+}
 
 export default async function ArticleDetailPage({ params }) {
-  const { slug } = params; // Tidak perlu await di versi Next.js stabil
+  // ✅ Next.js 15: params adalah Promise di Server Components → wajib di-await
+  const { slug } = await params;
+
+  // Guard ekstra: pastikan slug valid
+  if (!slug || typeof slug !== "string") {
+    console.warn("ArticleDetailPage: slug tidak valid:", slug);
+    notFound();
+  }
 
   let articleData;
-  let allArticlesData;
+  let allArticlesData = [];
 
-  // [DIPERBAIKI] Menambahkan blok try...catch untuk penanganan error saat pengambilan data
   try {
     // 1) Ambil konten MDX untuk slug ini
     const result = await getArticleBySlug(slug);
     if (!result || !result.meta) {
-        // Jika hasil tidak ada atau tidak memiliki metadata, anggap tidak ditemukan
-        notFound();
+      notFound();
     }
-    
-    // 2) Map ke bentuk yang dipakai komponen lain
-    articleData = { ...result.meta, content: result.content };
+
+    // 2) Normalisasi data artikel untuk komponen client
+    articleData = { ...result.meta, content: result.content, slug };
 
     // 3) Ambil semua artikel (metadata) untuk related
-    allArticlesData = await getAllArticles();
-
-    // [DIPERBAIKI] Pastikan allArticlesData adalah array
-    if (!Array.isArray(allArticlesData)) {
-        console.warn("Gagal mendapatkan daftar artikel untuk 'related articles', akan ditampilkan kosong.");
-        allArticlesData = [];
+    const all = await getAllArticles();
+    allArticlesData = Array.isArray(all) ? all : [];
+    if (!Array.isArray(all)) {
+      console.warn("Related: getAllArticles bukan array; related akan kosong.");
     }
-
   } catch (error) {
     console.error(`Gagal mengambil data untuk artikel slug: ${slug}`, error);
-    // Jika terjadi error saat fetching, arahkan ke halaman not found
     notFound();
   }
 
-
-  // [DIPERBAIKI] Logika untuk artikel terkait dibuat lebih mudah dibaca
+  // 4) Hitung artikel terkait
   const related = allArticlesData
-    .filter((a) => a.slug !== slug)
-    .map((a) => ({ 
-        article: a, 
-        score: scoreRelated(articleData, a) 
-    }))
+    .filter((a) => a?.slug && a.slug !== slug)
+    .map((a) => ({ article: a, score: scoreRelated(articleData, a) }))
     .filter(({ score }) => score > 0)
     .sort((x, y) => {
-        // Urutkan berdasarkan skor tertinggi
-        if (y.score !== x.score) {
-            return y.score - x.score;
-        }
-        // Jika skor sama, urutkan berdasarkan tanggal terbaru
-        const dateX = new Date(x.article.date || 0).getTime();
-        const dateY = new Date(y.article.date || 0).getTime();
-        return dateY - dateX;
+      if (y.score !== x.score) return y.score - x.score; // skor tertinggi dulu
+      const dx = new Date(x.article.date || 0).getTime();
+      const dy = new Date(y.article.date || 0).getTime();
+      return dy - dx; // tanggal terbaru dulu
     })
     .slice(0, 3)
     .map(({ article }) => article);
 
-  // [DIPERBAIKI] Format tanggal dibuat lebih aman dengan pengecekan validitas
-  const dateText = articleData?.date && !isNaN(new Date(articleData.date))
-    ? new Intl.DateTimeFormat("id-ID", { dateStyle: "long" }).format(new Date(articleData.date))
-    : "";
+  // 5) Format tanggal aman
+  const dateText = (() => {
+    const raw = articleData?.date;
+    const d = raw ? new Date(raw) : null;
+    if (!d || Number.isNaN(d.getTime())) return "";
+    return new Intl.DateTimeFormat("id-ID", { dateStyle: "long" }).format(d);
+  })();
 
   return (
     <>
-      {/* Progress bar */}
+      {/* Progress bar (client) */}
       <ReadingProgress />
 
-      {/* Tracker untuk increment view */}
+      {/* Tracker untuk increment view (client) */}
       <ViewTracker slug={articleData.slug} />
 
       <div className={styles.page}>
