@@ -136,7 +136,6 @@ html.dark .navbar { background-color: rgba(15, 23, 42, 0.7); }
 .navbar nav,
 .navbar .search-form-desktop { display: none; }
 
-.navbar .logo-mobile,
 .navbar .search-icon-mobile,
 .navbar .menu-toggle { display: block; }
 
@@ -549,6 +548,78 @@ html.dark .hero {
   margin-bottom: 1rem;
 }
 
+/* Hero dengan brand banner */
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(280px, 36vw, 220px); /* tinggi responsif supaya gambar terlihat */
+}
+
+.hero .hero-media {
+  position: absolute;
+  inset: 0;
+}
+
+.hero .hero-img {
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(1.05);
+}
+
+/* Overlay agar teks selalu terbaca (gradasi atas→bawah) */
+.hero .hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.28), rgba(0,0,0,.24) 30%, rgba(0,0,0,.15) 60%, rgba(0,0,0,0));
+  mix-blend-mode: multiply; /* lembut di foto terang */
+}
+
+html.dark .hero .hero-overlay {
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.45), rgba(0,0,0,.38) 30%, rgba(0,0,0,.25) 60%, rgba(0,0,0,.15));
+}
+/* === Section teks di bawah banner === */
+.hero-content {
+  max-width: 640px;
+  margin: clamp(20px, 3vw, 32px) auto 0;
+  text-align: center;
+  padding: 0 1rem; /* aman di layar kecil */
+}
+
+/* Animasi halus seperti hero lama */
+.hero-content h1,
+.hero-content p,
+.hero-content .hero-actions {
+  opacity: 0;
+  transform: translateY(25px);
+  animation: fadeUp 0.8s ease forwards;
+}
+.hero-content h1 { animation-delay: .1s; }
+.hero-content p { animation-delay: .25s; }
+.hero-content .hero-actions { animation-delay: .4s; }
+
+.hero-content .hero-actions {
+  display: inline-flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;               /* stack di mobile */
+  justify-content: center;
+}
+
+/* Tombol full-width pada layar sangat kecil */
+@media (max-width: 480px) {
+  .hero-content .hero-actions .btn {
+    width: 100%;
+  }
+}
+
+
+/* Pastikan konten di atas gambar */
+.hero .hero-inner {
+  position: relative;
+  z-index: 1;
+}
 
 /* ==========================================================================
    4. RESPONSIVE DESIGN (Media Queries)
@@ -626,4 +697,31 @@ html.dark .search-item:hover {
   min-height: 150px;
   transition: all 0.2s ease-in-out;
 }
-.dictionary-results .terms-container p { margin-top: 1rem; }
+.dictionary-results .terms-container p { margin-top: 1rem; } 
+
+
+/* ========================================================================
+   OVERRIDES TANPA MENGHAPUS KODE SEBELUMNYA
+   - Perkecil banner hero (clamp yang benar + image-only)
+   - Sembunyikan .logo-mobile (YLK) di mobile
+   ======================================================================== */
+
+/* Tambah variabel hero (boleh didefinisikan ulang di :root lain) */
+:root {
+  --hero-h-min: 220px;
+  --hero-h-fluid: 28vw;
+  --hero-h-max: 360px;
+}
+
+/* BENARKAN ukuran hero + hilangkan padding/background lama (tanpa hapus kode) */
+.hero {
+  min-height: clamp(var(--hero-h-min), var(--hero-h-fluid), var(--hero-h-max)) !important;
+  padding: 0 !important;
+  background: none !important;
+}
+
+/* Sembunyikan label mobile (YLK) di semua non-desktop */
+@media (max-width: 991px) {
+  .logo-mobile { display: none !important; }
+}
+

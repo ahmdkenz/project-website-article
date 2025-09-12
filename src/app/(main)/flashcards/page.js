@@ -8,6 +8,7 @@ export default async function FlashcardsPage() {
 
   return (
     <>
+    
       <section className="hero small">
         <h1>🎴 Flashcards Keuangan</h1>
         <p className="muted">Belajar istilah keuangan dengan cara yang lebih seru & interaktif.</p>
