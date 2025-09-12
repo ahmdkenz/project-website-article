@@ -16,6 +16,9 @@
   --ring-color: rgba(37, 99, 235, 0.35);
   --btn-bg: var(--primary-color);
   --btn-text: var(--primary-text-color);
+
+  /* Tinggi navbar global (mudah diganti saat logo diperbesar) */
+  --navbar-h: 60px;
 }
 
 html.dark {
@@ -76,31 +79,32 @@ a:hover { text-decoration: underline; }
   border-bottom: 1px solid var(--border-color);
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
-html.dark .navbar {
-  background-color: rgba(15, 23, 42, 0.7);
-}
+html.dark .navbar { background-color: rgba(15, 23, 42, 0.7); }
 .navbar .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 0;
-  height: 60px;
+  height: var(--navbar-h);
   box-sizing: border-box;
 }
+
+/* Logo (ikon + teks) */
 .navbar .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-color);
   text-decoration: none;
   transition: color 0.2s ease;
 }
-.navbar .logo:hover {
-  color: var(--primary-color);
-}
-.navbar nav {
-  display: flex;
-  gap: 1.5rem;
-}
+.navbar .logo:hover { color: var(--primary-color); }
+.navbar .logo img { display: block; height: auto; }
+
+/* Nav link */
+.navbar nav { display: flex; gap: 1.5rem; }
 .navbar nav a {
   font-weight: 500;
   color: var(--text-color);
@@ -109,17 +113,13 @@ html.dark .navbar {
   padding: 0.25rem 0;
   transition: color 0.2s ease;
 }
-.navbar nav a:hover {
-  color: var(--primary-color);
-}
+.navbar nav a:hover { color: var(--primary-color); }
 .navbar nav a::after {
   content: '';
   position: absolute;
-  width: 100%;
-  height: 2px;
+  width: 100%; height: 2px;
   background-color: var(--primary-color);
-  bottom: 0;
-  left: 0;
+  bottom: 0; left: 0;
   transform: scaleX(0);
   transform-origin: bottom right;
   transition: transform 0.3s ease-out;
@@ -128,22 +128,17 @@ html.dark .navbar {
   transform: scaleX(1);
   transform-origin: bottom left;
 }
-/* Tambahkan ini di file globals.css Anda */
 
 /* === PENYESUAIAN HEADER RESPONSIF === */
 
 /* Default (Mobile-First) */
 .navbar .logo-desktop,
 .navbar nav,
-.navbar .search-form-desktop {
-  display: none; /* Sembunyikan navigasi, logo panjang, dan form desktop di mobile */
-}
+.navbar .search-form-desktop { display: none; }
 
 .navbar .logo-mobile,
 .navbar .search-icon-mobile,
-.navbar .menu-toggle {
-  display: block; /* Tampilkan logo pendek, ikon search, dan tombol hamburger di mobile */
-}
+.navbar .menu-toggle { display: block; }
 
 .header-actions {
   display: flex;
@@ -157,7 +152,7 @@ html.dark .navbar {
   cursor: pointer;
   padding: 0.25rem;
   color: var(--text-color);
-  z-index: 1001; /* Pastikan di atas menu */
+  z-index: 1001;
 }
 
 .search-icon-mobile {
@@ -166,12 +161,12 @@ html.dark .navbar {
   text-decoration: none;
 }
 
-/* Tampilan Menu Mobile Saat Terbuka */
+/* Menu Mobile Saat Terbuka */
 .navbar nav.nav-open {
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 60px; /* Sesuaikan dengan tinggi header Anda */
+  top: var(--navbar-h);
   left: 0;
   width: 100%;
   background-color: var(--surface-color);
@@ -180,46 +175,30 @@ html.dark .navbar {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   gap: 1rem;
 }
+.navbar nav.nav-open a { padding: 0.5rem; border-radius: 6px; }
+.navbar nav.nav-open a:hover { background-color: var(--bg-color); }
 
-.navbar nav.nav-open a {
-  padding: 0.5rem;
-  border-radius: 6px;
-}
-.navbar nav.nav-open a:hover {
-  background-color: var(--bg-color);
-}
-
-
-/* Tampilan untuk Desktop (Layar 992px atau lebih lebar) */
+/* Desktop (≥ 992px) */
 @media (min-width: 992px) {
   .navbar .logo-desktop,
   .navbar nav,
   .navbar .search-form-desktop {
-    display: flex; /* Tampilkan kembali semua elemen desktop */
+    display: flex;
     align-items: center;
   }
-
   .navbar .logo-mobile,
   .navbar .search-icon-mobile,
-  .navbar .menu-toggle {
-    display: none; /* Sembunyikan semua elemen khusus mobile */
-  }
+  .navbar .menu-toggle { display: none; }
 
-  /* Mengembalikan gaya navigasi ke mode normal */
   .navbar nav {
     position: static;
     flex-direction: row;
     background: none;
-    padding: 0;
-    border: none;
-    box-shadow: none;
-    gap: 1.5rem; /* Jarak antar link di desktop */
+    padding: 0; border: none; box-shadow: none;
+    gap: 1.5rem;
   }
 
-  .search-form-desktop {
-    gap: 0.5rem;
-  }
-
+  .search-form-desktop { gap: 0.5rem; }
   .search-form-desktop input {
     padding: .5rem .75rem;
     border: 1px solid var(--border-color);
@@ -228,6 +207,8 @@ html.dark .navbar {
     color: var(--text-color);
   }
 }
+
+/* Toggle tema */
 #darkModeToggle {
   background: none;
   border: none;
@@ -239,28 +220,13 @@ html.dark .navbar {
   border-radius: 8px;
   transition: transform 0.2s ease;
 }
-#darkModeToggle:hover {
-  transform: scale(1.1) rotate(15deg);
-}
-#darkModeToggle:focus-visible {
-  outline: 3px solid var(--ring-color);
-  outline-offset: 2px;
-}
+#darkModeToggle:hover { transform: scale(1.1) rotate(15deg); }
+#darkModeToggle:focus-visible { outline: 3px solid var(--ring-color); outline-offset: 2px; }
 
-/* === [BARU] PENYESUAIAN LOGO & SEARCH RESPONSIVE === */
-
-/* LOGO RESPONSIVE (Metode Ganti Ikon) */
-.logo-mobile {
-  display: none; /* Sembunyikan logo mobile di desktop */
-}
-
-/* SEARCH BAR RESPONSIVE */
-.search-bar-global {
-  display: flex; /* Tampilkan search bar penuh di desktop */
-}
-.search-toggle-mobile {
-  display: none; /* Sembunyikan ikon search di desktop */
-}
+/* Logo & Search Responsif (tambahan) */
+.logo-mobile { display: none; }
+.search-bar-global { display: flex; }
+.search-toggle-mobile { display: none; }
 
 /* === FOOTER === */
 .footer {
@@ -270,9 +236,7 @@ html.dark .navbar {
   padding: 2.5rem 0;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
-.footer .container {
-  text-align: center;
-}
+.footer .container { text-align: center; }
 .footer p {
   margin: 0;
   color: var(--muted-color);
@@ -342,9 +306,95 @@ html.dark .btn, html.dark .btn-ghost, html.dark .btn-outline {
   flex-direction: column;
   transition: all 0.3s ease;
 }
-.article-card:hover, .option-card:hover, .mode-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-html.dark .article-card:hover, html.dark .option-card:hover, html.dark .mode-card:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+.article-card:hover, .option-card:hover, .mode-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+html.dark .article-card:hover,
+html.dark .option-card:hover,
+html.dark .mode-card:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
 .card-actions { margin-top: auto; padding-top: 1rem; }
+
+/* ====== Mini cards (lebih minimal & rapat) ====== */
+.article-card.mini {
+  padding: 1rem;
+  border-radius: 10px;
+  display: block;
+}
+.article-card.mini .mini-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+.article-card.mini .mini-title {
+  margin: 0 0 .35rem;
+  font-size: 1rem;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.article-card.mini .mini-meta {
+  display: flex; flex-wrap: wrap;
+  gap: .35rem; align-items: center;
+}
+
+/* ===== Horizontal scroller (selalu horizontal + scroll-snap) ===== */
+.hscroll {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(240px, 1fr); /* lebar kartu minimum */
+  gap: 1rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding: 0 .25rem .5rem;
+  -webkit-overflow-scrolling: touch;
+}
+.hscroll > * { scroll-snap-align: start; }
+
+/* Scrollbar tipis yang ramah */
+.hscroll::-webkit-scrollbar { height: 8px; }
+.hscroll::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 999px;
+}
+
+/* ===== Navigasi panah scroller ===== */
+.hscroll-wrap { position: relative; }
+.hscroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px; height: 36px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: color-mix(in oklab, var(--surface-color), #000 4%);
+  color: var(--text-color);
+  display: grid; place-items: center;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease;
+  z-index: 2;
+}
+.hscroll-btn:hover {
+  transform: translateY(-50%) scale(1.05);
+  background: color-mix(in oklab, var(--surface-color), #000 8%);
+}
+.hscroll-btn:focus-visible {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+.hscroll-btn--left  { left: -10px; }
+.hscroll-btn--right { right: -10px; }
+
+/* Rapikan posisi panah di layar kecil (hindari mentok) */
+@media (max-width: 480px) {
+  .hscroll-btn--left  { left: 4px; }
+  .hscroll-btn--right { right: 4px; }
+}
 
 /* === FLASHCARDS === */
 .flashcards-grid {
@@ -362,9 +412,7 @@ html.dark .article-card:hover, html.dark .option-card:hover, html.dark .mode-car
   position: relative; width: 100%; height: 100%;
   transition: transform 0.6s; transform-style: preserve-3d;
 }
-.flashcard-inner.is-flipped, .flashcard.flipped .flashcard-inner {
-  transform: rotateY(180deg);
-}
+.flashcard-inner.is-flipped, .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
 .flashcard-front, .flashcard-back {
   position: absolute; width: 100%; height: 100%;
   backface-visibility: hidden;
@@ -381,16 +429,11 @@ html.dark .article-card:hover, html.dark .option-card:hover, html.dark .mode-car
 html.dark .flashcard-back { color: #ffffff !important; }
 
 /* === SEARCH BAR === */
-.search-area {
-  max-width: 700px;
-  margin: 2rem auto;
-}
-.search-wrapper {
-  position: relative;
-}
+.search-area { max-width: 700px; margin: 2rem auto; }
+.search-wrapper { position: relative; }
 .search-wrapper input[type="text"] {
   width: 100%; font-size: 1rem;
-  padding: 0.9rem 1rem 0.9rem 3rem; 
+  padding: 0.9rem 1rem 0.9rem 3rem;
   color: var(--text-color); background-color: var(--surface-color);
   border: 1px solid var(--border-color); border-radius: 12px;
   outline: none; box-sizing: border-box; box-shadow: var(--shadow);
@@ -401,18 +444,14 @@ html.dark .flashcard-back { color: #ffffff !important; }
   transform: translateY(-50%); font-size: 1.2rem;
   opacity: 0.5; transition: opacity 0.3s ease;
 }
-.search-wrapper:focus-within {
-  box-shadow: 0 0 0 4px var(--ring-color); border-radius: 12px;
-}
+.search-wrapper:focus-within { box-shadow: 0 0 0 4px var(--ring-color); border-radius: 12px; }
 .search-wrapper:focus-within::before { opacity: 1; }
 .search-wrapper input[type="text"]:focus {
   border-color: var(--primary-color); background-color: var(--bg-color);
 }
-.search-wrapper input[type="text"]::placeholder {
-  color: var(--muted-color); opacity: 1;
-}
+.search-wrapper input[type="text"]::placeholder { color: var(--muted-color); opacity: 1; }
 
-/* === MISC COMPONENTS (Badge, Tag, etc) === */
+/* === MISC COMPONENTS (Badge, Tag, dll) === */
 .badge {
   display: inline-block; font-size: 12px;
   padding: .2rem .5rem; border-radius: 999px;
@@ -473,9 +512,7 @@ html.dark .hero {
   transform: translateY(25px);
   animation: fadeUp 0.9s ease 0.8s forwards;
 }
-@keyframes fadeUp {
-  to { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
 .section-title {
   text-align: center;
@@ -489,7 +526,6 @@ html.dark .hero {
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
   margin-top: 3rem;
-  
 }
 .homepage-articles {
   background-color: var(--surface-color);
@@ -504,32 +540,13 @@ html.dark .hero {
   padding-left: 0.6rem;
   margin-top: 0;
 }
-.homepage-articles .articles-list {
+
+/* Tab bar minimal (gunakan tombol .btn yang sudah ada) */
+.homepage-articles > [role="tablist"] {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.homepage-articles .articles-list article {
-  padding: 1rem 1.2rem;
-  border-left: 3px solid var(--border-color);
-  border-radius: 8px;
-  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-}
-.homepage-articles .articles-list article:hover {
-  background-color: rgba(37, 99, 235, 0.05);
-  transform: translateX(4px);
-  border-left-color: var(--primary-color);
-}
-html.dark .homepage-articles .articles-list article:hover {
-  background-color: rgba(59, 130, 246, 0.08);
-}
-.homepage-articles .articles-list h3 {
-  margin: 0 0 0.3rem;
-  font-size: 1.05rem;
-}
-.homepage-articles .articles-list p {
-  margin: 0 0 0.3rem;
-  font-size: 0.9rem;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
 }
 
 
@@ -537,111 +554,76 @@ html.dark .homepage-articles .articles-list article:hover {
    4. RESPONSIVE DESIGN (Media Queries)
    ========================================================================== */
 
-/* === MOBILE (default, tidak perlu media query) === */
-
-/* Tombol full width di mobile sempit */
 @media (max-width: 480px) {
   .btn, .btn-primary, .btn-ghost, .btn-outline { width: 100%; }
 }
 
-/* Sembunyikan navigasi desktop di mobile/tablet DAN ATUR LOGO/SEARCH BAR */
 @media (max-width: 768px) {
-  .navbar nav {
-    display: none;
-  }
+  .navbar nav { display: none; }
 
-  /* [BARU] Aturan untuk logo responsif */
-  .logo-desktop {
-    display: none; /* Sembunyikan logo versi desktop */
-  }
-  .logo-mobile {
-    display: inline-block; /* Tampilkan logo versi mobile */
-  }
+  /* Logo & Search responsif */
+  .logo-desktop { display: none; }
+  .logo-mobile { display: inline-block; }
 
-  /* [BARU] Aturan untuk search bar responsif */
-  .search-bar-global {
-    display: none; /* Sembunyikan search bar penuh */
-  }
+  .search-bar-global { display: none; }
   .search-toggle-mobile {
-    display: inline-flex; /* Tampilkan ikon search */
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--text-color);
+    display: inline-flex;
+    background: none; border: none;
+    font-size: 1.5rem; cursor: pointer; color: var(--text-color);
   }
 }
 
-/* === TABLET & UP === */
 @media (min-width: 600px) {
-  .hero {
-    padding: 60px 0;
-  }
-  .hero h1 {
-    font-size: clamp(32px, 5vw, 48px);
-  }
+  .hero { padding: 60px 0; }
+  .hero h1 { font-size: clamp(32px, 5vw, 48px); }
 }
 
-/* === DESKTOP & UP === */
 @media (min-width: 992px) {
-  /* Di versi CSS yang Anda berikan, nav sudah 'display:flex' 
-     sehingga aturan ini tidak diperlukan lagi, tapi disimpan untuk konsistensi */
+  /* placeholder untuk konsistensi */
 }
 
-/* === EXTRA LARGE DESKTOP & UP === */
 @media (min-width: 1280px) {
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .hero h1 {
-    font-size: 56px;
-  }
+  .container { max-width: 1200px; margin: 0 auto; }
+  .hero h1 { font-size: 56px; }
 }
-/* Tambahkan ini di globals.css Anda */
 
-/* Kotak utama untuk hasil pencarian */
+
+/* ==========================================================================
+   5. KOMPONEN PENCARIAN (Result & Kamus)
+   ========================================================================== */
+
 .search-result {
   background-color: var(--surface-color);
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 1.5rem;
-  min-height: 100px; /* Memberi tinggi minimal agar tidak aneh saat kosong */
+  min-height: 100px;
   display: flex;
   flex-direction: column;
 }
 
-/* Setiap item hasil pencarian di dalamnya */
 .search-item {
   padding: 1rem 0;
   border-bottom: 1px solid var(--border-color);
   transition: background-color 0.2s ease;
   cursor: pointer;
-  margin: 0 -1.5rem; /* Trik agar border bisa full-width */
+  margin: 0 -1.5rem;
   padding: 1rem 1.5rem;
 }
-
 .search-item:hover {
   background-color: color-mix(in oklab, var(--surface-color), #888 6%);
 }
 html.dark .search-item:hover {
-   background-color: color-mix(in oklab, var(--surface-color), #fff 6%);
+  background-color: color-mix(in oklab, var(--surface-color), #fff 6%);
 }
 
-/* Menghilangkan garis bawah pada item terakhir */
-/* Kotak untuk hasil pencarian Kamus */
+/* Kamus */
 .dictionary-results .terms-container {
   background-color: var(--surface-color);
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 1.5rem;
-  min-height: 150px; /* Memberi ruang untuk pesan awal seperti "Silakan cari..." */
-  
-  /* Menambahkan transisi agar muncul/hilangnya hasil lebih halus */
+  min-height: 150px;
   transition: all 0.2s ease-in-out;
 }
-
-/* Penataan untuk pesan di dalam kotak (mis. "Istilah tidak ditemukan") */
-.dictionary-results .terms-container p {
-  margin-top: 1rem;
-}
+.dictionary-results .terms-container p { margin-top: 1rem; }
