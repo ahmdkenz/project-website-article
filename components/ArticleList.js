@@ -12,7 +12,7 @@ export default function ArticleList({ allArticles }) {
   const router = useRouter();
   const params = useSearchParams();
 
-  // --- bootstrap filter dari URL ---
+  // --- State management tidak berubah ---
   const urlCategory = params.get("category") || "";
   const urlTags = (params.get("tags") || "").split(",").map(t => t.trim()).filter(Boolean);
   const urlQ = params.get("q") || "";
@@ -21,7 +21,8 @@ export default function ArticleList({ allArticles }) {
   const [category, setCategory] = useState(urlCategory);
   const [tags, setTags] = useState(urlTags);
 
-  // --- derive kategori & tag unik dari data ---
+  // [DIPERBAIKI] Logika Kategori dikembalikan menjadi sederhana dan stabil.
+  // Selalu tampilkan semua kategori yang ada dari seluruh artikel.
   const { categories } = useMemo(() => {
     const catSet = new Set();
     (allArticles || []).forEach(a => {
@@ -30,9 +31,12 @@ export default function ArticleList({ allArticles }) {
     return {
       categories: Array.from(catSet).sort((a, b) => a.localeCompare(b)),
     };
-  }, [allArticles]);
+  }, [allArticles]); // Dependensi hanya pada allArticles
 
-  // --- sinkronkan state -> URL (debounce singkat) ---
+  // [DIHAPUS] useEffect untuk "self-healing" tidak lagi diperlukan
+  // karena daftar kategori sekarang sudah stabil.
+
+  // --- Sinkronkan state -> URL (tidak berubah) ---
   useEffect(() => {
     const handle = setTimeout(() => {
       const p = new URLSearchParams();
@@ -45,7 +49,7 @@ export default function ArticleList({ allArticles }) {
     return () => clearTimeout(handle);
   }, [q, category, tags, router]);
 
-  // --- filter artikel ---
+  // --- Logika filter artikel (tidak berubah) ---
   const filteredArticles = useMemo(() => {
     const nQ = norm(q);
     const nCat = norm(category);
@@ -83,31 +87,6 @@ export default function ArticleList({ allArticles }) {
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
-        </div>
-      </section>
-
-      {/* Filter Bar */}
-      <section className="filters" style={{ marginBottom: "1rem" }}>
-        <div style={{ display: "flex", gap: ".5rem", alignItems: "center", flexWrap: "wrap" }}>
-          <label htmlFor="categorySelect" className="muted" style={{ minWidth: 76 }}>
-            Kategori
-          </label>
-          <select
-            id="categorySelect"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="btn"
-            style={{ minWidth: 220 }}
-          >
-            <option value="">Semua Kategori</option>
-            {categories.map((c) => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
-
-          <button className="btn-ghost" onClick={clearFilters}>
-            Reset
-          </button>
         </div>
       </section>
 

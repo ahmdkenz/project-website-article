@@ -128,6 +128,106 @@ html.dark .navbar {
   transform: scaleX(1);
   transform-origin: bottom left;
 }
+/* Tambahkan ini di file globals.css Anda */
+
+/* === PENYESUAIAN HEADER RESPONSIF === */
+
+/* Default (Mobile-First) */
+.navbar .logo-desktop,
+.navbar nav,
+.navbar .search-form-desktop {
+  display: none; /* Sembunyikan navigasi, logo panjang, dan form desktop di mobile */
+}
+
+.navbar .logo-mobile,
+.navbar .search-icon-mobile,
+.navbar .menu-toggle {
+  display: block; /* Tampilkan logo pendek, ikon search, dan tombol hamburger di mobile */
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: var(--text-color);
+  z-index: 1001; /* Pastikan di atas menu */
+}
+
+.search-icon-mobile {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+/* Tampilan Menu Mobile Saat Terbuka */
+.navbar nav.nav-open {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 60px; /* Sesuaikan dengan tinggi header Anda */
+  left: 0;
+  width: 100%;
+  background-color: var(--surface-color);
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  gap: 1rem;
+}
+
+.navbar nav.nav-open a {
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+.navbar nav.nav-open a:hover {
+  background-color: var(--bg-color);
+}
+
+
+/* Tampilan untuk Desktop (Layar 992px atau lebih lebar) */
+@media (min-width: 992px) {
+  .navbar .logo-desktop,
+  .navbar nav,
+  .navbar .search-form-desktop {
+    display: flex; /* Tampilkan kembali semua elemen desktop */
+    align-items: center;
+  }
+
+  .navbar .logo-mobile,
+  .navbar .search-icon-mobile,
+  .navbar .menu-toggle {
+    display: none; /* Sembunyikan semua elemen khusus mobile */
+  }
+
+  /* Mengembalikan gaya navigasi ke mode normal */
+  .navbar nav {
+    position: static;
+    flex-direction: row;
+    background: none;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    gap: 1.5rem; /* Jarak antar link di desktop */
+  }
+
+  .search-form-desktop {
+    gap: 0.5rem;
+  }
+
+  .search-form-desktop input {
+    padding: .5rem .75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--surface-color);
+    color: var(--text-color);
+  }
+}
 #darkModeToggle {
   background: none;
   border: none;
@@ -145,6 +245,21 @@ html.dark .navbar {
 #darkModeToggle:focus-visible {
   outline: 3px solid var(--ring-color);
   outline-offset: 2px;
+}
+
+/* === [BARU] PENYESUAIAN LOGO & SEARCH RESPONSIVE === */
+
+/* LOGO RESPONSIVE (Metode Ganti Ikon) */
+.logo-mobile {
+  display: none; /* Sembunyikan logo mobile di desktop */
+}
+
+/* SEARCH BAR RESPONSIVE */
+.search-bar-global {
+  display: flex; /* Tampilkan search bar penuh di desktop */
+}
+.search-toggle-mobile {
+  display: none; /* Sembunyikan ikon search di desktop */
 }
 
 /* === FOOTER === */
@@ -429,10 +544,31 @@ html.dark .homepage-articles .articles-list article:hover {
   .btn, .btn-primary, .btn-ghost, .btn-outline { width: 100%; }
 }
 
-/* Sembunyikan navigasi desktop di mobile/tablet */
+/* Sembunyikan navigasi desktop di mobile/tablet DAN ATUR LOGO/SEARCH BAR */
 @media (max-width: 768px) {
   .navbar nav {
     display: none;
+  }
+
+  /* [BARU] Aturan untuk logo responsif */
+  .logo-desktop {
+    display: none; /* Sembunyikan logo versi desktop */
+  }
+  .logo-mobile {
+    display: inline-block; /* Tampilkan logo versi mobile */
+  }
+
+  /* [BARU] Aturan untuk search bar responsif */
+  .search-bar-global {
+    display: none; /* Sembunyikan search bar penuh */
+  }
+  .search-toggle-mobile {
+    display: inline-flex; /* Tampilkan ikon search */
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
   }
 }
 
@@ -461,4 +597,51 @@ html.dark .homepage-articles .articles-list article:hover {
   .hero h1 {
     font-size: 56px;
   }
+}
+/* Tambahkan ini di globals.css Anda */
+
+/* Kotak utama untuk hasil pencarian */
+.search-result {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  min-height: 100px; /* Memberi tinggi minimal agar tidak aneh saat kosong */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Setiap item hasil pencarian di dalamnya */
+.search-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  margin: 0 -1.5rem; /* Trik agar border bisa full-width */
+  padding: 1rem 1.5rem;
+}
+
+.search-item:hover {
+  background-color: color-mix(in oklab, var(--surface-color), #888 6%);
+}
+html.dark .search-item:hover {
+   background-color: color-mix(in oklab, var(--surface-color), #fff 6%);
+}
+
+/* Menghilangkan garis bawah pada item terakhir */
+/* Kotak untuk hasil pencarian Kamus */
+.dictionary-results .terms-container {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  min-height: 150px; /* Memberi ruang untuk pesan awal seperti "Silakan cari..." */
+  
+  /* Menambahkan transisi agar muncul/hilangnya hasil lebih halus */
+  transition: all 0.2s ease-in-out;
+}
+
+/* Penataan untuk pesan di dalam kotak (mis. "Istilah tidak ditemukan") */
+.dictionary-results .terms-container p {
+  margin-top: 1rem;
 }

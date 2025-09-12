@@ -1,72 +1,80 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { useMode } from "@/context/ModeContext";
+import { useState, useMemo } from 'react';
 
-const norm = (s) => (s || "").toLowerCase().trim();
+// Fungsi bantuan untuk normalisasi teks
+const norm = (s) => (s || "").toString().toLowerCase().trim();
 
-export default function DictionaryList({ allTerms = [] }) {
-  const [q, setQ] = useState("");
-  const { mode } = useMode(); // ✅ ambil mode (friendly/moderate)
+export default function DictionaryList({ allTerms }) {
+  // [DIUBAH] State untuk input yang sedang diketik
+  const [inputValue, setInputValue] = useState('');
+  
+  // [BARU] State untuk query yang sudah disubmit (setelah tekan Enter/klik)
+  const [submittedQuery, setSubmittedQuery] = useState('');
 
-  const results = useMemo(() => {
-    const nQ = norm(q);
-    if (!nQ) return [];
-    return allTerms.filter((t) => {
-      const hay = `${t.term} ${t.definitionFriendly || ""} ${t.definitionModerate || ""}`;
-      return hay.toLowerCase().includes(nQ);
+  // [DIUBAH] Logika filter sekarang bergantung pada `submittedQuery`
+  const filteredTerms = useMemo(() => {
+    const normalizedQuery = norm(submittedQuery);
+    if (!normalizedQuery) {
+      return []; // Jika belum ada yang dicari, jangan tampilkan apa-apa
+    }
+    
+    return allTerms.filter(term => {
+      const termText = norm(term.term);
+      const definitionText = norm(term.definitionFriendly || term.definitionModerate);
+      return termText.includes(normalizedQuery) || definitionText.includes(normalizedQuery);
     });
-  }, [q, allTerms]);
+  }, [allTerms, submittedQuery]);
+
+  // [BARU] Fungsi untuk menangani submit pencarian
+  const handleSearch = (e) => {
+    e.preventDefault(); // Mencegah halaman reload
+    setSubmittedQuery(inputValue); // Set query yang akan dicari
+  };
 
   return (
-    <section>
-      {/* Kolom Search */}
-      <input
-        type="search"
-        id="searchInput"
-        placeholder="Ketik istilah untuk mencari..."
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        style={{
-          width: "100%",
-          padding: "0.85rem 1rem",
-          borderRadius: "12px",
-          border: "1px solid var(--border-color)",
-          background: "var(--surface-color)",
-          color: "var(--text-color)",
-          outline: "none",
-          marginBottom: "1rem",
-        }}
-      />
+    <>
+      {/* [DIUBAH] Input sekarang dibungkus dengan <form> */}
+      <section className="search-area">
+        <form className="search-wrapper" onSubmit={handleSearch} style={{ display: 'flex', gap: '0.5rem' }}>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Ketik istilah, lalu tekan Enter..."
+            aria-label="Cari Istilah"
+            style={{ flexGrow: 1 }} // Agar input mengisi ruang
+          />
+          <button type="submit" className="btn btn-primary">
+            Cari
+          </button>
+        </form>
+      </section>
+      
+      {/* [DIUBAH] Tampilan hasil disesuaikan dengan logika baru */}
+      <section className="dictionary-results" style={{ marginTop: '2rem' }}>
+        <div className="terms-container">
+          {/* Kondisi saat halaman baru dibuka */}
+          {!submittedQuery && (
+            <p style={{ textAlign: 'center' }}>Silakan ketik istilah untuk memulai pencarian.</p>
+          )}
 
-      {/* Hasil Pencarian */}
-      <div id="searchResult" className="search-result">
-        {q && results.length === 0 ? (
-          <p className="muted">Tidak ada hasil untuk &quot;{q}&quot;</p>
-        ) : !q ? (
-          <p className="muted">Hasil pencarian akan muncul di sini.</p>
-        ) : (
-          results.map((item) => (
-            <div
-              key={item.term}
-              className="search-item"
-              style={{
-                borderBottom: "1px solid var(--border-color)",
-                padding: "0.75rem 0",
-                cursor: "pointer",
-              }}
-              onClick={() => alert(`Kamu klik: ${item.term}`)} // ✅ bisa diganti dengan navigasi detail
-            >
-              <h4 style={{ marginBottom: ".35rem" }}>{item.term}</h4>
-              <p className="muted" style={{ lineHeight: 1.6 }}>
-                {mode === "moderate"
-                  ? item.definitionModerate
-                  : item.definitionFriendly}
-              </p>
-            </div>
-          ))
-        )}
-      </div>
-    </section>
+          {/* Kondisi saat sudah mencari tapi tidak ada hasil */}
+          {submittedQuery && filteredTerms.length === 0 && (
+            <p style={{ textAlign: 'center' }}>Istilah "{submittedQuery}" tidak ditemukan.</p>
+          )}
+
+          {/* Kondisi saat hasil ditemukan */}
+          {filteredTerms.length > 0 && (
+            filteredTerms.map((term, index) => (
+              <article key={term.id || index} className="term-card">
+                <h3>{term.term}</h3>
+                <p className="muted">{term.definitionFriendly || term.definitionModerate}</p>
+              </article>
+            ))
+          )}
+        </div>
+      </section>
+    </>
   );
 }
