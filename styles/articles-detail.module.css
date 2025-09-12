@@ -5,6 +5,15 @@
   /* batasi lebar agar nyaman dibaca, tetapi fleksibel */
   display: block !important;
 }
+.main {
+  max-width: 120ch; /* Atur batas maksimal lebar kolom konten */  /* Dorong kolom ke tengah */
+  margin-right: auto; /* Dorong kolom ke tengah */
+  font-size: clamp(1.3rem, 1.5vw + 0.5rem, 1.125rem);
+  line-height: 1.75;
+  margin: .6rem 0;
+
+  /* ...gaya Anda yang lain... */
+}
 
 /* Headings */
 .article-body h1,
@@ -136,4 +145,25 @@ html.dark .article-body thead th {
 .main :global(.article-body table),
 .main :global(.article-body pre) {
   border: none !important;
+}
+.title {
+  /* Min: 28px, Ideal: 6vw, Maks: 38px */
+  font-size: clamp(1.75rem, 6vw, 2.375rem);
+  text-align: center;
+}
+.date {
+  font-size: 1rem; /* Setara ~16px tapi lebih fleksibel */
+  text-align: center;
+  color: gray;
+}
+/* Memberi spasi ekstra hanya untuk layar tablet ke atas */
+@media (min-width: 768px) {
+  .article-body {
+    padding: 1.5rem 2.5rem; /* Padding horizontal lebih besar */
+  }
+}
+.header {
+  position: relative;
+  /* Gaya Anda yang sudah ada... */
+  /* Contoh: padding, border-bottom, dll. */
 }

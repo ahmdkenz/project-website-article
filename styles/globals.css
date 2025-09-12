@@ -1,26 +1,242 @@
-@import "./flashcard.css";
-@import "./footer.css";
-@import "./header.css";
-@import "./homepage-articles.css";
-@import "./homepage.css";
-@import "./responsive.css";
-@import "./search-bar.css";
-@import "./style.css";
+/* ==========================================================================
+   1. VARIABEL, TEMA & GAYA DASAR
+   ========================================================================== */
 
-/* ====== VARIABEL TOMBOL (GLOBAL) ====== */
 :root {
-  /* default: pakai warna primer */
+  --bg-color: #f8f9fa;
+  --surface-color: #ffffff;
+  --text-color: #0f172a; /* Slate 900 */
+  --muted-color: #64748b; /* Slate 500 */
+  --border-color: #e2e8f0; /* Slate 200 */
+  --primary-color: #2563eb; /* Blue 600 */
+  --primary-text-color: #ffffff;
+  --friendly-color: #0230c7; /* Green 600 */
+  --moderate-color: #0230c7; /* Sky 600 */
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --ring-color: rgba(37, 99, 235, 0.35);
   --btn-bg: var(--primary-color);
   --btn-text: var(--primary-text-color);
 }
 
-/* ====== FLASHCARD FLIP ====== */
-
-/* Flashcard dark mode fix */
-html.dark .flashcard-back {
-  color: #ffffff !important;
+html.dark {
+  --bg-color: #0f172a; /* Slate 900 */
+  --surface-color: #1e293b; /* Slate 800 */
+  --text-color: #f1f5f9; /* Slate 100 */
+  --muted-color: #94a3b8; /* Slate 400 */
+  --border-color: #334155; /* Slate 700 */
+  --primary-color: #3b82f6; /* Blue 500 */
+  --friendly-color: #0230c7; /* Green 500 */
+  --moderate-color: #0230c7; /* Sky 500 */
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  --ring-color: rgba(96, 165, 250, 0.45);
 }
 
+/* Mode-specific overrides */
+html.mode-friendly:root { --primary-color: var(--friendly-color); }
+html.mode-moderate:root { --primary-color: var(--moderate-color); }
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  line-height: 1.7;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container {
+  width: min(1120px, 92%);
+  margin-inline: auto;
+}
+
+h1, h2, h3, h4 {
+  color: var(--text-color);
+  margin-block: 0 0.5em;
+  font-weight: 700;
+}
+
+.muted { color: var(--muted-color); }
+a { color: var(--primary-color); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+
+/* ==========================================================================
+   2. KOMPONEN UTAMA (Header, Footer, Buttons, Cards, etc.)
+   ========================================================================== */
+
+/* === HEADER / NAVBAR === */
+.navbar {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+html.dark .navbar {
+  background-color: rgba(15, 23, 42, 0.7);
+}
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  height: 60px;
+  box-sizing: border-box;
+}
+.navbar .logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.navbar .logo:hover {
+  color: var(--primary-color);
+}
+.navbar nav {
+  display: flex;
+  gap: 1.5rem;
+}
+.navbar nav a {
+  font-weight: 500;
+  color: var(--text-color);
+  text-decoration: none;
+  position: relative;
+  padding: 0.25rem 0;
+  transition: color 0.2s ease;
+}
+.navbar nav a:hover {
+  color: var(--primary-color);
+}
+.navbar nav a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-color);
+  bottom: 0;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+}
+.navbar nav a:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+#darkModeToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0.25rem;
+  margin-left: 1rem;
+  line-height: 1;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+#darkModeToggle:hover {
+  transform: scale(1.1) rotate(15deg);
+}
+#darkModeToggle:focus-visible {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+
+/* === FOOTER === */
+.footer {
+  margin-top: 4rem;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--surface-color);
+  padding: 2.5rem 0;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.footer .container {
+  text-align: center;
+}
+.footer p {
+  margin: 0;
+  color: var(--muted-color);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* === BUTTONS (Versi Modern) === */
+.btn-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .9rem;
+}
+.btn, .btn-primary, .btn-ghost, .btn-outline {
+  appearance: none; -webkit-tap-highlight-color: transparent;
+  border: 1px solid var(--border-color);
+  background: var(--surface-color); color: var(--text-color);
+  padding: .85rem 1.05rem; border-radius: 12px;
+  font-weight: 700; cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0,0,0,.08);
+  transition: all .2s ease;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: .55rem; text-decoration: none; user-select: none;
+}
+.btn:hover, .btn-primary:hover, .btn-ghost:hover, .btn-outline:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(0,0,0,.12);
+  filter: brightness(1.03);
+}
+.btn:active, .btn-primary:active, .btn-ghost:active, .btn-outline:active {
+  transform: translateY(0); filter: none;
+}
+.btn:focus-visible, .btn-primary:focus-visible, .btn-ghost:focus-visible, .btn-outline:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 4px var(--ring-color), 0 10px 22px rgba(0,0,0,.12);
+}
+.btn-lg { padding: 1rem 1.2rem; font-size: 1.05rem; }
+.btn-sm { padding: .6rem .8rem; font-size: .92rem; border-radius: 10px; }
+.btn-primary {
+  background: linear-gradient(180deg, color-mix(in oklab, var(--btn-bg) 88%, #fff 12%), var(--btn-bg));
+  color: var(--btn-text);
+  border-color: transparent;
+}
+html.dark .btn-primary { color: #ffffff !important; }
+html.dark .btn, html.dark .btn-ghost, html.dark .btn-outline {
+  border-color: rgba(255,255,255,.08); box-shadow: none;
+}
+.btn-ghost { background: transparent; border-color: transparent; }
+.btn-outline { background: transparent; }
+.btn:disabled, .btn[disabled] {
+  opacity: .6; cursor: not-allowed; transform: none; box-shadow: none;
+}
+
+/* === CARDS & GRIDS === */
+.card-grid, .options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.article-card, .option-card, .mode-card {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+.article-card:hover, .option-card:hover, .mode-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+html.dark .article-card:hover, html.dark .option-card:hover, html.dark .mode-card:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+.card-actions { margin-top: auto; padding-top: 1rem; }
+
+/* === FLASHCARDS === */
+.flashcards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
 .flashcard {
   background-color: transparent;
   height: 200px;
@@ -28,324 +244,221 @@ html.dark .flashcard-back {
   cursor: pointer;
 }
 .flashcard-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.6s;
-  transform-style: preserve-3d;
+  position: relative; width: 100%; height: 100%;
+  transition: transform 0.6s; transform-style: preserve-3d;
 }
-.flashcard-inner.is-flipped {
+.flashcard-inner.is-flipped, .flashcard.flipped .flashcard-inner {
   transform: rotateY(180deg);
 }
 .flashcard-front, .flashcard-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-backface-visibility: hidden;
+  position: absolute; width: 100%; height: 100%;
   backface-visibility: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 1rem;
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow);
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 1rem; border-radius: 12px;
+  border: 1px solid var(--border-color); box-shadow: var(--shadow);
 }
-.flashcard-front {
-  background-color: var(--surface-color);
-}
+.flashcard-front { background-color: var(--surface-color); }
 .flashcard-back {
   background-color: var(--primary-color);
   color: var(--primary-text-color);
   transform: rotateY(180deg);
 }
+html.dark .flashcard-back { color: #ffffff !important; }
 
-/* ====== MODE — override variabel per mode ====== */
-html.mode-friendly:root {
-  --primary-color: #7624d4;              /* Biru  */
-  --ring-color: rgba(22, 163, 74, 0.35);
+/* === SEARCH BAR === */
+.search-area {
+  max-width: 700px;
+  margin: 2rem auto;
 }
-html.mode-moderate:root {
-  --primary-color: #0284c7;              /* Biru moderat */
-  --ring-color: rgba(2, 132, 199, 0.35);
+.search-wrapper {
+  position: relative;
 }
-
-/* ====== THEME DARK — override variabel saat gelap ====== */
-html.dark:root {
-  --bg-color: #0b1220;
-  --surface-color: #0f172a;
-  --text-color: #e5e7eb;
-  --muted-color: #94a3b8;
-  --border-color: #1f2937;
-  --primary-text-color: #0b1220;         /* teks di atas primary di dark mode */
-  --shadow: 0 8px 20px rgba(0,0,0,0.45);
-  /* tombol ikut primary secara default */
-  --btn-bg: var(--primary-color);
-  --btn-text: var(--primary-text-color);
+.search-wrapper input[type="text"] {
+  width: 100%; font-size: 1rem;
+  padding: 0.9rem 1rem 0.9rem 3rem; 
+  color: var(--text-color); background-color: var(--surface-color);
+  border: 1px solid var(--border-color); border-radius: 12px;
+  outline: none; box-sizing: border-box; box-shadow: var(--shadow);
+  transition: all 0.3s ease;
 }
-/* === Tombol agar teks tetap putih di dark mode === */
-html.dark .btn-primary {
-  color: #ffffff !important;
+.search-wrapper::before {
+  content: '🔍'; position: absolute; left: 1rem; top: 50%;
+  transform: translateY(-50%); font-size: 1.2rem;
+  opacity: 0.5; transition: opacity 0.3s ease;
 }
-
-/* ====== ELEMEN UMUM ====== */
-body {
-  background: var(--bg-color);
-  color: var(--text-color);
-  transition: background .25s ease, color .25s ease;
+.search-wrapper:focus-within {
+  box-shadow: 0 0 0 4px var(--ring-color); border-radius: 12px;
+}
+.search-wrapper:focus-within::before { opacity: 1; }
+.search-wrapper input[type="text"]:focus {
+  border-color: var(--primary-color); background-color: var(--bg-color);
+}
+.search-wrapper input[type="text"]::placeholder {
+  color: var(--muted-color); opacity: 1;
 }
 
+/* === MISC COMPONENTS (Badge, Tag, etc) === */
 .badge {
-  display: inline-block;
-  font-size: 12px;
-  padding: .2rem .5rem;
-  border-radius: 999px;
+  display: inline-block; font-size: 12px;
+  padding: .2rem .5rem; border-radius: 999px;
   border: 1px solid var(--border-color);
   background: var(--surface-color);
   margin-right: .5rem;
 }
-
 .tag {
-  display: inline-block;
-  font-size: 12px;
-  padding: .2rem .5rem;
-  border-radius: 6px;
+  display: inline-block; font-size: 12px;
+  padding: .2rem .5rem; border-radius: 6px;
   border: 1px dashed var(--border-color);
-  margin-right: .35rem;
-  color: var(--muted-color);
+  margin-right: .35rem; color: var(--muted-color);
+}
+.progress-bar {
+  position: fixed; top: 0; left: 0;
+  height: 4px; background: var(--primary-color);
+  z-index: 9999; transition: width 0.15s ease-out;
+}
+.visually-hidden {
+  position: absolute !important; width: 1px !important; height: 1px !important;
+  margin: -1px !important; padding: 0 !important; border: 0 !important;
+  clip: rect(0 0 0 0) !important; overflow: hidden !important;
 }
 
-/* ====== BUTTONS ====== */
-.btn {
-  border: 1px solid var(--border-color);
-  background: var(--surface-color);
-  padding: .6rem .9rem;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background .2s ease, color .2s ease, border-color .2s ease, transform .15s ease;
+
+/* ==========================================================================
+   3. GAYA KHUSUS HALAMAN (Homepage)
+   ========================================================================== */
+
+.hero {
+  text-align: center;
+  padding: 3rem 1rem;
+  margin-top: 1.5rem;
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.06), transparent);
+  border-radius: 12px;
+}
+html.dark .hero {
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.08), transparent);
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  opacity: 0;
+  transform: translateY(25px);
+  animation: fadeUp 0.9s ease 0.2s forwards;
+}
+.hero p {
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 1rem auto 1.5rem;
+  opacity: 0;
+  transform: translateY(25px);
+  animation: fadeUp 0.9s ease 0.5s forwards;
+}
+.hero-actions {
+  display: inline-flex;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(25px);
+  animation: fadeUp 0.9s ease 0.8s forwards;
+}
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.btn:hover {
-  transform: translateY(-1px);
+.section-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-top: 4rem;
+  margin-bottom: 2rem;
 }
 
-.btn:active {
-  transform: translateY(0);
-}
-
-.btn:focus-visible {
-  outline: 2px solid transparent; /* reset */
-  box-shadow: 0 0 0 4px var(--ring-color);
-}
-
-.btn:disabled,
-.btn[disabled] {
-  opacity: .6;
-  cursor: not-allowed;
-}
-
-/* Tombol primer mengikuti mode & theme melalui variabel */
-.btn-primary {
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  border-color: transparent;
-}
-
-.btn-primary:hover {
-  filter: brightness(1.05);
-}
-
-.btn-ghost {
-  background: transparent;
-}
-
-/* ====== PENYESUAIAN KHUSUS (opsional) ======
-   Jika ingin warna tombol berbeda antara friendly/moderate
-   tanpa mengubah warna primer global, aktifkan block ini:
-
-html.mode-friendly:root {
-  --btn-bg: #16a34a;
-  --btn-text: #ffffff;
-}
-html.mode-moderate:root {
-  --btn-bg: #0284c7;
-  --btn-text: #ffffff;
-}
-*/
-/* === BTN MODERN (uses your existing CSS variables) === */
-
-/* Variabel khusus tombol */
-:root {
-  --btn-radius: 12px;
-  --btn-shadow: 0 6px 14px rgba(0,0,0,.08);
-  --btn-shadow-hover: 0 10px 22px rgba(0,0,0,.12);
-  --btn-border: rgba(0,0,0,.06);
-  --btn-border-dark: rgba(255,255,255,.08);
-}
-
-/* Container util (opsional) untuk baris tombol */
-.btn-row {
+.homepage-articles-wrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: .9rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+  
+}
+.homepage-articles {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+.homepage-articles h2 {
+  font-size: 1.3rem;
+  border-left: 4px solid var(--primary-color);
+  padding-left: 0.6rem;
+  margin-top: 0;
+}
+.homepage-articles .articles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.homepage-articles .articles-list article {
+  padding: 1rem 1.2rem;
+  border-left: 3px solid var(--border-color);
+  border-radius: 8px;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+.homepage-articles .articles-list article:hover {
+  background-color: rgba(37, 99, 235, 0.05);
+  transform: translateX(4px);
+  border-left-color: var(--primary-color);
+}
+html.dark .homepage-articles .articles-list article:hover {
+  background-color: rgba(59, 130, 246, 0.08);
+}
+.homepage-articles .articles-list h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1.05rem;
+}
+.homepage-articles .articles-list p {
+  margin: 0 0 0.3rem;
+  font-size: 0.9rem;
 }
 
-.btn,
-.btn-primary,
-.btn-ghost,
-.btn-outline {
-  appearance: none;
-  -webkit-tap-highlight-color: transparent;
-  border: 1px solid var(--btn-border);
-  background: var(--surface-color);
-  color: var(--text-color);
-  padding: .85rem 1.05rem;
-  border-radius: var(--btn-radius);
-  font-weight: 700;
-  letter-spacing: .2px;
-  line-height: 1;
-  cursor: pointer;
-  box-shadow: var(--btn-shadow);
-  transition:
-    transform .15s ease,
-    box-shadow .2s ease,
-    background .2s ease,
-    border-color .2s ease,
-    color .2s ease,
-    filter .2s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: .55rem;
-  text-decoration: none;
-  user-select: none;
-}
 
-.btn:hover,
-.btn-primary:hover,
-.btn-ghost:hover,
-.btn-outline:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--btn-shadow-hover);
-  filter: brightness(1.03);
-}
+/* ==========================================================================
+   4. RESPONSIVE DESIGN (Media Queries)
+   ========================================================================== */
 
-.btn:active,
-.btn-primary:active,
-.btn-ghost:active,
-.btn-outline:active {
-  transform: translateY(0);
-  filter: none;
-}
+/* === MOBILE (default, tidak perlu media query) === */
 
-.btn:focus-visible,
-.btn-primary:focus-visible,
-.btn-ghost:focus-visible,
-.btn-outline:focus-visible {
-  outline: 2px solid transparent;
-  box-shadow: 0 0 0 4px var(--ring-color), var(--btn-shadow-hover);
-}
-
-/* Ukuran util */
-.btn-lg { padding: 1rem 1.2rem; font-size: 1.05rem; }
-.btn-sm { padding: .6rem .8rem; font-size: .92rem; border-radius: 10px; }
-
-/* Variants */
-.btn-primary {
-  /* pakai variabel tombol yang sudah kamu set: --btn-bg & --btn-text */
-  background: linear-gradient(180deg, color-mix(in oklab, var(--btn-bg) 88%, #fff 12%), var(--btn-bg));
-  color: var(--btn-text);
-  border-color: transparent;
-}
-
-html.dark .btn,
-html.dark .btn-ghost,
-html.dark .btn-outline {
-  border-color: var(--btn-border-dark);
-  box-shadow: none;
-}
-
-.btn-ghost {
-  background: transparent;
-  border-color: transparent;
-  color: var(--text-color);
-}
-
-.btn-outline {
-  background: transparent;
-  border-color: var(--border-color);
-  color: var(--text-color);
-}
-
-/* State */
-.btn:disabled,
-.btn[disabled] {
-  opacity: .6;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-/* Icon wrapper (optional—pakai span.icon saja) */
-.btn .icon {
-  display: inline-flex;
-  width: 1.2em;
-  height: 1.2em;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Responsif: tombol full width di mobile sempit */
+/* Tombol full width di mobile sempit */
 @media (max-width: 480px) {
   .btn, .btn-primary, .btn-ghost, .btn-outline { width: 100%; }
 }
 
-/* High contrast hover di dark */
-html.dark .btn-primary:hover {
-  filter: brightness(1.06);
+/* Sembunyikan navigasi desktop di mobile/tablet */
+@media (max-width: 768px) {
+  .navbar nav {
+    display: none;
+  }
 }
 
-/* Friendly/Moderate override (opsional—aktifkan jika mau warna primer unik per mode)
-html.mode-friendly:root { --btn-bg: #16a34a; --btn-text: #ffffff; }
-html.mode-moderate:root { --btn-bg: #0284c7; --btn-text: #ffffff; }
-*/
-/* ====== ARTICLE BODY (gaya ala PDF) ====== */
-
-/* Progress bar baca artikel */
-.progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 4px;
-  background: var(--primary-color);
-  z-index: 9999;
-  transition: width 0.15s ease-out;
+/* === TABLET & UP === */
+@media (min-width: 600px) {
+  .hero {
+    padding: 60px 0;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 48px);
+  }
 }
 
-/* Fokus input/textarea komentar */
-#commentName:focus,
-#commentText:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--ring-color);
-  border-color: transparent;
+/* === DESKTOP & UP === */
+@media (min-width: 992px) {
+  /* Di versi CSS yang Anda berikan, nav sudah 'display:flex' 
+     sehingga aturan ini tidak diperlukan lagi, tapi disimpan untuk konsistensi */
 }
 
-/* Aksesibilitas: sembunyikan visual label tapi tetap untuk screen reader */
-.visually-hidden {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  margin: -1px !important;
-  padding: 0 !important;
-  border: 0 !important;
-  clip: rect(0 0 0 0) !important;
-  overflow: hidden !important;
-}
-/* Ring fokus halus untuk tombol kecil */
-.btn-sm:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--ring-color);
-  border-color: transparent;
+/* === EXTRA LARGE DESKTOP & UP === */
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .hero h1 {
+    font-size: 56px;
+  }
 }
