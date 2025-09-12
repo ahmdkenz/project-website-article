@@ -1,4 +1,5 @@
 // app/(main)/yuk-literasi/page.js
+import Image from "next/image";
 
 export const metadata = {
   title: "Yuk Literasi - Yuk Literasi Keuangan",
@@ -21,11 +22,37 @@ export const metadata = {
 };
 
 export default function YukLiterasiPage() {
+  // Gambar banner brand untuk halaman Yuk Literasi (sesuaikan asetmu)
+  const bannerSrc = "/brand/hero-yuk-literasi.jpg"; // disarankan .webp agar ringan
+
   return (
     <>
-      {/* Hero */}
-      <section className="hero small">
-        <h2>🚀 Yuk, Mulai Literasi Keuangan!</h2>
+      {/* === Brand Banner (image-only, full-bleed) === */}
+      <section
+        className="hero"
+        style={{
+          // Tinggi responsif khusus halaman ini
+          "--hero-h-min": "220px",
+          "--hero-h-fluid": "26vw",
+          "--hero-h-max": "360px",
+        }}
+      >
+        <div className="hero-media" aria-hidden="true">
+          <Image
+            src={bannerSrc}
+            alt=""
+            fill
+            sizes="100vw"
+            priority={false}
+            className="hero-img"
+          />
+          <div className="hero-overlay" />
+        </div>
+      </section>
+
+      {/* === Blok teks di bawah banner === */}
+      <section className="hero-content" aria-labelledby="yl-title">
+        <h1 id="yl-title">🚀 Yuk, Mulai Literasi Keuangan!</h1>
         <p className="muted">
           Kiat sederhana &amp; tutorial praktis agar makin bijak mengelola uang.
         </p>

@@ -1,16 +1,41 @@
 // app/about/page.js
+import Image from "next/image";
 
 export default function AboutPage() {
+  const bannerSrc = "/brand/hero-about.jpg"; // siapkan aset ini (disarankan .webp)
+
   return (
     <>
-      <section className="hero small">
-        <div className="hero-inner">
-          <h1>Tentang LiterasiKu</h1>
-          <p className="muted">
-            Media edukasi keuangan sederhana untuk membantu masyarakat memahami dan
-            mengelola uang dengan lebih bijak.
-          </p>
+      {/* === Brand Banner (image-only) === */}
+      <section
+        className="hero"
+        style={{
+          // Banner lebih ringkas untuk halaman Tentang
+          "--hero-h-min": "200px",
+          "--hero-h-fluid": "22vw",
+          "--hero-h-max": "320px",
+        }}
+      >
+        <div className="hero-media" aria-hidden="true">
+          <Image
+            src={bannerSrc}
+            alt=""
+            fill
+            sizes="100vw"
+            priority={false}
+            className="hero-img"
+          />
+          <div className="hero-overlay" />
         </div>
+      </section>
+
+      {/* === Blok teks di bawah banner === */}
+      <section className="hero-content" aria-labelledby="about-title">
+        <h1 id="about-title">Tentang LiterasiKu</h1>
+        <p className="muted">
+          Media edukasi keuangan sederhana untuk membantu masyarakat memahami dan
+          mengelola uang dengan lebih bijak.
+        </p>
       </section>
 
       <div className="card-grid" style={{ marginTop: '2rem' }}>

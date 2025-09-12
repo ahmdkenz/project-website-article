@@ -1,5 +1,6 @@
 // src/app/(main)/articles/page.js
 import React from "react"; // gunakan React.Suspense, hindari duplikat identifier
+import Image from "next/image";
 import { getAllArticles } from "@/lib/data";
 import { getAllViews } from "@/lib/views";
 import ArticleList from "@/components/ArticleList";
@@ -22,10 +23,37 @@ export default async function ArticlesPage() {
   });
   const allTags = Array.from(tagSet).sort((a, b) => a.localeCompare(b));
 
+  // Gambar banner brand untuk halaman Artikel
+  const bannerSrc = "/brand/hero-articles.jpg"; // ganti sesuai asetmu (disarankan .webp)
+
   return (
     <>
-      <section className="hero small">
-        <h2>Kumpulan Artikel</h2>
+      {/* === Brand Banner (image-only) === */}
+      <section
+        className="hero"
+        style={{
+          // Opsional: sesuaikan tinggi banner halaman ini
+          "--hero-h-min": "220px",
+          "--hero-h-fluid": "26vw",
+          "--hero-h-max": "360px",
+        }}
+      >
+        <div className="hero-media" aria-hidden="true">
+          <Image
+            src={bannerSrc}
+            alt=""
+            fill
+            sizes="100vw"
+            priority={false}
+            className="hero-img"
+          />
+          <div className="hero-overlay" />
+        </div>
+      </section>
+
+      {/* === Blok teks di bawah banner === */}
+      <section className="hero-content" aria-labelledby="articles-title">
+        <h1 id="articles-title">Kumpulan Artikel</h1>
         <p className="muted">
           Panduan, tips, dan pengetahuan finansial yang mudah dipahami.
         </p>
