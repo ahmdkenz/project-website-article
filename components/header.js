@@ -7,20 +7,33 @@ import ThemeToggle from "./ThemeToggle";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
+/* === [TAMBAHAN] import komponen realtime search === */
+import HeaderSearchDesktop from "@/components/HeaderSearchDesktop";
+import SearchOverlay from "@/components/SearchOverlay";
+
 export default function Header() {
   // State untuk menu mobile
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  /* === [TAMBAHAN] state overlay search mobile === */
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
   const pathname = usePathname();
 
   // Tutup menu saat rute berubah (aksesibilitas + UX)
   useEffect(() => {
     setIsMenuOpen(false);
+    /* === [TAMBAHAN] tutup overlay saat pindah halaman === */
+    setIsSearchOpen(false);
   }, [pathname]);
 
   // Tutup menu dengan tombol Escape
   useEffect(() => {
     const onKeyDown = (e) => {
-      if (e.key === "Escape") setIsMenuOpen(false);
+      if (e.key === "Escape") {
+        setIsMenuOpen(false);
+        /* === [TAMBAHAN] Esc juga menutup overlay === */
+        setIsSearchOpen(false);
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -55,8 +68,16 @@ export default function Header() {
 
         {/* Aksi di sisi kanan header */}
         <div className="header-actions">
-          {/* Search form hanya desktop */}
-          <form action="/search" method="get" className="search-form-desktop" role="search">
+          {/* ===================== */}
+          {/*  SEARCH DESKTOP LAMA  */}
+          {/* ===================== */}
+          {/* [DIBIARKAN ADA, TAPI DISEMBUNYIKAN VIA CSS .legacy-search-desktop] */}
+          <form
+            action="/search"
+            method="get"
+            className="search-form-desktop legacy-search-desktop"
+            role="search"
+          >
             <input
               type="text"
               name="q"
@@ -66,10 +87,34 @@ export default function Header() {
             <button className="btn btn-ghost" type="submit">Cari</button>
           </form>
 
-          {/* Ikon search khusus mobile */}
-          <Link href="/search" className="search-icon-mobile" aria-label="Buka Pencarian">
+          {/* ======================== */}
+          {/*  SEARCH DESKTOP (BARU)   */}
+          {/* ======================== */}
+          {/* form realtime + dropdown suggestions */}
+          <div className="search-form-desktop">
+            <HeaderSearchDesktop />
+          </div>
+
+          {/* ==================== */}
+          {/*  SEARCH MOBILE LAMA  */}
+          {/* ==================== */}
+          {/* [DIBIARKAN ADA, TAPI DISEMBUNYIKAN VIA CSS .legacy-search-mobile] */}
+          <Link href="/search" className="search-icon-mobile legacy-search-mobile" aria-label="Buka Pencarian">
             🔍
           </Link>
+
+          {/* ===================== */}
+          {/*  SEARCH MOBILE (BARU) */}
+          {/* ===================== */}
+          <button
+            type="button"
+            className="search-icon-mobile"
+            aria-label="Buka Pencarian"
+            aria-expanded={isSearchOpen}
+            onClick={() => setIsSearchOpen(true)}
+          >
+            🔍
+          </button>
 
           <ThemeToggle />
 
@@ -97,6 +142,9 @@ export default function Header() {
           </button>
         </div>
       </div>
+
+      {/* === [TAMBAHAN] Overlay mobile realtime === */}
+      <SearchOverlay open={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </header>
   );
 }
