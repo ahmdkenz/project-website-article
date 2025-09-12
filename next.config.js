@@ -1,13 +1,12 @@
-// next.config.js (atau next.config.mjs)
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    // Pastikan path glob mengarah ke folder konten kamu
-    outputFileTracingIncludes: {
-      // berlaku untuk semua route
-      '*': ['./content/articles/**'], 
-      // kalau kontenmu beda, ganti pathnya
-      // '*': ['./data/posts/**'],
-    },
+  // Pastikan path sesuai dengan lokasi kontenmu
+  outputFileTracingIncludes: {
+    '*': ['./content/articles/**'],
   },
+
+  // (Opsional, biar build tidak gagal karena linting)
+  // eslint: { ignoreDuringBuilds: true },
 };
+
 module.exports = nextConfig;
