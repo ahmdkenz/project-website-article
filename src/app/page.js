@@ -207,7 +207,7 @@ export default function SelectModePage() {
           .options-grid .mode-card:nth-child(1) { animation-delay: .05s; }
           .options-grid .mode-card:nth-child(2) { animation-delay: .12s; }
 
-          /* Badge kecil di hero (opsional, subtle) */
+          /* (asli) Badge kecil di hero */
           .brand-badge { display: inline-flex; font-size: 1.25rem; animation: softPulse 2.2s ease-in-out .6s 2; }
         }
 
@@ -250,6 +250,137 @@ export default function SelectModePage() {
           /* Overlay sedikit lebih ringan agar gambar tetap terlihat */
           .hero.hero--welcome .hero-overlay {
             background: linear-gradient(180deg, rgba(2,6,23,.35), rgba(2,6,23,.45) 40%, rgba(2,6,23,.55));
+          }
+        }
+
+        /* ====== POSISI DASAR BRAND BADGE DI KANAN ATAS ====== */
+        .brand-badge {
+          position: absolute;
+          /* kanan-atas: tambahkan safe-area iOS */
+          top: calc(clamp(8px, 2vw, 16px) + env(safe-area-inset-top, 0px));
+          right: calc(clamp(8px, 2vw, 16px) + env(safe-area-inset-right, 0px));
+          font-size: clamp(1rem, 0.9rem + 0.6vw, 1.4rem);
+          line-height: 1;
+          opacity: 0.9;
+          pointer-events: none;
+          user-select: none;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+          z-index: 2; /* di atas overlay */
+        }
+        @media (max-width: 640px) {
+          .brand-badge {
+            top: calc(10px + env(safe-area-inset-top, 0px));
+            right: calc(10px + env(safe-area-inset-right, 0px));
+            font-size: 1.05rem;
+            opacity: 0.88;
+          }
+        }
+        @media (prefers-reduced-motion: no-preference) {
+          .brand-badge { animation: softPulse 2.6s ease-in-out .6s 3; }
+        }
+
+        /* ====== BRAND BADGE → gaya "gantungan kunci" (override akhir) ====== */
+        .brand-badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: .35rem;
+          padding: .38rem .6rem;
+          font-weight: 600;
+
+          /* tag look */
+          background: rgba(255,255,255,0.92);
+          color: #0f172a;
+          border: 1px solid rgba(15,23,42,0.08);
+          border-radius: 14px;
+          box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+          backdrop-filter: saturate(130%) blur(6px);
+
+          /* efek menggantung */
+          transform-origin: top center;
+          text-shadow: 0 1px 0 rgba(255,255,255,.35);
+        }
+        /* TALI gantungan */
+        .brand-badge::before {
+          content: "";
+          position: absolute;
+          top: -18px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 2px;
+          height: 18px;
+          background: linear-gradient(#e2e8f0, #cbd5e1);
+          border-radius: 2px;
+          box-shadow: 0 0 0 1px rgba(0,0,0,0.05);
+        }
+        /* RING gantungan */
+        .brand-badge::after {
+          content: "";
+          position: absolute;
+          top: -26px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 12px;
+          height: 12px;
+          border-radius: 999px;
+          background: transparent;
+          border: 2px solid rgba(226,232,240,0.95);
+          box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06), 0 0 0 1px rgba(255,255,255,0.6);
+        }
+
+        /* Dark mode */
+        html.dark .brand-badge {
+          background: rgba(15,23,42,0.6);
+          color: #f1f5f9;
+          border: 1px solid rgba(148,163,184,0.35);
+          text-shadow: none;
+        }
+        html.dark .brand-badge::before {
+          background: linear-gradient(#475569, #334155);
+          box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
+        }
+        html.dark .brand-badge::after {
+          border-color: rgba(148,163,184,0.9);
+          box-shadow: inset 0 0 0 1px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08);
+        }
+
+        /* Responsive tuning untuk keychain */
+        @media (max-width: 640px) {
+          .brand-badge {
+            padding: .34rem .5rem;
+            font-size: 1rem;
+          }
+          .brand-badge::before { top: -14px; height: 14px; } /* tali lebih pendek di mobile */
+          .brand-badge::after  { top: -21px; width: 11px; height: 11px; } /* ring sedikit lebih kecil */
+        }
+
+        /* Animasi ayunan halus (hormati reduce motion) */
+        @media (prefers-reduced-motion: no-preference) {
+          @keyframes keychain-swing {
+            0%   { transform: rotate(-2.2deg); }
+            50%  { transform: rotate( 2.2deg); }
+            100% { transform: rotate(-2.2deg); }
+          }
+          @keyframes keychain-swing-sm {
+            0%   { transform: rotate(-1.2deg); }
+            50%  { transform: rotate( 1.2deg); }
+            100% { transform: rotate(-1.2deg); }
+          }
+          /* Desktop/tablet: ayunan sedang, berhenti setelah 3x */
+          .brand-badge {
+            animation: keychain-swing 3.2s ease-in-out .6s 3;
+          }
+          /* Mobile: ayunan lebih halus dan sedikit lebih cepat */
+          @media (max-width: 640px) {
+            .brand-badge {
+              animation: keychain-swing-sm 2.6s ease-in-out .4s 3;
+            }
+          }
+          /* Hover only untuk perangkat dengan hover → infinite */
+          @media (hover: hover) {
+            .brand-badge:hover {
+              animation: keychain-swing 1.6s ease-in-out infinite;
+            }
           }
         }
       `}</style>
