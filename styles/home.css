@@ -1,0 +1,60 @@
+/* === Home & Hero: tombol patuh lebar kolom di mobile === */
+@media (max-width: 640px) {
+  /* Baris tombol jadi 1 kolom */
+  .homepage-articles-wrapper .btn-row,
+  .hero .btn-row {
+    grid-template-columns: 1fr !important;
+    gap: .85rem;
+  }
+
+  /* Tombol ikut lebar kolom (bukan lebar konten) */
+  .homepage-articles-wrapper .btn,
+  .homepage-articles-wrapper .btn-primary,
+  .homepage-articles-wrapper .btn-ghost,
+  .homepage-articles-wrapper .btn-outline,
+  .hero .btn,
+  .hero .btn-primary,
+  .hero .btn-ghost,
+  .hero .btn-outline {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    justify-content: center !important;
+    white-space: nowrap;
+  }
+
+  /* Pastikan parent mengizinkan anak mengecil */
+  .homepage-articles-wrapper [class*="card"],
+  .homepage-articles-wrapper [class*="actions"],
+  .hero [class*="card"],
+  .hero [class*="actions"] {
+    min-width: 0 !important;
+  }
+
+  /* Tombol besar disetel ulang biar tak melebar */
+  .homepage-articles-wrapper .btn-lg,
+  .hero .btn-lg {
+    padding: .9rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* Layar sangat kecil → izinkan label membungkus 2 baris */
+@media (max-width: 360px) {
+  .homepage-articles-wrapper .btn,
+  .hero .btn {
+    white-space: normal;
+    line-height: 1.25;
+    text-align: center;
+  }
+}
+/* Jadikan kartu sebagai container ukuran */
+.homepage-articles-wrapper .article-card,
+.homepage-articles-wrapper .home-card { container-type: inline-size; }
+
+/* Jika kolom kartu menyempit, tombol jadi full-width */
+@container (max-width: 420px) {
+  .article-card .btn, .home-card .btn { width: 100%; max-width: 100%; min-width: 0; }
+  .article-card .btn-row, .home-card .btn-row { grid-template-columns: 1fr; }
+}
