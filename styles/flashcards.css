@@ -30,3 +30,172 @@
 }
 html.dark .flashcard-back { color: #ffffff !important; }
 
+/* Spasi antar kartu (horizontal & vertical) */
+.flashcards-grid {
+  gap: 1.5rem;               /* ~24px, sesuaikan selera */
+}
+
+@media (min-width: 1024px) {
+  .flashcards-grid { gap: 1.75rem; }  /* desktop sedikit lebih lega */
+}
+/* Pastikan grid memberi ruang untuk tombol di bawahnya */
+#flashcardsGrid {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 5rem;     /* beri jarak vertikal dari tombol */
+}
+
+/* Tombol & hint selalu berada di atas kartu */
+.list-footer,
+.list-hint {
+  position: relative;
+  z-index: 2;                 /* di atas kartu */
+}
+
+/* Kalau masih ketimpa (karena efek 3D/hover), tambahkan ini juga */
+.flashcard {
+  position: relative;         /* buat konteks sendiri */
+  z-index: 1;                 /* lebih rendah dari tombol */
+  /* overflow: hidden; */     /* opsional: aktifkan jika bayangan meluber menutupi tombol */
+}
+/* === Mobile fix: flip tetap aktif, tapi hanya 1 sisi yang terlihat === */
+@media (max-width: 640px) {
+  .flashcard {
+    perspective: 1000px;
+    overflow: hidden;                  /* cegah sisi lain nongol */
+    -webkit-transform: translateZ(0);  /* aktifkan compositing di iOS */
+            transform: translateZ(0);
+  }
+
+  .flashcard-inner {
+    position: relative;
+    width: 100%; height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;    /* penting untuk iOS */
+    will-change: transform;
+  }
+  .flashcard-inner.is-flipped {
+    -webkit-transform: rotateY(180deg);      /* vendor prefix untuk Safari mobile */
+            transform: rotateY(180deg);
+  }
+
+  /* TAMPILKAN HANYA SATU SISI PADA SUATU WAKTU */
+  .flashcard-front,
+  .flashcard-back {
+    position: absolute; inset: 0;
+    display: flex;
+    align-items: center; justify-content: center;
+    text-align: center;
+    width: 100%; height: 100%;
+    backface-visibility: hidden;             /* kunci utamanya */
+    -webkit-backface-visibility: hidden;     /* iOS butuh ini */
+    overflow: hidden;
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+  }
+  .flashcard-back {
+    -webkit-transform: rotateY(180deg);
+            transform: rotateY(180deg);
+  }
+}
+/* Fallback (tanpa prefix) – biarkan seperti sebelumnya */
+.flashcard-desc,
+.flashcard-front p,
+.flashcard-back p {
+  margin: 0;
+  line-height: var(--desc-lh, 1.45em);
+  overflow: hidden;
+  max-height: calc((var(--lines, 3)) * var(--desc-lh, 1.45em));
+}
+
+/* Clamp modern + vendor; tambahkan properti standar lebih dulu */
+@supports (line-clamp: 1) or (-webkit-line-clamp: 1) {
+  .flashcard-desc,
+  .flashcard-front p,
+  .flashcard-back p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: var(--lines, 3);           /* ← standar */
+    -webkit-line-clamp: var(--lines, 3);   /* ← vendor */
+  }
+
+  /* Tablet */
+  @media (max-width: 992px) {
+    .flashcard-desc,
+    .flashcard-front p,
+    .flashcard-back p {
+      line-clamp: var(--lines-md, 3);
+      -webkit-line-clamp: var(--lines-md, 3);
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    .flashcard-desc,
+    .flashcard-front p,
+    .flashcard-back p {
+      line-clamp: var(--lines-sm, 3);
+      -webkit-line-clamp: var(--lines-sm, 3);
+    }
+  }
+}
+/* === Stabilizer: biar judul & isi tidak kepotong === */
+
+/* 1) Pastikan panel muat ke tinggi kartu (border-box) + teks aman bungkus */
+.flashcard-front,
+.flashcard-back {
+  box-sizing: border-box;                /* border & padding termasuk di 100% height */
+  padding: clamp(10px, 1.2vw, 14px);
+  overflow-wrap: anywhere;               /* putus kata panjang */
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* 2) Fallback clamp (tanpa prefix) — JANGAN terlalu ketat */
+.flashcard-desc,
+.flashcard-front p,
+.flashcard-back p {
+  margin: 0;
+  line-height: 1.45;                     /* unitless, aman untuk rounding */
+  overflow: hidden;
+  max-height: calc(var(--lines, 3) * 1.45em);   /* fallback: 3 baris */
+}
+
+/* 3) Jika browser dukung clamp modern, matikan fallback max-height supaya
+      tidak terjadi “double clamp” (penyebab umum teks kepotong 1–2px). */
+@supports (line-clamp: 1) or (-webkit-line-clamp: 1) {
+  .flashcard-desc,
+  .flashcard-front p,
+  .flashcard-back p {
+    max-height: none;                    /* <— penting! hindari dobel batas */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: var(--lines, 3);
+    -webkit-line-clamp: var(--lines, 3);
+  }
+}
+
+/* 4) Mobile: hindari auto-scaling font iOS + clamp 3 baris */
+@media (max-width: 640px) {
+  html { -webkit-text-size-adjust: 100%; }  /* cegah Safari membesarkan font */
+  .flashcard-desc,
+  .flashcard-front p,
+  .flashcard-back p {
+    line-clamp: var(--lines-sm, 3);
+    -webkit-line-clamp: var(--lines-sm, 3);
+  }
+}
+
+/* 5) (Opsional) Desktop: kalau definisi sering panjang, izinkan scroll vertikal
+      di sisi belakang saja, biar tidak kepotong saat flip. */
+@media (min-width: 641px) {
+  .flashcard-back {
+    overflow: auto;                       /* scroll hanya jika perlu */
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* 6) (Opsional) Sedikit ruang ekstra bawah grid agar tombol tidak “nempel” */
+#flashcardsGrid { margin-bottom: 1.25rem; position: relative; z-index: 1; }
+.list-footer, .list-hint { position: relative; z-index: 2; }

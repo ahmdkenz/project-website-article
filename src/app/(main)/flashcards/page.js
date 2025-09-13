@@ -42,8 +42,8 @@ export default async function FlashcardsPage() {
       </section>
 
       {/* 2. Render komponen client dan kirim data sebagai props */}
-      {/* Dibungkus agar gaya “compact” hanya aktif di halaman ini */}
-      <section className="flashcards-compact">
+      {/* Kembali ke ukuran default (TANPA wrapper compact) */}
+      <section>
         <FlashcardList allFlashcards={flashcards} />
       </section>
     </>

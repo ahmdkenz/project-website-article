@@ -8,26 +8,26 @@ export default function FlashcardList({ allFlashcards }) {
   // allFlashcards adalah data awal yang kita dapat dari server
   const [filteredFlashcards, setFilteredFlashcards] = useState(allFlashcards);
 
-  // [BARU] kontrol jumlah item yang ditampilkan
-  const INITIAL_COUNT = 8;   // tampilkan 8 dulu
-  const STEP = 8;            // tambah 8 setiap klik
+  // kontrol jumlah item yang ditampilkan
+  const INITIAL_COUNT = 5;   // tampilkan 8 dulu
+  const STEP = 5;            // tambah 8 setiap klik
   const [visible, setVisible] = useState(INITIAL_COUNT);
 
   const handleSearch = (event) => {
     const keyword = event.target.value.toLowerCase().trim();
     if (!keyword) {
       setFilteredFlashcards(allFlashcards); // Jika kosong, tampilkan semua
-      setVisible(INITIAL_COUNT);            // [BARU] reset tampilan awal
+      setVisible(INITIAL_COUNT);            // reset tampilan awal
       return;
     }
     const filtered = allFlashcards.filter(card =>
       card.term.toLowerCase().includes(keyword)
     );
     setFilteredFlashcards(filtered);
-    setVisible(INITIAL_COUNT);              // [BARU] reset tampilan awal untuk hasil pencarian
+    setVisible(INITIAL_COUNT);              // reset tampilan awal untuk hasil pencarian
   };
 
-  // [BARU] hitung irisan item yang akan dirender
+  // hitung irisan item yang akan dirender
   const total = filteredFlashcards.length;
   const items = filteredFlashcards.slice(0, visible);
   const canShowMore = visible < total;
@@ -50,9 +50,10 @@ export default function FlashcardList({ allFlashcards }) {
         </div>
       </section>
 
+      {/* ← pakai grid default dari styles/flashcards.css */}
       <div
         id="flashcardsGrid"
-        className="card-grid"
+        className="flashcards-grid"
         style={{ marginTop: '2rem' }}
         aria-live="polite"
       >
@@ -67,7 +68,7 @@ export default function FlashcardList({ allFlashcards }) {
         )}
       </div>
 
-      {/* [BARU] Footer tombol Show More / Show Less */}
+      {/* Footer tombol Show More / Show Less */}
       {total > 0 && (
         <>
           <div className="list-footer" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem', gap: '.5rem' }}>
