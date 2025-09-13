@@ -1,0 +1,41 @@
+
+.hero-content {
+  max-width: 640px;
+  margin: clamp(20px, 3vw, 32px) auto 0;
+  text-align: center;
+  padding: 0 1rem; /* aman di layar kecil */
+}
+
+/* Animasi halus seperti hero lama */
+.hero-content h1,
+.hero-content p,
+.hero-content .hero-actions {
+  opacity: 0;
+  transform: translateY(25px);
+  animation: fadeUp 0.8s ease forwards;
+}
+.hero-content h1 { animation-delay: .1s; }
+.hero-content p { animation-delay: .25s; }
+.hero-content .hero-actions { animation-delay: .4s; }
+
+.hero-content .hero-actions {
+  display: inline-flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;               /* stack di mobile */
+  justify-content: center;
+}
+
+/* Tombol full-width pada layar sangat kecil */
+@media (max-width: 480px) {
+  .hero-content .hero-actions .btn {
+    width: 100%;
+  }
+}
+
+/* Pastikan konten di atas gambar */
+.hero .hero-inner {
+  position: relative;
+  z-index: 1;
+}
+

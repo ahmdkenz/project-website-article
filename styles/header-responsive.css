@@ -1,0 +1,99 @@
+
+
+/* Default (Mobile-First) */
+.navbar .logo-desktop,
+.navbar nav,
+.navbar .search-form-desktop { display: none; }
+
+.navbar .logo-mobile,
+.navbar .search-icon-mobile,
+.navbar .menu-toggle { display: block; }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: var(--text-color);
+  z-index: 1001;
+}
+
+.search-icon-mobile {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+/* Menu Mobile Saat Terbuka */
+.navbar nav.nav-open {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: var(--navbar-h);
+  left: 0;
+  width: 100%;
+  background-color: var(--surface-color);
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  gap: 1rem;
+}
+.navbar nav.nav-open a { padding: 0.5rem; border-radius: 6px; }
+.navbar nav.nav-open a:hover { background-color: var(--bg-color); }
+
+/* Desktop (≥ 992px) */
+@media (min-width: 992px) {
+  .navbar .logo-desktop,
+  .navbar nav,
+  .navbar .search-form-desktop {
+    display: flex;
+    align-items: center;
+  }
+  .navbar .logo-mobile,
+  .navbar .search-icon-mobile,
+  .navbar .menu-toggle { display: none; }
+
+  .navbar nav {
+    position: static;
+    flex-direction: row;
+    background: none;
+    padding: 0; border: none; box-shadow: none;
+    gap: 1.5rem;
+  }
+
+  .search-form-desktop { gap: 0.5rem; }
+  .search-form-desktop input {
+    padding: .5rem .75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--surface-color);
+    color: var(--text-color);
+  }
+}
+
+/* Toggle tema */
+#darkModeToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0.25rem;
+  margin-left: 1rem;
+  line-height: 1;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+#darkModeToggle:hover { transform: scale(1.1) rotate(15deg); }
+#darkModeToggle:focus-visible { outline: 3px solid var(--ring-color); outline-offset: 2px; }
+
+/* Logo & Search Responsif (tambahan) */
+.logo-mobile { display: none; }
+.search-bar-global { display: flex; }
+.search-toggle-mobile { display: none; }
+

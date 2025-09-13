@@ -1,0 +1,70 @@
+
+
+/* Dropdown suggestions (desktop) */
+.search-suggest {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + .5rem);
+  z-index: 1002;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 1rem;
+}
+
+/* Search Overlay (mobile) */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+}
+.search-overlay-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.35);
+}
+.search-overlay-panel {
+  position: relative;
+  background: var(--surface-color);
+  height: 100%;
+  width: min(720px, 100%);
+  margin-left: auto; margin-right: auto;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+}
+.search-overlay-head {
+  display: flex; gap: .5rem; align-items: center;
+  padding: .75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+.search-overlay-input {
+  flex: 1;
+  padding: .75rem .9rem;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--surface-color);
+  color: var(--text-color);
+}
+.search-overlay-body {
+  padding: 1rem;
+  overflow: auto;
+}
+.search-overlay-foot {
+  border-top: 1px solid var(--border-color);
+  padding: .75rem;
+  display: flex; justify-content: flex-end;
+}
+@media (max-width: 640px) {
+  .search-overlay-panel {
+    border-left: none; border-right: none;
+  }
+}
+
+/* Sembunyikan elemen legacy agar tidak dobel (tanpa menghapus markup) */
+.legacy-search-desktop { display: none !important; }
+@media (max-width: 991px) {
+  .legacy-search-mobile { display: none !important; }
+}

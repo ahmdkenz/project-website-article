@@ -1,0 +1,21 @@
+
+.hscroll {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(240px, 1fr); /* lebar kartu minimum */
+  gap: 1rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding: 0 .25rem .5rem;
+  -webkit-overflow-scrolling: touch;
+}
+.hscroll > * { scroll-snap-align: start; }
+
+/* Scrollbar tipis yang ramah */
+.hscroll::-webkit-scrollbar { height: 8px; }
+.hscroll::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 999px;
+}
+

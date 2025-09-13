@@ -1,0 +1,34 @@
+
+.hscroll-wrap { position: relative; }
+.hscroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px; height: 36px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: color-mix(in oklab, var(--surface-color), #000 4%);
+  color: var(--text-color);
+  display: grid; place-items: center;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease;
+  z-index: 2;
+}
+.hscroll-btn:hover {
+  transform: translateY(-50%) scale(1.05);
+  background: color-mix(in oklab, var(--surface-color), #000 8%);
+}
+.hscroll-btn:focus-visible {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+.hscroll-btn--left  { left: -10px; }
+.hscroll-btn--right { right: -10px; }
+
+/* Rapikan posisi panah di layar kecil (hindari mentok) */
+@media (max-width: 480px) {
+  .hscroll-btn--left  { left: 4px; }
+  .hscroll-btn--right { right: 4px; }
+}
+

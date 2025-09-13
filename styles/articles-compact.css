@@ -1,0 +1,65 @@
+
+.articles-compact .card-grid,
+.articles-compact .articles-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* kartu lebih sempit */
+  gap: 1rem;
+}
+
+.articles-compact .article-card {
+  padding: 1rem;                 /* lebih tipis */
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  box-shadow: none;              /* tanpa shadow berat */
+}
+
+.articles-compact .article-card h3 {
+  font-size: 1rem;               /* judul kecil */
+  line-height: 1.35;
+  margin: 0 0 .35rem;
+}
+
+.articles-compact .article-card p {
+  font-size: .9rem;              /* excerpt kecil */
+  margin: 0 0 .5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;         /* maksimal 2 baris */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.articles-compact .badge,
+.articles-compact .tag {
+  font-size: .78rem;             /* meta ringkas */
+}
+
+.articles-compact .card-actions {
+  display: none;                 /* sembunyikan tombol besar */
+}
+
+.articles-compact .article-card:hover {
+  transform: none;
+  box-shadow: var(--shadow);     /* hover halus */
+}
+/* ==========================================
+   Footer list: tombol "Lihat selengkapnya"
+   (khusus digunakan di halaman /articles)
+   ========================================== */
+.articles-compact .list-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.articles-compact .list-footer .btn {
+  min-width: 180px;
+}
+
+/* Opsi: teks kecil di bawah tombol (mis. jumlah total) */
+.articles-compact .list-hint {
+  margin-top: .5rem;
+  text-align: center;
+  font-size: .85rem;
+  color: var(--muted-color);
+}

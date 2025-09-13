@@ -1,0 +1,26 @@
+
+.badge {
+  display: inline-block; font-size: 12px;
+  padding: .2rem .5rem; border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--surface-color);
+  margin-right: .5rem;
+}
+.tag {
+  display: inline-block; font-size: 12px;
+  padding: .2rem .5rem; border-radius: 6px;
+  border: 1px dashed var(--border-color);
+  margin-right: .35rem; color: var(--muted-color);
+}
+.progress-bar {
+  position: fixed; top: 0; left: 0;
+  height: 4px; background: var(--primary-color);
+  z-index: 9999; transition: width 0.15s ease-out;
+}
+.visually-hidden {
+  position: absolute !important; width: 1px !important; height: 1px !important;
+  margin: -1px !important; padding: 0 !important; border: 0 !important;
+  clip: rect(0 0 0 0) !important; overflow: hidden !important;
+}
+
+

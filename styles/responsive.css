@@ -1,0 +1,36 @@
+
+
+@media (max-width: 480px) {
+  .btn, .btn-primary, .btn-ghost, .btn-outline { width: 100%; }
+}
+
+@media (max-width: 768px) {
+  .navbar nav { display: none; }
+
+  /* Logo & Search responsif */
+  .logo-desktop { display: none; }
+  .logo-mobile { display: inline-block; }
+
+  .search-bar-global { display: none; }
+  .search-toggle-mobile {
+    display: inline-flex;
+    background: none; border: none;
+    font-size: 1.5rem; cursor: pointer; color: var(--text-color);
+  }
+}
+
+@media (min-width: 600px) {
+  .hero { padding: 60px 0; }
+  .hero h1 { font-size: clamp(32px, 5vw, 48px); }
+}
+
+@media (min-width: 992px) {
+  /* placeholder untuk konsistensi */
+}
+
+@media (min-width: 1280px) {
+  .container { max-width: 1200px; margin: 0 auto; }
+  .hero h1 { font-size: 56px; }
+}
+
+

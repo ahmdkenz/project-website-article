@@ -1,0 +1,25 @@
+
+.card-grid, .options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.article-card, .option-card, .mode-card {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+.article-card:hover, .option-card:hover, .mode-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+html.dark .article-card:hover,
+html.dark .option-card:hover,
+html.dark .mode-card:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+.card-actions { margin-top: auto; padding-top: 1rem; }
+

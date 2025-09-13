@@ -1,0 +1,62 @@
+
+.navbar {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+html.dark .navbar { background-color: rgba(15, 23, 42, 0.7); }
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  height: var(--navbar-h);
+  box-sizing: border-box;
+}
+
+/* Logo (ikon + teks) */
+.navbar .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.navbar .logo:hover { color: var(--primary-color); }
+.navbar .logo img { display: block; height: auto; }
+
+/* Nav link */
+.navbar nav { display: flex; gap: 1.5rem; }
+.navbar nav a {
+  font-weight: 500;
+  color: var(--text-color);
+  text-decoration: none;
+  position: relative;
+  padding: 0.25rem 0;
+  transition: color 0.2s ease;
+}
+.navbar nav a:hover { color: var(--primary-color); }
+.navbar nav a::after {
+  content: '';
+  position: absolute;
+  width: 100%; height: 2px;
+  background-color: var(--primary-color);
+  bottom: 0; left: 0;
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+}
+.navbar nav a:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+

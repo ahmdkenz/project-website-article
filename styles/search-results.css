@@ -1,0 +1,64 @@
+
+
+.search-result {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  margin: 0 -1.5rem;
+  padding: 1rem 1.5rem;
+}
+.search-item:hover {
+  background-color: color-mix(in oklab, var(--surface-color), #888 6%);
+}
+html.dark .search-item:hover {
+  background-color: color-mix(in oklab, var(--surface-color), #fff 6%);
+}
+
+/* Kamus */
+.dictionary-results .terms-container {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  min-height: 150px;
+  transition: all 0.2s ease-in-out;
+}
+.dictionary-results .terms-container p { margin-top: 1rem; } 
+
+
+/* ========================================================================
+   OVERRIDES TANPA MENGHAPUS KODE SEBELUMNYA
+   - Perkecil banner hero (clamp yang benar + image-only)
+   - Sembunyikan .logo-mobile (YLK) di mobile & tablet
+   ======================================================================== */
+
+/* Tambah variabel hero (boleh didefinisikan ulang di :root lain) */
+:root {
+  --hero-h-min: 220px;
+  --hero-h-fluid: 28vw;
+  --hero-h-max: 360px;
+}
+
+/* BENARKAN ukuran hero + hilangkan padding/background lama (tanpa hapus kode) */
+.hero {
+  min-height: clamp(var(--hero-h-min), var(--hero-h-fluid), var(--hero-h-max)) !important;
+  padding: 0 !important;
+  background: none !important;
+}
+
+/* Sembunyikan label mobile (YLK) di semua non-desktop */
+@media (max-width: 991px) {
+  .logo-mobile { display: none !important; }
+}
+

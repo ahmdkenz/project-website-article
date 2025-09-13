@@ -1,0 +1,18 @@
+
+.flashcards-compact .list-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  gap: .5rem;
+  position: relative; /* [BARU] buat stacking context untuk z-index */
+  z-index: 2;         /* [BARU] pastikan tombol di atas kartu */
+}
+
+.flashcards-compact .list-footer .btn { min-width: 180px; }
+
+.flashcards-compact .list-hint {
+  margin-top: .5rem;
+  text-align: center;
+  font-size: .85rem;
+  color: var(--muted-color);
+}

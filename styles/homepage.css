@@ -1,0 +1,101 @@
+
+
+.hero {
+  text-align: center;
+  padding: 3rem 1rem;
+  margin-top: 1.5rem;
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.06), transparent);
+  border-radius: 12px;
+}
+html.dark .hero {
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.08), transparent);
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  opacity: 0;
+  transform: translateY(25px);
+  animation: fadeUp 0.9s ease 0.2s forwards;
+}
+.hero p {
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 1rem auto 1.5rem;
+  opacity: 0;
+  transform: translateY(25px);
+  animation: fadeUp 0.9s ease 0.5s forwards;
+}
+.hero-actions {
+  display: inline-flex;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(25px);
+  animation: fadeUp 0.9s ease 0.8s forwards;
+}
+@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+.section-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+}
+
+.homepage-articles-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+.homepage-articles {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+.homepage-articles h2 {
+  font-size: 1.3rem;
+  border-left: 4px solid var(--primary-color);
+  padding-left: 0.6rem;
+  margin-top: 0;
+}
+
+/* Tab bar minimal (gunakan tombol .btn yang sudah ada) */
+.homepage-articles > [role="tablist"] {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+/* Hero dengan brand banner */
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(280px, 36vw, 220px); /* tinggi responsif supaya gambar terlihat */
+}
+
+.hero .hero-media {
+  position: absolute;
+  inset: 0;
+}
+
+.hero .hero-img {
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(1.05);
+}
+
+/* Overlay agar teks selalu terbaca (gradasi atas→bawah) */
+.hero .hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.28), rgba(0,0,0,.24) 30%, rgba(0,0,0,.15) 60%, rgba(0,0,0,0));
+  mix-blend-mode: multiply; /* lembut di foto terang */
+}
+
+html.dark .hero .hero-overlay {
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.45), rgba(0,0,0,.38) 30%, rgba(0,0,0,.25) 60%, rgba(0,0,0,.15));
+}

@@ -1,0 +1,63 @@
+
+
+:root {
+  --bg-color: #f8f9fa;
+  --surface-color: #ffffff;
+  --text-color: #0f172a; /* Slate 900 */
+  --muted-color: #64748b; /* Slate 500 */
+  --border-color: #e2e8f0; /* Slate 200 */
+  --primary-color: #2563eb; /* Blue 600 */
+  --primary-text-color: #ffffff;
+  --friendly-color: #0230c7; /* Green 600 */
+  --moderate-color: #0230c7; /* Sky 600 */
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --ring-color: rgba(37, 99, 235, 0.35);
+  --btn-bg: var(--primary-color);
+  --btn-text: var(--primary-text-color);
+
+  /* Tinggi navbar global (mudah diganti saat logo diperbesar) */
+  --navbar-h: 60px;
+}
+
+html.dark {
+  --bg-color: #0f172a; /* Slate 900 */
+  --surface-color: #1e293b; /* Slate 800 */
+  --text-color: #f1f5f9; /* Slate 100 */
+  --muted-color: #94a3b8; /* Slate 400 */
+  --border-color: #334155; /* Slate 700 */
+  --primary-color: #3b82f6; /* Blue 500 */
+  --friendly-color: #0230c7; /* Green 500 */
+  --moderate-color: #0230c7; /* Sky 500 */
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  --ring-color: rgba(96, 165, 250, 0.45);
+}
+
+/* Mode-specific overrides */
+html.mode-friendly:root { --primary-color: var(--friendly-color); }
+html.mode-moderate:root { --primary-color: var(--moderate-color); }
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  line-height: 1.7;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container {
+  width: min(1120px, 92%);
+  margin-inline: auto;
+}
+
+h1, h2, h3, h4 {
+  color: var(--text-color);
+  margin-block: 0 0.5em;
+  font-weight: 700;
+}
+
+.muted { color: var(--muted-color); }
+a { color: var(--primary-color); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+
