@@ -19,7 +19,7 @@ import '@/styles/responsive.css';
 import '@/styles/search-results.css';
 import '@/styles/search-overlay.css';
 import '@/styles/articles-compact.css';
-/*import '@/styles/flashcards-compact.css';*/
+import '@/styles/home.css';
 import '@/styles/footer-extra.css';
 
 import { ModeProvider } from '@/context/ModeContext'; // <-- 1. IMPORT PROVIDER
