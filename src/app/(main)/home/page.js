@@ -1,6 +1,9 @@
 // src/app/(main)/home/page.js
 export const revalidate = 60; // ISR: refresh max tiap 60 detik
 
+// ⬇️ Pastikan CSS untuk behavior tombol mobile dimuat
+import "@/styles/home.css";
+
 import { getAllArticles } from "@/lib/data";
 import { getAllViews } from "@/lib/views";
 import HomeHeroClient from "@/components/HomeHeroClient";
