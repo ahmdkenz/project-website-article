@@ -42,7 +42,10 @@ export default async function FlashcardsPage() {
       </section>
 
       {/* 2. Render komponen client dan kirim data sebagai props */}
-      <FlashcardList allFlashcards={flashcards} />
+      {/* Dibungkus agar gaya “compact” hanya aktif di halaman ini */}
+      <section className="flashcards-compact">
+        <FlashcardList allFlashcards={flashcards} />
+      </section>
     </>
   );
 }

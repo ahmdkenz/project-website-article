@@ -797,3 +797,210 @@ html.dark .search-item:hover {
 @media (max-width: 991px) {
   .legacy-search-mobile { display: none !important; }
 }
+/* ============================
+   Compact list khusus /articles
+   ============================ */
+.articles-compact .card-grid,
+.articles-compact .articles-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* kartu lebih sempit */
+  gap: 1rem;
+}
+
+.articles-compact .article-card {
+  padding: 1rem;                 /* lebih tipis */
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  box-shadow: none;              /* tanpa shadow berat */
+}
+
+.articles-compact .article-card h3 {
+  font-size: 1rem;               /* judul kecil */
+  line-height: 1.35;
+  margin: 0 0 .35rem;
+}
+
+.articles-compact .article-card p {
+  font-size: .9rem;              /* excerpt kecil */
+  margin: 0 0 .5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;         /* maksimal 2 baris */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.articles-compact .badge,
+.articles-compact .tag {
+  font-size: .78rem;             /* meta ringkas */
+}
+
+.articles-compact .card-actions {
+  display: none;                 /* sembunyikan tombol besar */
+}
+
+.articles-compact .article-card:hover {
+  transform: none;
+  box-shadow: var(--shadow);     /* hover halus */
+}
+/* ==========================================
+   Footer list: tombol "Lihat selengkapnya"
+   (khusus digunakan di halaman /articles)
+   ========================================== */
+.articles-compact .list-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.articles-compact .list-footer .btn {
+  min-width: 180px;
+}
+
+/* Opsi: teks kecil di bawah tombol (mis. jumlah total) */
+.articles-compact .list-hint {
+  margin-top: .5rem;
+  text-align: center;
+  font-size: .85rem;
+  color: var(--muted-color);
+}
+/* ==========================================
+   Compact layout khusus halaman /flashcards
+   ========================================== */
+.flashcards-compact .card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); /* kartu lebih kecil */
+  gap: 14px; /* jarak antar istilah/kartu */
+}
+
+/* Perkecil tinggi & padding kartu */
+.flashcards-compact .flashcard {
+  height: 160px;                 /* desktop default */
+}
+.flashcards-compact .flashcard-front,
+.flashcards-compact .flashcard-back {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  box-shadow: none;
+}
+
+/* Tipografi istilah lebih ringkas dan ‘ada jarak’ */
+.flashcards-compact .flashcard-front h3,
+.flashcards-compact .flashcard-front .term,
+.flashcards-compact .flashcard-front .title {
+  font-size: 1rem;
+  line-height: 1.35;
+  letter-spacing: .2px;
+  margin: 6px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;         /* maksimal 2 baris */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Isi belakang kartu (definisi/list) lebih rapat & kecil */
+.flashcards-compact .flashcard-back,
+.flashcards-compact .flashcard-back p,
+.flashcards-compact .flashcard-back li {
+  font-size: .9rem;
+}
+.flashcards-compact .flashcard-back p,
+.flashcards-compact .flashcard-back li {
+  margin: 6px 0;
+}
+
+/* Responsif: kartu lebih pendek di layar kecil */
+@media (max-width: 992px) {
+  .flashcards-compact .flashcard { height: 150px; }
+}
+@media (max-width: 640px) {
+  .flashcards-compact .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+  }
+  .flashcards-compact .flashcard { height: 140px; }
+}
+/* ==========================================
+   Compact layout khusus halaman /flashcards
+   (blok ini boleh sudah ada; tambahkan bagian footer/hint di bawah)
+   ========================================== */
+.flashcards-compact .card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px; /* jarak antar kartu/istilah */
+  margin-bottom: 1.25rem; /* [BARU] beri ruang untuk tombol di bawah grid */
+}
+
+.flashcards-compact .flashcard {
+  height: 160px;
+  position: relative;   /* [BARU] untuk kontrol z-index */
+  z-index: 1;           /* [BARU] pastikan di bawah tombol */
+  overflow: hidden;     /* [BARU] cegah konten kartu melewati batas */
+}
+
+.flashcards-compact .flashcard-front,
+.flashcards-compact .flashcard-back {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  box-shadow: none;
+  overflow: hidden; /* [BARU] panel depan/belakang tidak meluber */
+}
+
+/* [BARU] Jika konten belakang panjang, biarkan scroll di dalam kartu */
+.flashcards-compact .flashcard-back {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.flashcards-compact .flashcard-front h3,
+.flashcards-compact .flashcard-front .term,
+.flashcards-compact .flashcard-front .title {
+  font-size: 1rem;
+  line-height: 1.35;
+  letter-spacing: .2px;
+  margin: 6px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.flashcards-compact .flashcard-back,
+.flashcards-compact .flashcard-back p,
+.flashcards-compact .flashcard-back li { font-size: .9rem; }
+.flashcards-compact .flashcard-back p,
+.flashcards-compact .flashcard-back li { margin: 6px 0; }
+
+@media (max-width: 992px) {
+  .flashcards-compact .flashcard { height: 150px; }
+}
+@media (max-width: 640px) {
+  .flashcards-compact .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+  }
+  .flashcards-compact .flashcard { height: 140px; }
+}
+
+/* ===== Footer tombol Show More / Show Less ===== */
+.flashcards-compact .list-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  gap: .5rem;
+  position: relative; /* [BARU] buat stacking context untuk z-index */
+  z-index: 2;         /* [BARU] pastikan tombol di atas kartu */
+}
+
+.flashcards-compact .list-footer .btn { min-width: 180px; }
+
+.flashcards-compact .list-hint {
+  margin-top: .5rem;
+  text-align: center;
+  font-size: .85rem;
+  color: var(--muted-color);
+}

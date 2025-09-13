@@ -6,6 +6,9 @@ import { getAllViews } from "@/lib/views";
 import ArticleList from "@/components/ArticleList";
 import Link from "next/link";
 
+// [BARU] Import komponen client untuk "Lihat selengkapnya"
+import ArticlesShowMoreClient from "@/components/ArticlesShowMoreClient";
+
 export default async function ArticlesPage() {
   const articles = await getAllArticles();
   const viewsMap = await getAllViews();
@@ -59,10 +62,18 @@ export default async function ArticlesPage() {
         </p>
       </section>
 
-      {/* Bungkus ArticleList dengan React.Suspense */}
-      <React.Suspense fallback={<p>Loading articles...</p>}>
-        <ArticleList allArticles={enrichedArticles} />
-      </React.Suspense>
+      {/* === WRAPPER COMPACT (tetap) === */}
+      <section className="articles-compact container" aria-labelledby="articles-list">
+        {/* Bungkus ArticleList dengan React.Suspense */}
+        <React.Suspense fallback={<p>Loading articles...</p>}>
+          {/* [DIUBAH] Gunakan komponen client "Show More" agar awalnya tampil 6 item */}
+          <ArticlesShowMoreClient
+            allArticles={enrichedArticles}
+            initialCount={6}  // jumlah awal yang ditampilkan
+            step={6}          // jumlah penambahan setiap kali klik
+          />
+        </React.Suspense>
+      </section>
 
       {/* Tags Section sebelum footer */}
       {allTags.length > 0 && (
