@@ -16,17 +16,34 @@ export default function HomeHeroClient() {
 
   return (
     <>
-      {/* === BANNER BRAND: gambar saja, tanpa teks === */}
+      {/* === BANNER BRAND: sekarang dengan 2 gambar yang akan beranimasi === */}
       <section className="hero" id="hero">
         <div className="hero-media" aria-hidden="true">
+          {/* --- PERUBAHAN DIMULAI DI SINI --- */}
+          
+          {/* Gambar Pertama */}
           <Image
-            src="/brand/hero-mudamelekfinansial.jpg"  // pastikan file ada di /public/brand/
-            alt=""                                     // dekoratif (teks ada di bawah)
+            src="/brand/hero-mudamelekfinansial.jpg"
+            alt=""
             fill
             priority
             sizes="100vw"
             className="hero-img"
+            id="hero-img-1" // ID untuk animasi CSS
           />
+
+          {/* Gambar Kedua */}
+          <Image
+            src="/brand/hero-2.jpg" // Pastikan file ini ada di /public/brand/
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="hero-img"
+            id="hero-img-2" // ID untuk animasi CSS
+          />
+
+          {/* --- AKHIR PERUBAHAN --- */}
           <div className="hero-overlay" />
         </div>
       </section>
