@@ -60,4 +60,49 @@ h1, h2, h3, h4 {
 a { color: var(--primary-color); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+/* 1. Atur container utama */
+.hero-media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 
+/* 2. Buat "filmstrip" yang akan digeser */
+.hero-slider-wrapper {
+  display: flex;
+  width: 200%; /* Karena ada 2 gambar, lebarnya 2x lipat */
+  height: 100%;
+  position: relative;
+  animation: slideRightLoop 10s linear infinite;
+}
+
+/* 3. Atur setiap gambar di dalam slider */
+.hero-media .hero-img {
+  width: 50%; /* Setiap gambar mengisi setengah dari wrapper */
+  height: 100%;
+  flex-shrink: 0;
+  object-fit: contain;
+  
+  /* --- PERUBAHAN UTAMA ADA DI SINI --- */
+  object-fit: contain; /* Mengganti 'cover' agar seluruh gambar terlihat */
+}
+
+/* 4. Definisikan animasinya (@keyframes) */
+@keyframes slideRightLoop {
+  0% {
+    transform: translateX(0%);
+  }
+  45% {
+    transform: translateX(0%);
+  }
+  50% {
+    transform: translateX(-50%);
+  }
+  95% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}

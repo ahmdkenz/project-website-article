@@ -22,29 +22,35 @@ export const metadata = {
 };
 
 export default function YukLiterasiPage() {
-  // Gambar banner brand untuk halaman Yuk Literasi (sesuaikan asetmu)
-  const bannerSrc = "/brand/hero-yuk-literasi.jpg"; // disarankan .webp agar ringan
+  // Siapkan dua gambar untuk banner
+  const bannerSrc1 = "/brand/hero-yuk-literasi.jpg";
+  const bannerSrc2 = "/brand/hero-2.jpg";
 
   return (
     <>
-      {/* === Brand Banner (image-only, full-bleed) === */}
-      <section
-        className="hero"
-        style={{
-          // Tinggi responsif khusus halaman ini
-          "--hero-h-min": "220px",
-          "--hero-h-fluid": "26vw",
-          "--hero-h-max": "360px",
-        }}
-      >
+      {/* === Brand Banner (disesuaikan dengan animasi & ukuran standar) === */}
+      
+      {/* PERUBAHAN 1: Blok 'style' dihapus agar ukurannya sama seperti homepage */}
+      <section className="hero">
         <div className="hero-media" aria-hidden="true">
+          {/* PERUBAHAN 2: Struktur diubah menjadi tumpukan 2 gambar untuk animasi fade */}
           <Image
-            src={bannerSrc}
+            src={bannerSrc1}
             alt=""
             fill
             sizes="100vw"
             priority={false}
             className="hero-img"
+            id="hero-img-1"
+          />
+          <Image
+            src={bannerSrc2}
+            alt=""
+            fill
+            sizes="100vw"
+            priority={false}
+            className="hero-img"
+            id="hero-img-2"
           />
           <div className="hero-overlay" />
         </div>

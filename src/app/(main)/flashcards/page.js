@@ -7,30 +7,39 @@ export default async function FlashcardsPage() {
   // 1. Ambil data di sisi server saat halaman di-build
   const flashcards = await getAllFlashcards();
 
-  // Gambar banner brand untuk halaman Flashcards (sesuaikan nama file asetmu)
-  const bannerSrc = "/brand/hero-flashcards.jpg";
+  // Gambar banner brand untuk halaman Flashcards
+  const bannerSrc1 = "/brand/hero-flashcards.jpg";
+  const bannerSrc2 = "/brand/hero-2.jpg"; // Gambar kedua, sama seperti di homepage
 
   return (
     <>
-      {/* === Brand Banner (image-only) === */}
-      <section
-        className="hero"
-        style={{
-          // Opsional: tinggi responsif khusus untuk Flashcards
-          "--hero-h-min": "220px",
-          "--hero-h-fluid": "30vw",
-          "--hero-h-max": "380px",
-        }}
-      >
+      {/* === Brand Banner (disesuaikan untuk animasi FADE) === */}
+      <section className="hero">
         <div className="hero-media" aria-hidden="true">
+          {/* --- PERUBAHAN: Struktur dikembalikan untuk animasi FADE --- */}
+          
+          {/* Gambar Pertama */}
           <Image
-            src={bannerSrc}
+            src={bannerSrc1}
             alt=""
-            fill
+            fill // Gunakan 'fill' untuk menutupi container
             sizes="100vw"
             priority={false}
             className="hero-img"
+            id="hero-img-1" // ID untuk target animasi
           />
+          {/* Gambar Kedua */}
+          <Image
+            src={bannerSrc2}
+            alt=""
+            fill // Gunakan 'fill' untuk menutupi container
+            sizes="100vw"
+            priority={false}
+            className="hero-img"
+            id="hero-img-2" // ID untuk target animasi
+          />
+          
+          {/* --- AKHIR PERUBAHAN --- */}
           <div className="hero-overlay" />
         </div>
       </section>
@@ -42,7 +51,6 @@ export default async function FlashcardsPage() {
       </section>
 
       {/* 2. Render komponen client dan kirim data sebagai props */}
-      {/* Kembali ke ukuran default (TANPA wrapper compact) */}
       <section>
         <FlashcardList allFlashcards={flashcards} />
       </section>

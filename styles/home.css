@@ -58,3 +58,58 @@
   .article-card .btn, .home-card .btn { width: 100%; max-width: 100%; min-width: 0; }
   .article-card .btn-row, .home-card .btn-row { grid-template-columns: 1fr; }
 }
+/* Membuat container siap untuk menumpuk gambar */
+.hero-media {
+  position: relative; /* Wajib untuk menumpuk elemen di dalamnya */
+}
+
+/* Mengatur agar semua gambar di dalam hero-media menumpuk di posisi yang sama */
+.hero-media .hero-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Memastikan gambar menutupi area tanpa distorsi */
+}
+
+/* Membuat container siap untuk menumpuk gambar */
+.hero-media {
+  position: relative;
+}
+
+/* Mengatur agar semua gambar di dalam hero-media menumpuk di posisi yang sama */
+.hero-media .hero-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- LOGIKA ANIMASI FADE LOOPING (DIPERBAIKI) --- */
+
+/* 1. Definisikan animasi fade (tetap sama) */
+@keyframes fadeLoop {
+  0% { opacity: 1; }
+  45% { opacity: 1; }
+  50% { opacity: 0; }
+  95% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* 2. Terapkan animasi ke gambar pertama (tanpa delay) */
+#hero-img-1 {
+  animation-name: fadeLoop;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+}
+
+/* 3. Terapkan animasi ke gambar kedua DENGAN DELAY NEGATIF */
+#hero-img-2 {
+  animation-name: fadeLoop;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+  animation-delay: -5s; /* --- INI PERUBAHANNYA --- */
+}

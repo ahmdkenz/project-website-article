@@ -1,4 +1,4 @@
-// src/app/(main)/articles/page.js
+// app/(main)/articles/page.js
 import React from "react";
 import Image from "next/image";
 import { cookies } from "next/headers";
@@ -19,7 +19,7 @@ export default async function ArticlesPage() {
   const cookieMode = cookieStore.get("site_mode")?.value;
   const activeMode = normMode(cookieMode);
 
-  // enrich (full list, belum difilter) — ini yang kita kirim ke client untuk fallback
+  // enrich (full list, belum difilter)
   const enrichedArticles = (Array.isArray(articles) ? articles : []).map((a) => ({
     ...a,
     slug: a.slug,
@@ -33,30 +33,46 @@ export default async function ArticlesPage() {
     views: Number(viewsMap?.[a.slug] ?? 0),
   }));
 
-  // Server-side filtered list (untuk initial HTML sesuai cookie)
+  // Server-side filtered list
   const allArticlesFiltered = filterByMode(enrichedArticles, activeMode);
-
-  // latest & popular precomputed server-side (sesuai mode) — untuk initial render
   const latest = getLatest(enrichedArticles, 6, { mode: activeMode });
   const popular = getPopular(enrichedArticles, viewsMap || {}, 6, { mode: activeMode });
 
-  // kumpulkan tags (optional)
+  // kumpulkan tags
   const tagSet = new Set();
   enrichedArticles.forEach((a) => {
     if (Array.isArray(a.tags)) a.tags.forEach((t) => tagSet.add(t));
   });
   const allTags = Array.from(tagSet).sort((a, b) => a.localeCompare(b));
 
-  const bannerSrc = "/brand/hero-articles.jpg";
-
-  // debug singkat (opsional: hapus setelah verifikasi)
-  // console.log(`SERVER ArticlesPage activeMode=${activeMode} total=${enrichedArticles.length} filtered=${allArticlesFiltered.length} latest=${latest.length} popular=${popular.length}`);
+  // Siapkan dua gambar untuk banner
+  const bannerSrc1 = "/brand/hero-articles.jpg";
+  const bannerSrc2 = "/brand/hero-2.jpg";
 
   return (
     <>
-      <section className="hero" style={{ "--hero-h-min": "220px", "--hero-h-fluid": "26vw", "--hero-h-max": "360px" }}>
+      {/* --- PERUBAHAN 1: 'style' untuk tinggi khusus dihapus dari section ini --- */}
+      <section className="hero">
         <div className="hero-media" aria-hidden="true">
-          <Image src={bannerSrc} alt="" fill sizes="100vw" priority={false} className="hero-img" />
+          {/* --- PERUBAHAN 2: Struktur diubah menjadi tumpukan 2 gambar untuk animasi fade --- */}
+          <Image
+            src={bannerSrc1}
+            alt=""
+            fill
+            sizes="100vw"
+            priority={false}
+            className="hero-img"
+            id="hero-img-1"
+          />
+          <Image
+            src={bannerSrc2}
+            alt=""
+            fill
+            sizes="100vw"
+            priority={false}
+            className="hero-img"
+            id="hero-img-2"
+          />
           <div className="hero-overlay" />
         </div>
       </section>
@@ -68,12 +84,10 @@ export default async function ArticlesPage() {
 
       <section className="articles-compact container" aria-labelledby="articles-list">
         <React.Suspense fallback={<p>Loading articles...</p>}>
-          {/* --- KIRIM enriched (full) agar client dapat fallback tanpa reload --- */}
           <ArticlesShowMoreClient
-            allArticles={enrichedArticles}    // full list (client fallback)
+            allArticles={enrichedArticles}
             initialCount={6}
             step={6}
-            // opsional: juga bisa kirim latest/popular precomputed
             latest={latest}
             popular={popular}
           />
