@@ -5,7 +5,9 @@ import Link from "next/link";
 import RealtimeViewCounter from "@/components/RealtimeViewCounter";
 import SavedListClient from "@/components/SavedListClient";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useMode } from "@/context/ModeContext";
 
+/* MiniArticleCard */
 function MiniArticleCard({ a }) {
   return (
     <article className="article-card mini">
@@ -29,6 +31,7 @@ function MiniArticleCard({ a }) {
   );
 }
 
+/* MiniScroller */
 function MiniScroller({ items, ariaLabel }) {
   const ref = useRef(null);
   const [showNav, setShowNav] = useState(false);
@@ -94,6 +97,18 @@ function MiniScroller({ items, ariaLabel }) {
   );
 }
 
+/* helpers client */
+function norm(s) {
+  return (s || "").toString().toLowerCase().trim();
+}
+function normMode(m) {
+  if (!m) return "moderate";
+  const v = String(m).toLowerCase().trim();
+  if (v === "friendly" || v === "moderate" || v === "both") return v;
+  return "moderate";
+}
+
+/* MAIN */
 export default function HomeArticlesClient({
   latest = [],
   popular = [],
@@ -109,6 +124,7 @@ export default function HomeArticlesClient({
     []
   );
 
+  const { mode } = useMode();
   const [active, setActive] = useState(defaultTab);
 
   useEffect(() => {
@@ -119,6 +135,68 @@ export default function HomeArticlesClient({
   useEffect(() => {
     if (typeof window !== "undefined") sessionStorage.setItem("homeTab", active);
   }, [active]);
+
+  // --- Compute fallback latest/popular from allArticles when server props empty or not matching mode
+  const modeNorm = normMode(mode);
+
+  // filter helper for arrays
+  const filterByModeArray = (items, m) => {
+    return (Array.isArray(items) ? items : []).filter((a) => {
+      const aMode = normMode(a?.mode);
+      if (aMode === "both") return true;
+      return aMode === m;
+    });
+  };
+
+  // If server-provided latest has items that match current mode, use it.
+  // Otherwise compute from allArticles.
+  const latestFiltered = useMemo(() => {
+    const srv = Array.isArray(latest) ? latest : [];
+    const srvMatch = srv.filter(a => {
+      const am = normMode(a?.mode);
+      return (am === "both") || (am === modeNorm);
+    });
+    if (srvMatch.length > 0) return srvMatch;
+
+    // fallback: compute from allArticles
+    const list = (Array.isArray(allArticles) ? [...allArticles] : []);
+    const filtered = list.filter(a => {
+      const am = normMode(a?.mode);
+      if (am === "both") return true;
+      return am === modeNorm;
+    });
+    filtered.sort((a,b) => new Date(b.date || 0) - new Date(a.date || 0));
+    return filtered.slice(0, 6);
+  }, [latest, allArticles, modeNorm]);
+
+  const popularFiltered = useMemo(() => {
+    const srv = Array.isArray(popular) ? popular : [];
+    const srvMatch = srv.filter(a => {
+      const am = normMode(a?.mode);
+      return (am === "both") || (am === modeNorm);
+    });
+    if (srvMatch.length > 0) return srvMatch;
+
+    // fallback: compute top by views from allArticles
+    const list = (Array.isArray(allArticles) ? [...allArticles] : []);
+    const filtered = list.filter(a => {
+      const am = normMode(a?.mode);
+      if (am === "both") return true;
+      return am === modeNorm;
+    });
+    filtered.sort((a, b) => (Number(b.views || 0) - Number(a.views || 0)) || (new Date(b.date || 0) - new Date(a.date || 0)));
+    return filtered.slice(0, 6);
+  }, [popular, allArticles, modeNorm]);
+
+  // saved uses allArticles (filtered)
+  const savedFiltered = useMemo(() => {
+    const list = (Array.isArray(allArticles) ? [...allArticles] : []);
+    return list.filter(a => {
+      const am = normMode(a?.mode);
+      if (am === "both") return true;
+      return am === modeNorm;
+    });
+  }, [allArticles, modeNorm]);
 
   return (
     <>
@@ -151,22 +229,21 @@ export default function HomeArticlesClient({
         {active === "saved" && (
           <>
             <h2>⭐ Disimpan</h2>
-            {/* SavedListClient kemungkinan daftar vertikal; biarkan seperti ini */}
-            <SavedListClient allArticles={allArticles} />
+            <SavedListClient allArticles={savedFiltered} />
           </>
         )}
 
         {active === "latest" && (
           <>
             <h2>🆕 Terbaru</h2>
-            <MiniScroller items={latest} ariaLabel="Artikel terbaru" />
+            <MiniScroller items={latestFiltered} ariaLabel="Artikel terbaru" />
           </>
         )}
 
         {active === "popular" && (
           <>
             <h2>🔥 Populer</h2>
-            <MiniScroller items={popular} ariaLabel="Artikel populer" />
+            <MiniScroller items={popularFiltered} ariaLabel="Artikel populer" />
           </>
         )}
       </section>

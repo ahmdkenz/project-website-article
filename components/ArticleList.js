@@ -2,7 +2,6 @@
 
 "use client";
 
-// [UPDATE] Impor 'useContext' dari React dan 'ModeContext'
 import { useMemo, useState, useEffect, useContext } from "react";
 import { ModeContext } from "@/context/ModeContext";
 
@@ -12,13 +11,20 @@ import RealtimeViewCounter from "@/components/RealtimeViewCounter";
 
 /** Util kecil */
 const norm = (s) => (s || "").toString().toLowerCase().trim();
+const normMode = (m) => {
+  if (!m) return "moderate"; // treat missing mode as 'moderate' (conservative)
+  const v = m.toString().toLowerCase().trim();
+  if (v === "friendly" || v === "moderate" || v === "both") return v;
+  return "moderate";
+};
 
-export default function ArticleList({ allArticles }) {
+export default function ArticleList({ allArticles = [] }) {
   const router = useRouter();
   const params = useSearchParams();
 
-  // [UPDATE] Ambil 'mode' yang sedang aktif dari context
-  const { mode } = useContext(ModeContext);
+  // Ambil 'mode' yang sedang aktif dari context (fallback ke 'moderate' jika belum ada)
+  const { mode: ctxMode } = useContext(ModeContext) || {};
+  const mode = normMode(ctxMode);
 
   // --- State management tidak berubah ---
   const urlCategory = params.get("category") || "";
@@ -29,21 +35,18 @@ export default function ArticleList({ allArticles }) {
   const [category, setCategory] = useState(urlCategory);
   const [tags, setTags] = useState(urlTags);
 
-  // [UPDATE] Filter artikel berdasarkan 'mode' terlebih dahulu.
-  // Ini menjadi sumber data baru untuk filter-filter selanjutnya.
+  // Filter artikel berdasarkan 'mode' terlebih dahulu.
   const modeFilteredArticles = useMemo(() => {
-    if (mode === 'moderate') {
-      return allArticles.filter(article => article.mode === 'moderate' || !article.mode);
-    }
-    // Defaultnya adalah 'friendly'
-    return allArticles.filter(article => article.mode === 'friendly' || !article.mode);
+    return (allArticles || []).filter((article) => {
+      const aMode = normMode(article?.mode);
+      if (aMode === "both") return true;
+      return aMode === mode;
+    });
   }, [allArticles, mode]);
 
-  // [UPDATE] Logika untuk mendapatkan kategori sekarang berdasarkan artikel yang sudah difilter oleh 'mode'.
-  // Ini memastikan daftar kategori yang tampil relevan dengan mode pengguna.
+  // Dapatkan kategori dari artikel yang sudah difilter oleh 'mode'.
   const { categories } = useMemo(() => {
     const catSet = new Set();
-    // Gunakan 'modeFilteredArticles' sebagai sumber data
     (modeFilteredArticles || []).forEach(a => {
       if (a?.category) catSet.add(a.category);
     });
@@ -52,7 +55,7 @@ export default function ArticleList({ allArticles }) {
     };
   }, [modeFilteredArticles]);
 
-  // --- Sinkronkan state -> URL (tidak berubah) ---
+  // Sinkronkan state -> URL
   useEffect(() => {
     const handle = setTimeout(() => {
       const p = new URLSearchParams();
@@ -65,14 +68,12 @@ export default function ArticleList({ allArticles }) {
     return () => clearTimeout(handle);
   }, [q, category, tags, router]);
 
-  // [UPDATE] Logika filter artikel (pencarian, kategori, tag) sekarang bekerja
-  // di atas 'modeFilteredArticles', bukan 'allArticles' lagi.
+  // Filter artikel (pencarian, kategori, tag) di atas 'modeFilteredArticles'.
   const filteredArticles = useMemo(() => {
     const nQ = norm(q);
     const nCat = norm(category);
     const tagSet = new Set(tags.map(norm));
 
-    // Gunakan 'modeFilteredArticles' sebagai sumber data
     return (modeFilteredArticles || []).filter((a) => {
       const hay = `${a?.title ?? ""} ${a?.excerpt ?? ""}`.toLowerCase();
       const matchQ = nQ ? hay.includes(nQ) : true;
@@ -84,7 +85,7 @@ export default function ArticleList({ allArticles }) {
 
       return matchQ && matchCat && matchTags;
     });
-  }, [modeFilteredArticles, q, category, tags]); // Tambahkan 'modeFilteredArticles' sebagai dependensi
+  }, [modeFilteredArticles, q, category, tags]);
 
   const clearFilters = () => {
     setQ("");
@@ -94,7 +95,7 @@ export default function ArticleList({ allArticles }) {
 
   return (
     <>
-      {/* Search input (TIDAK ADA PERUBAHAN DI SINI) */}
+      {/* Search input */}
       <section className="search-area">
         <div className="search-wrapper">
           <input
@@ -108,48 +109,47 @@ export default function ArticleList({ allArticles }) {
         </div>
       </section>
 
-      {/* Hasil (TIDAK ADA PERUBAHAN DI SINI, karena sudah menggunakan 'filteredArticles' yang baru) */}
+      {/* Hasil */}
       <section className="card-grid" style={{ marginTop: "1rem" }}>
         {filteredArticles.length > 0 ? (
           filteredArticles.map((article) => (
             <article key={article.slug} className="article-card">
-              {/* ... sisa dari JSX Anda tidak berubah ... */}
               <div className="article-content">
-                 <h3>{article.title}</h3>
-                 {article.excerpt && <p className="muted">{article.excerpt}</p>}
+                <h3>{article.title}</h3>
+                {article.excerpt && <p className="muted">{article.excerpt}</p>}
 
-                 {/* Kategori + Views */}
-                 <div style={{ marginTop: ".25rem", display: "flex", gap: ".75rem", flexWrap: "wrap" }}>
-                   {article.category && <span className="badge">{article.category}</span>}
-                   <RealtimeViewCounter slug={article.slug} />
-                 </div>
+                {/* Kategori + Views */}
+                <div style={{ marginTop: ".25rem", display: "flex", gap: ".75rem", flexWrap: "wrap" }}>
+                  {article.category && <span className="badge">{article.category}</span>}
+                  <RealtimeViewCounter slug={article.slug} />
+                </div>
 
-                 {/* Aksi */}
-                 <div className="card-actions" style={{ marginTop: ".75rem" }}>
-                   <Link href={`/articles/${article.slug}`} className="btn btn-ghost">
-                     Baca Selengkapnya
-                   </Link>
-                 </div>
+                {/* Aksi */}
+                <div className="card-actions" style={{ marginTop: ".75rem" }}>
+                  <Link href={`/articles/${article.slug}`} className="btn btn-ghost">
+                    Baca Selengkapnya
+                  </Link>
+                </div>
 
-                 {/* Tags */}
-                 {Array.isArray(article.tags) && article.tags.length > 0 && (
-                   <div
-                     className="tags-row"
-                     style={{
-                       display: "flex",
-                       flexWrap: "wrap",
-                       gap: ".35rem",
-                       marginTop: ".75rem",
-                       paddingTop: ".5rem",
-                       borderTop: "1px solid var(--border-color)",
-                     }}
-                   >
-                     {article.tags.map((t) => (
-                       <span key={t} className="tag">#{t}</span>
-                     ))}
-                   </div>
-                 )}
-               </div>
+                {/* Tags */}
+                {Array.isArray(article.tags) && article.tags.length > 0 && (
+                  <div
+                    className="tags-row"
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: ".35rem",
+                      marginTop: ".75rem",
+                      paddingTop: ".5rem",
+                      borderTop: "1px solid var(--border-color)",
+                    }}
+                  >
+                    {article.tags.map((t) => (
+                      <span key={t} className="tag">#{t}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
             </article>
           ))
         ) : (

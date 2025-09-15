@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "check:modes": "node tools/check-modes.js",
+    "prebuild": "npm run check:modes"
   },
   "dependencies": {
     "@mdx-js/mdx": "^3.1.1",

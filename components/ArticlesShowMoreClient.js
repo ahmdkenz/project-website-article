@@ -4,6 +4,15 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import RealtimeViewCounter from "@/components/RealtimeViewCounter";
+import { useMode } from "@/context/ModeContext";
+
+/* kecil util */
+const normMode = (m) => {
+  if (!m) return "moderate";
+  const v = String(m).toLowerCase().trim();
+  if (v === "friendly" || v === "moderate" || v === "both") return v;
+  return "moderate";
+};
 
 function MiniArticleCard({ a }) {
   return (
@@ -47,7 +56,6 @@ function MiniArticleCard({ a }) {
               ))
             : null}
           {a?.readTime ? <span className="tag">{a.readTime} min</span> : null}
-          {/* Counter live (opsional, sudah kamu gunakan di tempat lain) */}
           {a?.slug ? <RealtimeViewCounter slug={a.slug} /> : null}
         </div>
       </Link>
@@ -61,19 +69,32 @@ export default function ArticlesShowMoreClient({
   step = 6,
   listId = "articles-list",
 }) {
-  const total = allArticles.length;
+  const { mode: ctxMode } = useMode();
+  const mode = normMode(ctxMode);
+
+  // filter berdasarkan mode: include if article.mode === mode OR article.mode === 'both'
+  const filteredArticles = useMemo(() => {
+    const m = mode;
+    return (Array.isArray(allArticles) ? allArticles : []).filter((a) => {
+      const aMode = normMode(a?.mode);
+      if (aMode === "both") return true;
+      return aMode === m;
+    });
+  }, [allArticles, mode]);
+
+  const total = filteredArticles.length;
   const safeInitial = Math.max(0, Math.min(initialCount, total || 0));
 
   const [visible, setVisible] = useState(safeInitial);
 
-  // Reset ke awal jika daftar artikel berubah (misalnya ada filter/urut)
+  // Reset ke awal jika daftar filter berubah (mis. mode berubah atau allArticles berubah)
   useEffect(() => {
-    setVisible(Math.max(0, Math.min(initialCount, allArticles.length || 0)));
-  }, [allArticles, initialCount]);
+    setVisible(Math.max(0, Math.min(initialCount, filteredArticles.length || 0)));
+  }, [filteredArticles, initialCount]);
 
   const items = useMemo(
-    () => (Array.isArray(allArticles) ? allArticles.slice(0, visible) : []),
-    [allArticles, visible]
+    () => (Array.isArray(filteredArticles) ? filteredArticles.slice(0, visible) : []),
+    [filteredArticles, visible]
   );
 
   const canShowMore = visible < total;
@@ -83,7 +104,7 @@ export default function ArticlesShowMoreClient({
   const handleShowLess = () => setVisible(safeInitial);
 
   if (!total) {
-    return <p className="muted">Belum ada artikel.</p>;
+    return <p className="muted">Belum ada artikel untuk mode ini.</p>;
   }
 
   return (
@@ -96,7 +117,10 @@ export default function ArticlesShowMoreClient({
       </div>
 
       {/* Footer tombol “Lihat selengkapnya” */}
-      <div className="list-footer" style={{ display: "flex", justifyContent: "center", marginTop: "1rem", gap: ".5rem" }}>
+      <div
+        className="list-footer"
+        style={{ display: "flex", justifyContent: "center", marginTop: "1rem", gap: ".5rem" }}
+      >
         {canShowMore ? (
           <button
             type="button"
@@ -123,7 +147,7 @@ export default function ArticlesShowMoreClient({
       </div>
 
       {/* Hint opsional di bawah tombol */}
-      <div className="list-hint">
+      <div className="list-hint" style={{ marginTop: ".5rem", textAlign: "center" }}>
         Menampilkan <strong>{visible}</strong> dari <strong>{total}</strong> artikel
       </div>
     </>
