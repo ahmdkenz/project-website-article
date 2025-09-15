@@ -45,7 +45,7 @@ export default function Header() {
         <Link href="/" className="logo" aria-label="Beranda">
           {/* Ikon/logo bulat */}
           <Image
-            src="/brand/mudamelekfinansial-logo.png"
+            src="/brand/hero-logo.png"
             alt="Mudamelekfinansial"
             width={48}
             height={48}
