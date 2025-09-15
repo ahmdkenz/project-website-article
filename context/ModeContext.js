@@ -2,7 +2,9 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-const ModeContext = createContext({
+// [UPDATE] Tambahkan kata kunci 'export' di sini.
+// Ini membuat 'ModeContext' bisa diimpor oleh komponen lain.
+export const ModeContext = createContext({
   mode: "friendly",   // friendly | moderate
   theme: "light",     // light | dark
   setMode: () => {},
