@@ -10,8 +10,8 @@ export default function SearchResultsList({ results = [], onItemClick }) {
 
   return (
     <div className="search-result" role="listbox" aria-label="Hasil pencarian">
-      {results.map((r) => (
-        <div key={r.slug} className="search-item" role="option">
+      {results.map((r, index) => (
+        <div key={r.slug} className="search-item" role="option" aria-selected="false" aria-posinset={index + 1} aria-setsize={results.length}>
           <Link
             href={`/articles/${r.slug}`}
             onClick={onItemClick}
