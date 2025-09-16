@@ -62,7 +62,7 @@ export default function Header() {
           <Link href="/articles" onClick={() => setIsMenuOpen(false)}>Artikel</Link>
           <Link href="/flashcards" onClick={() => setIsMenuOpen(false)}>Flashcards</Link>
           <Link href="/yuk-literasi" onClick={() => setIsMenuOpen(false)}>Yuk Literasi</Link>
-          <Link href="/dictionary" onClick={() => setIsMenuOpen(false)}>Kamus</Link>
+          <Link href="/dictionary" onClick={() => setIsMenuOpen(false)}>Glosarium</Link>
           <Link href="/about" onClick={() => setIsMenuOpen(false)}>Tentang</Link>
         </nav>
 

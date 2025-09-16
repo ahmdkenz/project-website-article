@@ -43,10 +43,13 @@ export default async function DictionaryPage() {
         </div>
       </section>
 
-      {/* === Blok teks di bawah banner === */}
+      {/* === Blok teks di bawah banner (Konten diperbarui) === */}
       <section className="hero-content" aria-labelledby="dictionary-title">
-        <h1 id="dictionary-title">📖 Kamus Istilah Keuangan</h1>
-        <p className="muted">Cari istilah keuangan dan pelajari definisinya dengan mudah.</p>
+        <h1 id="dictionary-title">Glosarium Finansial Komprehensif</h1>
+        <p className="muted">
+          Referensi esensial untuk memahami bahasa keuangan. Dapatkan akses cepat ke 
+          definisi yang akurat untuk menavigasi dunia finansial dengan lebih percaya diri.
+        </p>
       </section>
 
       {/* === Konten utama dalam container === */}

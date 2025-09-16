@@ -9,10 +9,18 @@ export default function HomeHeroClient() {
   const { mode } = useMode();
 
   const isFriendly = mode === "friendly";
-  const title = isFriendly ? "Belajar Keuangan" : "Literasi Keuangan";
-  const desc = isFriendly
-    ? "Panduan singkat dan mudah dipahami untuk mengatur keuangan sehari-hari."
-    : "Pendalaman manajemen keuangan dengan analisis dan strategi yang lebih serius.";
+
+  // --- Kalimat Profesional untuk Mode Friendly ---
+  const friendlyTitle = "Memahami Uang Lebih Mudah";
+  const friendlyDesc = "Pelajari langkah-langkah esensial untuk membangun kebiasaan finansial yang sehat, mulai dari menyusun anggaran hingga menabung secara efektif.";
+
+  // --- Kalimat Profesional untuk Mode Moderate ---
+  const moderateTitle = "Kecerdasan Finansial Strategis";
+  const moderateDesc = "Tingkatkan pemahaman Anda dengan analisis berbasis data dan wawasan strategis yang dirancang untuk membantu Anda menavigasi kompleksitas keputusan investasi dan keuangan.";
+
+  // Menggunakan kalimat yang sesuai dengan mode yang aktif
+  const title = isFriendly ? friendlyTitle : moderateTitle;
+  const desc = isFriendly ? friendlyDesc : moderateDesc;
 
   return (
     <>
@@ -54,12 +62,12 @@ export default function HomeHeroClient() {
         <p className="muted">{desc}</p>
 
         <div className="hero-actions">
-          <Link href="/articles" className="btn btn-primary">Mulai</Link>
+          <Link href="/articles" className="btn btn-primary">Mulai Belajar</Link>
           <Link href="/articles" className="btn btn-ghost">Lihat Artikel</Link>
         </div>
       </section>
 
-      {/* === Section pilihan cepat (tetap seperti sebelumnya) === */}
+      {/* === Section pilihan cepat (deskripsi diperbarui) === */}
       <section id="main-options" className="options-section">
         <h2 className="section-title" style={{ textAlign: "center", marginTop: "3rem", marginBottom: "2rem", fontSize: "3rem" }}>
           Mau mulai dari mana?
@@ -69,7 +77,7 @@ export default function HomeHeroClient() {
           <article className="option-card">
             <div className="icon">📰</div>
             <h3>Artikel</h3>
-            <p className="muted">Baca artikel bertahap: dasar, menengah, hingga lanjutan.</p>
+            <p className="muted">Jelajahi wawasan mendalam melalui artikel yang terstruktur, dari tingkat pemula hingga ahli.</p>
             <div className="card-actions" style={{ marginTop: "auto", paddingTop: "1rem" }}>
               <Link className="btn btn-primary" href="/articles">Buka Artikel</Link>
             </div>
@@ -78,7 +86,7 @@ export default function HomeHeroClient() {
           <article className="option-card">
             <div className="icon">🃏</div>
             <h3>Flashcards</h3>
-            <p className="muted">Kartu interaktif untuk menghafal istilah-istilah penting.</p>
+            <p className="muted">Perkuat pemahaman Anda akan istilah kunci keuangan melalui metode belajar interaktif.</p>
             <div className="card-actions" style={{ marginTop: "auto", paddingTop: "1rem" }}>
               <Link className="btn btn-ghost" href="/flashcards">Coba Flashcards</Link>
             </div>
@@ -87,7 +95,7 @@ export default function HomeHeroClient() {
           <article className="option-card">
             <div className="icon">🚀</div>
             <h3>Yuk Literasi</h3>
-            <p className="muted">Kumpulan kiat & tutorial langkah demi langkah.</p>
+            <p className="muted">Ikuti panduan praktis dan studi kasus untuk menerapkan pengetahuan finansial Anda.</p>
             <div className="card-actions" style={{ marginTop: "auto", paddingTop: "1rem" }}>
               <Link className="btn btn-primary" href="/yuk-literasi">Mulai Yuk</Link>
             </div>
@@ -95,8 +103,8 @@ export default function HomeHeroClient() {
 
           <article className="option-card">
             <div className="icon">🔎</div>
-            <h3>Cari Istilah</h3>
-            <p className="muted">Ketik istilah keuangan, dapatkan definisi singkat.</p>
+            <h3>Glosarium</h3>
+            <p className="muted">Akses glosarium lengkap kami untuk menemukan definisi istilah keuangan dengan cepat.</p>
             <div className="card-actions" style={{ marginTop: "auto", paddingTop: "1rem" }}>
               <Link id="open-search" className="btn btn-ghost" href="/dictionary">Cari Istilah</Link>
             </div>

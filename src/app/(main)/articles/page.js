@@ -77,9 +77,13 @@ export default async function ArticlesPage() {
         </div>
       </section>
 
+      {/* === Teks diperbarui di bawah ini === */}
       <section className="hero-content" aria-labelledby="articles-title">
-        <h1 id="articles-title">Kumpulan Artikel</h1>
-        <p className="muted">Panduan, tips, dan pengetahuan finansial yang mudah dipahami.</p>
+        <h1 id="articles-title">Kumpulan Artikel Finansial</h1>
+        <p className="muted">
+          Temukan pusat wawasan kami, di mana analisis finansial yang tajam bertemu dengan strategi praktis yang dapat langsung diterapkan. Kami mengupas tuntas berbagai spektrum topik—mulai dari perencanaan kekayaan jangka panjang hingga inovasi di pasar modal. 
+          Konten ini disusun secara sistematis untuk memberdayakan Anda, bukan hanya dengan informasi, tetapi dengan kerangka kerja untuk berpikir kritis dan mengambil keputusan finansial yang strategis dalam setiap tahap perjalanan ekonomi Anda.
+        </p>
       </section>
 
       <section className="articles-compact container" aria-labelledby="articles-list">

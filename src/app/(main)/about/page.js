@@ -36,12 +36,13 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* === Blok teks di bawah banner === */}
+      {/* === Blok teks di bawah banner (Konten diperbarui) === */}
       <section className="hero-content" aria-labelledby="about-title">
-        <h1 id="about-title">Tentang LiterasiKu</h1>
+        <h1 id="about-title">Muda Melek Finansial</h1>
         <p className="muted">
-          Media edukasi keuangan sederhana untuk membantu masyarakat memahami dan
-          mengelola uang dengan lebih bijak.
+          Muda Melek Finansial adalah platform media edukasi keuangan yang didedikasikan 
+          untuk membantu masyarakat memahami dan mengelola uang dengan lebih bijak. 
+          Kami percaya literasi keuangan adalah kunci untuk masa depan yang lebih aman dan sejahtera.
         </p>
       </section>
 
@@ -51,7 +52,8 @@ export default function AboutPage() {
           <h3>Visi Kami</h3>
           <p>
             Meningkatkan literasi keuangan masyarakat Indonesia agar mampu
-            mengambil keputusan finansial yang cerdas, bijak, dan berkelanjutan.
+            mengambil keputusan finansial yang cerdas, bijak, dan berkelanjutan demi
+            mencapai kemandirian finansial.
           </p>
         </article>
 
@@ -59,20 +61,20 @@ export default function AboutPage() {
           <div className="icon" aria-hidden="true">🚀</div>
           <h3>Misi Kami</h3>
           <ul style={{ paddingLeft: '1.2rem', listStyle: 'disc' }}>
-            <li>Menyediakan artikel edukatif yang mudah dipahami.</li>
-            <li>Membuat konten interaktif seperti flashcards.</li>
-            <li>Menyediakan kamus istilah keuangan sederhana.</li>
-            <li>Mendorong generasi muda untuk melek finansial.</li>
+            <li>Menyediakan artikel edukatif yang jelas, ringkas, dan mudah dipahami.</li>
+            <li>Membuat konten interaktif yang menarik untuk membuat belajar keuangan menjadi menyenangkan.</li>
+            <li>Menawarkan kamus istilah keuangan yang sederhana dan mudah diakses.</li>
+            <li>Memberdayakan generasi muda dengan pengetahuan finansial untuk masa depan yang kuat.</li>
           </ul>
         </article>
         
         <article className="option-card">
           <div className="icon" aria-hidden="true">💡</div>
-          <h3>Kenapa LiterasiKu?</h3>
+          <h3>Mengapa Mudamelekfinansial?</h3>
           <p>
-            LiterasiKu hadir karena banyak orang masih kesulitan memahami konsep
-            dasar keuangan. Kami ingin semua orang bisa belajar sesuai gaya
-            mereka.
+            Mudamelekfinansial lahir dari kesadaran bahwa banyak orang masih kesulitan 
+            dengan konsep dasar keuangan. Kami ingin menjembatani kesenjangan ini 
+            dengan platform yang melayani berbagai gaya belajar.
           </p>
         </article>
       </div>

@@ -44,10 +44,13 @@ export default async function FlashcardsPage() {
         </div>
       </section>
 
-      {/* === Blok teks di bawah banner === */}
+      {/* === Blok teks di bawah banner (Konten diperbarui) === */}
       <section className="hero-content" aria-labelledby="flashcards-title">
-        <h1 id="flashcards-title">🎴 Flashcards Keuangan</h1>
-        <p className="muted">Belajar istilah keuangan dengan cara yang lebih seru & interaktif.</p>
+        <h1 id="flashcards-title">Flashcards Interaktif</h1>
+        <p className="muted">
+          Manfaatkan metode <i>active recall</i> untuk menguji dan memperkuat pemahaman Anda 
+          terhadap terminologi esensial di bidang keuangan.
+        </p>
       </section>
 
       {/* 2. Render komponen client dan kirim data sebagai props */}

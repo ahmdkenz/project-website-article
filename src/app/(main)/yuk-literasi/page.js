@@ -2,20 +2,21 @@
 import Image from "next/image";
 
 export const metadata = {
-  title: "Yuk Literasi - Yuk Literasi Keuangan",
+  // --- Metadata diperbarui ---
+  title: "Panduan Praktis - Literasi Keuangan",
   description:
-    "Panduan literasi keuangan sederhana dan mendalam. Belajar mengatur uang, investasi, dan istilah keuangan dengan mudah.",
+    "Panduan strategis dan tutorial aplikatif untuk menguasai manajemen keuangan, mulai dari penganggaran, investasi, hingga perencanaan finansial jangka panjang.",
   openGraph: {
-    title: "Yuk Literasi Keuangan",
-    description: "Panduan literasi keuangan sederhana dan mendalam.",
+    title: "Panduan Praktis Literasi Keuangan",
+    description: "Kuasai manajemen keuangan melalui panduan strategis dan aplikatif.",
     type: "website",
-    url: "https://namadomainmu.com/",
+    url: "https://namadomainmu.com/yuk-literasi", // URL disesuaikan
     images: [
       {
-        url: "https://namadomainmu.com/assets/cover.jpg",
+        url: "https://namadomainmu.com/assets/cover-yuk-literasi.jpg", // Gambar disesuaikan
         width: 1200,
         height: 630,
-        alt: "Yuk Literasi Keuangan",
+        alt: "Panduan Praktis Literasi Keuangan",
       },
     ],
   },
@@ -56,64 +57,71 @@ export default function YukLiterasiPage() {
         </div>
       </section>
 
-      {/* === Blok teks di bawah banner === */}
+      {/* === Blok teks di bawah banner (Konten diperbarui) === */}
       <section className="hero-content" aria-labelledby="yl-title">
-        <h1 id="yl-title">🚀 Yuk, Mulai Literasi Keuangan!</h1>
+        <h1 id="yl-title">Panduan Finansial Aplikatif</h1>
         <p className="muted">
-          Kiat sederhana &amp; tutorial praktis agar makin bijak mengelola uang.
+          Kumpulan panduan praktis dan studi kasus yang dirancang untuk membantu Anda 
+          menerapkan konsep keuangan dalam kehidupan sehari-hari.
         </p>
       </section>
 
-      {/* Kiat & Tutorial */}
+      {/* Kiat & Tutorial (Konten diperbarui) */}
       <section className="options-section">
-        <h2 className="section-title">Kiat &amp; Tutorial</h2>
+        <h2 className="section-title">Panduan Praktis</h2>
 
         <div className="options-grid">
           <article className="option-card">
-            <div className="icon">📝</div>
-            <h3>Buat Anggaran Bulanan</h3>
+            <div className="icon" aria-hidden="true">📝</div>
+            <h3>Manajemen Arus Kas</h3>
             <p className="muted">
-              Catat pemasukan dan pengeluaran agar tahu ke mana uangmu pergi.
+              Lacak dan alokasikan pendapatan serta pengeluaran Anda untuk 
+              mencapai kontrol finansial penuh.
             </p>
           </article>
 
           <article className="option-card">
-            <div className="icon">💳</div>
-            <h3>Batasi Kartu Kredit</h3>
+            <div className="icon" aria-hidden="true">💳</div>
+            <h3>Pengelolaan Utang</h3>
             <p className="muted">
-              Gunakan hanya untuk kebutuhan penting dan bayar tagihan tepat waktu.
+              Manfaatkan instrumen kredit secara strategis dan hindari 
+              beban bunga yang tidak perlu.
             </p>
           </article>
 
           <article className="option-card">
-            <div className="icon">💰</div>
-            <h3>Mulai Menabung Rutin</h3>
+            <div className="icon" aria-hidden="true">💰</div>
+            <h3>Akumulasi Aset</h3>
             <p className="muted">
-              Sisihkan minimal 10% dari penghasilanmu untuk tabungan masa depan.
+              Alokasikan sebagian pendapatan secara konsisten untuk membangun 
+              dana darurat dan modal masa depan.
             </p>
           </article>
 
           <article className="option-card">
-            <div className="icon">📈</div>
-            <h3>Belajar Investasi</h3>
+            <div className="icon" aria-hidden="true">📈</div>
+            <h3>Pengenalan Investasi</h3>
             <p className="muted">
-              Kenali instrumen sederhana seperti reksa dana atau emas untuk pemula.
+              Pahami prinsip dasar instrumen investasi yang sesuai 
+              dengan profil risiko dan tujuan Anda.
             </p>
           </article>
 
           <article className="option-card">
-            <div className="icon">🚫</div>
-            <h3>Hindari Utang Konsumtif</h3>
+            <div className="icon" aria-hidden="true">🚫</div>
+            <h3>Prioritas Finansial</h3>
             <p className="muted">
-              Bedakan antara kebutuhan &amp; keinginan sebelum memutuskan berhutang.
+              Terapkan kerangka keputusan untuk membedakan pengeluaran 
+              esensial dari pengeluaran konsumtif.
             </p>
           </article>
 
           <article className="option-card">
-            <div className="icon">📚</div>
-            <h3>Terus Belajar</h3>
+            <div className="icon" aria-hidden="true">📚</div>
+            <h3>Edukasi Berkelanjutan</h3>
             <p className="muted">
-              Baca artikel, ikuti seminar, atau dengarkan podcast tentang finansial.
+              Akses sumber daya edukatif secara rutin untuk mempertajam 
+              kecerdasan finansial Anda.
             </p>
           </article>
         </div>
