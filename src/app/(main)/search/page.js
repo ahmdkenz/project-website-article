@@ -78,35 +78,7 @@ export default async function SearchPage({ searchParams }) {
   const bannerSrc2 = "/brand/hero-2.jpg";
 
   return (
-    // Gunakan Fragment <> untuk membungkus semua elemen
     <>
-      {/* === Struktur Brand Banner (sama seperti halaman lain) === */}
-      <section className="hero">
-        <div className="hero-media" aria-hidden="true">
-          {/* Wrapper untuk animasi slider */}
-          <div className="hero-slider-wrapper">
-            <Image
-              src={bannerSrc1}
-              alt=""
-              fill
-              sizes="100vw"
-              priority={false}
-              className="hero-img"
-            />
-            <Image
-              src={bannerSrc2}
-              alt=""
-              fill
-              sizes="100vw"
-              priority={false}
-              className="hero-img"
-              style={{ objectFit: 'contain' }} // ✨ PERUBAHAN DI SINI
-            />
-          </div>
-          <div className="hero-overlay" />
-        </div>
-      </section>
-
       {/* === Blok teks di bawah banner === */}
       <section className="hero-content" aria-labelledby="search-title">
         <h1 id="search-title">🔍 Hasil Pencarian</h1>
