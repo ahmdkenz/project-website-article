@@ -3,6 +3,12 @@
 
 import { useState } from 'react';
 import { useMode } from '@/context/ModeContext'; // Import hook useMode
+import { MDXRemote } from "next-mdx-remote";
+import Only from "@/components/mdx/Only";
+
+const mdxComponents = {
+  Only,
+};
 
 export default function Flashcard({ card }) {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -18,7 +24,7 @@ export default function Flashcard({ card }) {
           <h3>{card.term}</h3>
         </div>
         <div className="flashcard-back">
-          <p>{definition}</p>
+          <MDXRemote {...card.content} components={mdxComponents} />
         </div>
       </div>
     </div>

@@ -1,9 +1,15 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { MDXRemote } from "next-mdx-remote";
+import Only from "@/components/mdx/Only";
 
 // Fungsi bantuan untuk normalisasi teks
 const norm = (s) => (s || "").toString().toLowerCase().trim();
+
+const mdxComponents = {
+  Only,
+};
 
 export default function DictionaryList({ allTerms = [] }) {
   // State input yang sedang diketik
@@ -87,9 +93,7 @@ export default function DictionaryList({ allTerms = [] }) {
             filteredTerms.map((term, index) => (
               <article key={term.id ?? term.slug ?? index} className="term-card">
                 <h3>{term.term}</h3>
-                <p className="muted">
-                  {term.definitionFriendly || term.definitionModerate}
-                </p>
+                <MDXRemote {...term.content} components={mdxComponents} />
               </article>
             ))}
         </div>
