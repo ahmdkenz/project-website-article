@@ -24,6 +24,9 @@ import '@/styles/footer-extra.css';
 
 import { ModeProvider } from '@/context/ModeContext';
 import { I18nProvider } from '@/lib/i18n';
+import PerformanceMonitor from '@/components/PerformanceMonitor';
+import FontOptimizer from '@/components/FontOptimizer';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 export const metadata = {
   title: {
@@ -160,12 +163,18 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        {/* Performance and Font Optimization */}
+        <PerformanceMonitor />
+        <FontOptimizer />
+        
         {/* Combined Providers for better organization */}
-        <I18nProvider>
-          <ModeProvider>
-            {children}
-          </ModeProvider>
-        </I18nProvider>
+        <ErrorBoundary>
+          <I18nProvider>
+            <ModeProvider>
+              {children}
+            </ModeProvider>
+          </I18nProvider>
+        </ErrorBoundary>
         
         {/* Service Worker Registration */}
         <script
