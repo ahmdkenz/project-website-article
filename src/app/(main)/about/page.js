@@ -38,8 +38,11 @@ export default function AboutPage() {
 
       {/* === Blok teks di bawah banner (Konten diperbarui) === */}
       <section className="hero-content" aria-labelledby="about-title">
-        <h1 id="about-title">Muda Melek Finansial</h1>
-        <p className="muted">
+        <h1 id="about-title" style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
+          <span style={{fontSize:'1.2em',marginRight:6}}>💡</span>
+          Muda Melek Finansial
+        </h1>
+        <p className="muted" style={{textAlign:'center'}}>
           Muda Melek Finansial adalah platform media edukasi keuangan yang didedikasikan 
           untuk membantu masyarakat memahami dan mengelola uang dengan lebih bijak. 
           Kami percaya literasi keuangan adalah kunci untuk masa depan yang lebih aman dan sejahtera.

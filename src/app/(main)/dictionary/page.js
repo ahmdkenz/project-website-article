@@ -45,10 +45,12 @@ export default async function DictionaryPage() {
 
       {/* === Blok teks di bawah banner (Konten diperbarui) === */}
       <section className="hero-content" aria-labelledby="dictionary-title">
-        <h1 id="dictionary-title">Glosarium Finansial Komprehensif</h1>
-        <p className="muted">
-          Referensi esensial untuk memahami bahasa keuangan. Dapatkan akses cepat ke 
-          definisi yang akurat untuk menavigasi dunia finansial dengan lebih percaya diri.
+        <h1 id="dictionary-title" style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
+          <span style={{fontSize:'1.2em',marginRight:6}}>📚</span>
+          Glosarium Finansial Komprehensif
+        </h1>
+        <p className="muted" style={{textAlign:'center'}}>
+          Referensi esensial untuk memahami bahasa keuangan. Dapatkan akses cepat ke definisi yang akurat untuk menavigasi dunia finansial dengan lebih percaya diri.
         </p>
       </section>
 

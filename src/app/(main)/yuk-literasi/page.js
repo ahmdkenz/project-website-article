@@ -59,10 +59,12 @@ export default function YukLiterasiPage() {
 
       {/* === Blok teks di bawah banner (Konten diperbarui) === */}
       <section className="hero-content" aria-labelledby="yl-title">
-        <h1 id="yl-title">Panduan Finansial Aplikatif</h1>
-        <p className="muted">
-          Kumpulan panduan praktis dan studi kasus yang dirancang untuk membantu Anda 
-          menerapkan konsep keuangan dalam kehidupan sehari-hari.
+        <h1 id="yl-title" style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
+          <span style={{fontSize:'1.2em',marginRight:6}}>🚀</span>
+          Panduan Finansial Aplikatif
+        </h1>
+        <p className="muted" style={{textAlign:'center'}}>
+          Kumpulan panduan praktis dan studi kasus yang dirancang untuk membantu Anda menerapkan konsep keuangan dalam kehidupan sehari-hari.
         </p>
       </section>
 

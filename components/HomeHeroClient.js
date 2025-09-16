@@ -58,8 +58,11 @@ export default function HomeHeroClient() {
 
       {/* === TEKS & CTA DIPISAH (tidak menutupi banner) === */}
       <section className="hero-content" aria-labelledby="hero-title">
-        <h1 id="hero-title">{title}</h1>
-        <p className="muted">{desc}</p>
+        <h1 id="hero-title" style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
+          <span style={{fontSize:'1.2em',marginRight:6}}>{isFriendly ? "🧩" : "📊"}</span>
+          {title}
+        </h1>
+        <p className="muted" style={{textAlign:'center'}}>{desc}</p>
 
         <div className="hero-actions">
           <Link href="/articles" className="btn btn-primary">Mulai Belajar</Link>

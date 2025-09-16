@@ -46,10 +46,12 @@ export default async function FlashcardsPage() {
 
       {/* === Blok teks di bawah banner (Konten diperbarui) === */}
       <section className="hero-content" aria-labelledby="flashcards-title">
-        <h1 id="flashcards-title">Flashcards Interaktif</h1>
-        <p className="muted">
-          Manfaatkan metode <i>active recall</i> untuk menguji dan memperkuat pemahaman Anda 
-          terhadap terminologi esensial di bidang keuangan.
+        <h1 id="flashcards-title" style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
+          <span style={{fontSize:'1.2em',marginRight:6}}>⚡</span>
+          Flashcards Interaktif
+        </h1>
+        <p className="muted" style={{textAlign:'center'}}>
+          Manfaatkan metode <i>active recall</i> untuk menguji dan memperkuat pemahaman Anda terhadap terminologi esensial di bidang keuangan.
         </p>
       </section>
 
