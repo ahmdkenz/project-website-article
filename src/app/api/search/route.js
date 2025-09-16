@@ -33,14 +33,54 @@ export async function GET(req) {
     // Ambil semua artikel (boleh kamu ganti ke sumber lain juga nanti)
     const all = await getAllArticles();
 
-    // Filter by mode jika ada
+    // Filter by mode jika ada - STRICT MODE
     let filteredAll = Array.isArray(all) ? all : [];
+    console.log(`[API Search] Total articles before filtering: ${filteredAll.length}`);
+    
+    // Debug check for all mode values
+    const modeValues = {};
+    filteredAll.forEach(a => {
+      const articleMode = (a.mode || "moderate").toLowerCase().trim();
+      modeValues[articleMode] = (modeValues[articleMode] || 0) + 1;
+    });
+    console.log(`[API Search] Article mode distribution:`, modeValues);
+    
+    // Debug check for friendly mode articles
+    const friendlyArticles = filteredAll.filter(a => 
+      (a.mode || "moderate").toLowerCase().trim() === "friendly"
+    );
+    console.log(`[API Search] Found ${friendlyArticles.length} friendly mode articles`);
+    if (friendlyArticles.length > 0) {
+      console.log(`[API Search] Sample friendly articles: ${friendlyArticles.slice(0, 3).map(a => a.slug).join(', ')}`);
+    }
+    
+    // Debug cookie dan query parameters
+    console.log(`[API Search] Requested mode: ${mode || 'not specified'}`);
+    if (req.cookies) {
+      const themeModeFromCookie = req.cookies.get('theme_mode')?.value;
+      console.log(`[API Search] Cookie theme_mode: ${themeModeFromCookie || 'not found'}`);
+    }
+    
     if (mode === "friendly" || mode === "moderate") {
+      console.log(`[API Search] Filtering for mode: ${mode}`);
       filteredAll = filteredAll.filter(a => {
         const articleMode = (a.mode || "moderate").toLowerCase().trim();
-        // Legacy: artikel dengan mode 'both' akan tampil di kedua mode
-        return articleMode === mode || articleMode === "both";
+        
+        // Jika dalam friendly mode, hanya tampilkan artikel friendly
+        if (mode === "friendly") {
+          return articleMode === "friendly";
+        }
+        
+        // Jika dalam moderate mode, tampilkan semua artikel
+        return true;
       });
+      
+      console.log(`[API Search] After filtering: ${filteredAll.length} articles for mode ${mode}`);
+      
+      // Tampilkan sampel artikel yang tersisa setelah filtering
+      if (filteredAll.length > 0) {
+        console.log(`[API Search] Sample filtered articles: ${filteredAll.slice(0, 3).map(a => `${a.slug} (${a.mode || 'moderate'})`).join(', ')}`);
+      }
     }
 
     // Proyeksi ringan: hindari payload besar
@@ -53,6 +93,7 @@ export async function GET(req) {
       date: a.date || null,
       readTime: typeof a.readTime === "number" ? a.readTime : null,
       views: typeof a.views === "number" ? a.views : null,
+      mode: a.mode || "moderate", // Penting: sertakan mode untuk filter client-side
     }));
 
     // Skoring sederhana namun efektif

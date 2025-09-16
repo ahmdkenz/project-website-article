@@ -3,12 +3,19 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSearch } from "@/hooks/useSearch";
+import { useMode } from "@/context/ModeContext";
 import SearchResultsList from "@/components/SearchResultsList";
 import { useRouter } from "next/navigation";
 
 export default function HeaderSearchDesktop() {
   const router = useRouter();
-  const { query, setQuery, results, loading, canSearch } = useSearch({ minLen: 2, limit: 12, debounceMs: 200 });
+  const { mode } = useMode(); // Mengambil mode dari context
+  const { query, setQuery, results, loading, canSearch } = useSearch({ 
+    minLen: 2, 
+    limit: 12, 
+    debounceMs: 200, 
+    mode: mode // Passing mode ke useSearch hook
+  });
 
   const [open, setOpen] = useState(false);
   const wrapRef = useRef(null);
@@ -29,13 +36,28 @@ export default function HeaderSearchDesktop() {
     if (canSearch && (results.length || loading)) setOpen(true);
     if (!query.trim()) setOpen(false);
   }, [canSearch, results.length, loading, query]);
+  
+  // Debug logging for mode changes
+  useEffect(() => {
+    console.log(`[HeaderSearchDesktop] Current mode: ${mode}`);
+    if (results.length > 0) {
+      console.log(`[HeaderSearchDesktop] Result count: ${results.length}`);
+      const resultModes = {};
+      results.forEach(r => {
+        const rMode = r.mode || "moderate";
+        resultModes[rMode] = (resultModes[rMode] || 0) + 1;
+      });
+      console.log(`[HeaderSearchDesktop] Results by mode:`, resultModes);
+    }
+  }, [mode, results]);
 
   function onSubmit(e) {
     e.preventDefault();
     const q = inputRef.current?.value?.trim();
     if (!q) return;
     setOpen(false);
-    router.push(`/search?q=${encodeURIComponent(q)}`);
+    // Tambahkan parameter mode ke URL pencarian
+    router.push(`/search?q=${encodeURIComponent(q)}&mode=${encodeURIComponent(mode)}`);
   }
 
   return (

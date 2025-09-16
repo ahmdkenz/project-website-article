@@ -2,15 +2,41 @@
 "use client";
 
 import Link from "next/link";
+import { useMode } from "@/context/ModeContext";
 
 export default function SearchResultsList({ results = [], onItemClick }) {
-  if (!results?.length) {
-    return <p className="muted">Tidak ada hasil.</p>;
+  const { mode } = useMode(); // Akses mode aktif
+  
+  // Debug info
+  console.log(`[SearchResultsList] Current mode: ${mode}, Results count before filter: ${results?.length || 0}`);
+  if (results?.length > 0) {
+    console.log(`[SearchResultsList] First result mode: ${results[0]?.mode || 'not set'}`);
+  }
+  
+  // Filter hasil berdasarkan mode aktif (jika dalam friendly mode)
+  // Jika dalam mode friendly, hanya tampilkan hasil friendly
+  // Jika dalam mode moderate, tampilkan semua hasil
+  const filteredResults = results?.filter(item => {
+    // Jika tidak ada mode pada item, defaultnya moderate
+    const itemMode = (item.mode || "moderate").toLowerCase().trim();
+    
+    // Hanya filter jika mode saat ini adalah friendly
+    if (mode === "friendly") {
+      return itemMode === "friendly";
+    }
+    // Dalam moderate mode, tampilkan semua hasil
+    return true;
+  });
+  
+  console.log(`[SearchResultsList] Results count after filter: ${filteredResults?.length || 0}`);
+  
+  if (!filteredResults?.length) {
+    return <p className="muted">Tidak ada hasil untuk mode {mode}.</p>;
   }
 
   return (
     <div className="search-result" role="listbox" aria-label="Hasil pencarian">
-      {results.map((r) => (
+      {filteredResults.map((r) => (
         <div key={r.slug} className="search-item" role="option">
           <Link
             href={`/articles/${r.slug}`}
@@ -19,7 +45,7 @@ export default function SearchResultsList({ results = [], onItemClick }) {
             style={{ textDecoration: "none", color: "inherit", display: "block" }}
           >
             <strong style={{ display: "block" }}>{r.title}</strong>
-            {/* Mode badge */}
+            {/* Mode badge - Lebih jelas dengan icon */}
             {r.mode && (
               <span
                 className={`badge badge-mode badge-mode-${r.mode}`}
@@ -29,14 +55,24 @@ export default function SearchResultsList({ results = [], onItemClick }) {
                   color: "#fff",
                   fontSize: ".8em",
                   fontWeight: 500,
-                  padding: "2px 8px",
+                  padding: "3px 10px",
                   borderRadius: 8,
-                  display: "inline-block"
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px"
                 }}
               >
-                {r.mode === "friendly"
-                  ? "Friendly Mode"
-                  : "Moderate Mode"}
+                {r.mode === "friendly" ? (
+                  <>
+                    <span style={{ fontSize: "14px" }}>👶</span>
+                    <span>Friendly Mode</span>
+                  </>
+                ) : (
+                  <>
+                    <span style={{ fontSize: "14px" }}>🧠</span>
+                    <span>Moderate Mode</span>
+                  </>
+                )}
               </span>
             )}
             {r.excerpt ? (

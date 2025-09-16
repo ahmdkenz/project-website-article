@@ -56,6 +56,11 @@ export default function SearchPageClient({ initialQuery, initialResults }) {
 
   // Hook pencarian real-time (hint) dengan mode
   const { query: hintQuery, setQuery: setHintQuery, results: hintResults, loading: hintLoading, canSearch: canHint } = useSearch({ minLen: 2, limit: 8, debounceMs: 200, mode });
+  
+  // Log mode aktif untuk debugging
+  useEffect(() => {
+    console.log(`[SearchPageClient] Active mode: ${mode}`);
+  }, [mode]);
 
   // Sinkronisasi input dengan URL params
   useEffect(() => {
@@ -79,6 +84,56 @@ export default function SearchPageClient({ initialQuery, initialResults }) {
   useEffect(() => {
     setResults(initialResults);
   }, [initialResults]);
+
+  // Reset hasil jika mode berubah (untuk memastikan pencarian selalu menggunakan mode yang tepat)
+  useEffect(() => {
+    if (q.trim().length >= 2) {
+      // Jika ada query aktif, kita perlu memperbarui pencarian dengan mode baru
+      const fetchResults = async () => {
+        try {
+          console.log(`[Client Search] Fetching results for mode: ${mode}, query: "${q}"`);
+          const res = await fetch(`/api/search?q=${encodeURIComponent(q)}&mode=${encodeURIComponent(mode)}`);
+          if (res.ok) {
+            const data = await res.json();
+            // Tambahkan filter client-side untuk memastikan hanya artikel dengan mode yang tepat
+            const results = Array.isArray(data.results) ? data.results : [];
+            
+            // Check mode of all results
+            const modeMap = {};
+            results.forEach(article => {
+              const articleMode = (article.mode || "moderate").toLowerCase().trim();
+              modeMap[articleMode] = (modeMap[articleMode] || 0) + 1;
+            });
+            console.log(`[Client Search] Results by mode before filtering:`, modeMap);
+            
+            const filteredResults = results.filter(article => {
+              // Pastikan hanya artikel dengan mode yang sama persis yang ditampilkan
+              const articleMode = (article.mode || "moderate").toLowerCase().trim();
+              const isMatch = articleMode === mode;
+              
+              // Log info untuk artikel friendly mode
+              if (articleMode === "friendly" && mode === "friendly") {
+                console.log(`[Client Search] Found friendly article: ${article.title}`);
+              }
+              
+              return isMatch;
+            });
+            
+            console.log(`[Client Search] Mode: ${mode}, Found: ${filteredResults.length} articles after client filtering`);
+            
+            setResults({
+              articles: filteredResults,
+              terms: [], // Tetap kosong karena API hanya mengembalikan artikel
+              flashcards: [] // Tetap kosong karena API hanya mengembalikan artikel
+            });
+          }
+        } catch (err) {
+          console.error("Gagal memperbarui hasil pencarian:", err);
+        }
+      };
+      fetchResults();
+    }
+  }, [mode, q]);
 
   // Tab counts
   const counts = useMemo(

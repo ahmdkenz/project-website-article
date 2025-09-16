@@ -22,22 +22,46 @@ export default async function SearchPage({ searchParams }) {
     const cookieMode = cookieStore.get("theme_mode");
     if (cookieMode && (cookieMode.value === "friendly" || cookieMode.value === "moderate")) {
       mode = cookieMode.value;
+    } else {
+      // Default yang aman jika tidak ada cookie
+      mode = "moderate";
     }
-  } catch {}
+  } catch (err) {
+    console.warn("Error reading cookie, fallback to moderate mode:", err);
+    mode = "moderate";
+  }
 
+  // Log untuk debug - membantu memahami mode yang aktif
+  console.log(`[Search Page] Active mode: ${mode}, query: "${q}"`);
+  
   let rawResults = null;
   try {
+    // Gunakan searchAll dengan mode yang tepat
     rawResults = await searchAll(q, mode);
     rawResults = rawResults || {};
+    
+    // Log hasil pencarian untuk debug
+    console.log(`[Search Page] Found ${rawResults.articles?.length || 0} articles in "${mode}" mode`);
   } catch (err) {
     console.warn("searchAll failed, fallback ke default data:", err?.message || err);
     rawResults = { articles: [], terms: [], flashcards: [] };
   }
+  // Map artikel dan tambahkan filter sekali lagi untuk memastikan hanya mode yang tepat
+  let articleResults = (rawResults.articles || [])
+    .slice(0, 50)
+    .map(buildSummaryForArticle)
+    .filter(Boolean);
+    
+  // Double-check filter mode
+  articleResults = articleResults.filter(article => {
+    const articleMode = (article.mode || "moderate").toLowerCase().trim();
+    return articleMode === mode;
+  });
+  
+  console.log(`[Server Search] After final filter: ${articleResults.length} articles in "${mode}" mode`);
+    
   const results = {
-    articles: (rawResults.articles || [])
-      .slice(0, 50)
-      .map(buildSummaryForArticle)
-      .filter(Boolean),
+    articles: articleResults,
     terms: (rawResults.terms || [])
       .slice(0, 50)
       .map(buildSummaryForTerm)
