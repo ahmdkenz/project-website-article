@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote } from "next-mdx-remote";
 import Only from "@/components/mdx/Only";
 
@@ -10,6 +11,30 @@ const norm = (s) => (s || "").toString().toLowerCase().trim();
 const mdxComponents = {
   Only,
 };
+
+// Component to handle individual term rendering with client-side MDX serialization
+function TermCard({ term, index }) {
+  const [serializedContent, setSerializedContent] = useState(null);
+
+  useEffect(() => {
+    if (term.rawContent && !serializedContent) {
+      serialize(term.rawContent, { components: mdxComponents })
+        .then(setSerializedContent)
+        .catch(console.error);
+    }
+  }, [term.rawContent, serializedContent]);
+
+  return (
+    <article key={term.id ?? term.slug ?? index} className="term-card">
+      <h3>{term.term}</h3>
+      {serializedContent ? (
+        <MDXRemote {...serializedContent} components={mdxComponents} />
+      ) : (
+        <div>Loading...</div>
+      )}
+    </article>
+  );
+}
 
 export default function DictionaryList({ allTerms = [] }) {
   // State input yang sedang diketik
@@ -29,10 +54,8 @@ export default function DictionaryList({ allTerms = [] }) {
     if (!q) return [];
     return safeTerms.filter((term) => {
       const termText = norm(term.term);
-      const definitionText = norm(
-        term.definitionFriendly || term.definitionModerate
-      );
-      return termText.includes(q) || definitionText.includes(q);
+      const rawText = norm(term.rawContent || "");
+      return termText.includes(q) || rawText.includes(q);
     });
   }, [safeTerms, submittedQuery]);
 
@@ -91,10 +114,7 @@ export default function DictionaryList({ allTerms = [] }) {
           {/* Hasil ditemukan */}
           {filteredTerms.length > 0 &&
             filteredTerms.map((term, index) => (
-              <article key={term.id ?? term.slug ?? index} className="term-card">
-                <h3>{term.term}</h3>
-                <MDXRemote {...term.content} components={mdxComponents} />
-              </article>
+              <TermCard key={term.id ?? term.slug ?? index} term={term} index={index} />
             ))}
         </div>
       </section>
