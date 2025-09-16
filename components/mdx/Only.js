@@ -28,7 +28,6 @@ export default function Only({ mode, children }) {
   if (m === undefined || m === null) {
     // In development, warn to help authors
     if (process.env.NODE_ENV !== "production") {
-      // eslint-disable-next-line no-console
       console.warn("[Only] missing 'mode' prop on <Only> - defaulting to hide content");
     }
     return null;

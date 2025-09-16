@@ -4,24 +4,27 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useMode } from "@/context/ModeContext";
-import Footer from "@/components/footer"; // ⬅️ tambahkan import footer
+import { useI18n } from "@/lib/i18n";
+import Footer from "@/components/footer";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 /** Toggle tema melayang (khusus halaman ini saja) */
 function ThemeFloatToggleInline() {
   const { theme, setTheme } = useMode();
+  const { t } = useI18n();
   const next = theme === "dark" ? "light" : "dark";
 
   return (
     
     <button
-      aria-label={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
-      title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+      aria-label={theme === "dark" ? t('theme.light') : t('theme.dark')}
+      title={theme === "dark" ? t('theme.light') : t('theme.dark')}
       onClick={() => setTheme(next)}
       className="btn-ghost btn-sm"
       style={{
         position: "fixed",
         top: "12px",
-        right: "16px",
+        right: "70px", // Move left to make room for language switcher
         zIndex: 1000,
         borderRadius: "999px",
         padding: ".55rem .65rem",
@@ -36,9 +39,26 @@ function ThemeFloatToggleInline() {
   );
 }
 
+/** Language switcher floating button */
+function LanguageFloatToggle() {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: "12px",
+        right: "16px",
+        zIndex: 1000,
+      }}
+    >
+      <LanguageSwitcher />
+    </div>
+  );
+}
+
 export default function SelectModePage() {
   const router = useRouter();
   const { setMode } = useMode();
+  const { t } = useI18n();
 
   const handleModeSelect = (m) => {
     setMode(m);
@@ -52,8 +72,9 @@ export default function SelectModePage() {
   return (
     <>
       <main className="container" style={{ padding: "2rem 0" }}>
-        {/* Toggle tema hanya ada di halaman ini (pojok kanan atas) */}
+        {/* Toggle tema dan bahasa di pojok kanan atas */}
         <ThemeFloatToggleInline />
+        <LanguageFloatToggle />
 
         {/* ===== HERO Brand (gambar saja) ===== */}
         <section
@@ -86,9 +107,9 @@ export default function SelectModePage() {
 
         {/* ===== Judul & subjudul di BAWAH banner ===== */}
         <section className="welcome-head" style={{ textAlign: "center", marginTop: "0.75rem" }}>
-          <h1 className="welcome-title">Selamat Datang di Muda Melek Finansial</h1>
+          <h1 className="welcome-title">{t('welcome.title')}</h1>
           <p className="welcome-subtitle muted">
-            Pilih gaya belajar yang paling sesuai — <strong>Friendly</strong> yang ringan atau <strong>Moderate</strong> yang terstruktur. Preferensi bisa diubah kapan saja.
+            {t('welcome.subtitle')}
           </p>
         </section>
 
@@ -116,18 +137,18 @@ export default function SelectModePage() {
             }}
           >
             <div style={{ display: "grid", gap: ".35rem" }}>
-              <h2>🎈 Friendly Mode</h2>
-              <p className="muted">Bahasa santai, analogi ringan, cepat dipahami.</p>
+              <h2>🎈 {t('mode.friendly')}</h2>
+              <p className="muted">{t('mode.friendly.desc')}</p>
             </div>
             <div style={{ marginTop: "auto", paddingTop: "1rem" }}>
               <button
                 className="btn-primary btn-lg"
                 onClick={() => handleModeSelect("friendly")}
-                aria-label="Pilih Friendly Mode"
-                title="Pilih Friendly Mode"
+                aria-label={t('btn.choose.friendly')}
+                title={t('btn.choose.friendly')}
               >
                 <span className="icon">✨</span>
-                Pilih Friendly
+                {t('btn.choose.friendly')}
               </button>
             </div>
           </article>
@@ -146,18 +167,18 @@ export default function SelectModePage() {
             }}
           >
             <div style={{ display: "grid", gap: ".35rem" }}>
-              <h2>📘 Moderate Mode</h2>
-              <p className="muted">Bahasa formal, data lebih lengkap untuk pendalaman.</p>
+              <h2>📘 {t('mode.moderate')}</h2>
+              <p className="muted">{t('mode.moderate.desc')}</p>
             </div>
             <div style={{ marginTop: "auto", paddingTop: "1rem" }}>
               <button
                 className="btn-primary btn-lg"
                 onClick={() => handleModeSelect("moderate")}
-                aria-label="Pilih Moderate Mode"
-                title="Pilih Moderate Mode"
+                aria-label={t('btn.choose.moderate')}
+                title={t('btn.choose.moderate')}
               >
                 <span className="icon">🚀</span>
-                Pilih Moderate
+                {t('btn.choose.moderate')}
               </button>
             </div>
           </article>

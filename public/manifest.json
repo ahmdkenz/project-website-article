@@ -1,0 +1,100 @@
+{
+  "name": "Yuk Literasi Keuangan - Financial Education Platform",
+  "short_name": "YukLiterasiKeuangan",
+  "description": "Platform edukasi finansial untuk meningkatkan literasi keuangan masyarakat Indonesia",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "id",
+  "categories": ["education", "finance", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Artikel Terbaru",
+      "short_name": "Artikel",
+      "description": "Baca artikel terbaru tentang finansial",
+      "url": "/articles",
+      "icons": [{ "src": "/icons/shortcut-articles.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Kamus Finansial",
+      "short_name": "Kamus",
+      "description": "Cari definisi istilah finansial",
+      "url": "/dictionary",
+      "icons": [{ "src": "/icons/shortcut-dictionary.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Kartu Belajar",
+      "short_name": "Flashcard",
+      "description": "Belajar dengan kartu interaktif",
+      "url": "/flashcards",
+      "icons": [{ "src": "/icons/shortcut-flashcards.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/mobile-home.png",
+      "sizes": "360x640",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}
