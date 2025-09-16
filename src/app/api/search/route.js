@@ -18,6 +18,7 @@ export async function GET(req) {
       50,
       Math.max(1, parseInt(searchParams.get("limit") || "20", 10))
     );
+    const mode = searchParams.get("mode"); // 'friendly' | 'moderate' | null
 
     // Jika query kosong, kembalikan kosong (biar UI tidak “banjir”)
     if (!qRaw) {
@@ -32,8 +33,18 @@ export async function GET(req) {
     // Ambil semua artikel (boleh kamu ganti ke sumber lain juga nanti)
     const all = await getAllArticles();
 
+    // Filter by mode jika ada
+    let filteredAll = Array.isArray(all) ? all : [];
+    if (mode === "friendly" || mode === "moderate") {
+      filteredAll = filteredAll.filter(a => {
+        const articleMode = (a.mode || "moderate").toLowerCase().trim();
+        // Legacy: artikel dengan mode 'both' akan tampil di kedua mode
+        return articleMode === mode || articleMode === "both";
+      });
+    }
+
     // Proyeksi ringan: hindari payload besar
-    const docs = (Array.isArray(all) ? all : []).map((a) => ({
+    const docs = filteredAll.map((a) => ({
       slug: a.slug,
       title: a.title || "",
       excerpt: a.excerpt || "",

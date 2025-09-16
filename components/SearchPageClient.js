@@ -1,9 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useSearch } from "@/hooks/useSearch";
+import { useMode } from "@/context/ModeContext";
+import SearchResultsList from "@/components/SearchResultsList";
 
+// Komponen TabButton tidak berubah, sudah bagus.
 function TabButton({ id, active, label, count, onClick }) {
   return (
     <button
@@ -17,20 +21,50 @@ function TabButton({ id, active, label, count, onClick }) {
   );
 }
 
+// Komponen generik untuk menampilkan setiap bagian hasil.
+function ResultsSection({ title, items, renderItem, noResultsMessage, style }) {
+  if (!items || items.length === 0) {
+    return (
+      <section style={style}>
+        <h2>{title}</h2>
+        <p className="muted">{noResultsMessage}</p>
+      </section>
+    );
+  }
+  return (
+    <section className="homepage-articles" style={style}>
+      <h2>{title}</h2>
+      <div className="articles-list">{items.map(renderItem)}</div>
+    </section>
+  );
+}
+
 export default function SearchPageClient({ initialQuery, initialResults }) {
   const router = useRouter();
   const params = useSearchParams();
+  const inputRef = useRef(null);
+
+  // State utama untuk query dan tab
   const [q, setQ] = useState(initialQuery || "");
   const [activeTab, setActiveTab] = useState("all");
   const [results, setResults] = useState(initialResults);
+  // State untuk kontrol hint/saran
+  const [showHint, setShowHint] = useState(false);
 
-  // ✅ Sync URL -> input
+  // Ambil mode aktif dari context
+  const { mode } = useMode();
+
+  // Hook pencarian real-time (hint) dengan mode
+  const { query: hintQuery, setQuery: setHintQuery, results: hintResults, loading: hintLoading, canSearch: canHint } = useSearch({ minLen: 2, limit: 8, debounceMs: 200, mode });
+
+  // Sinkronisasi input dengan URL params
   useEffect(() => {
     const urlQ = params.get("q") || "";
     setQ(urlQ);
-  }, [params]);
+    setHintQuery(urlQ);
+  }, [params, setHintQuery]);
 
-  // ✅ Update URL saat user ketik (debounced)
+  // Update URL saat q berubah
   useEffect(() => {
     const handle = setTimeout(() => {
       const current = new URLSearchParams(Array.from(params.entries()));
@@ -39,13 +73,14 @@ export default function SearchPageClient({ initialQuery, initialResults }) {
       router.replace(`/search?${current.toString()}`);
     }, 250);
     return () => clearTimeout(handle);
-  }, [q, params, router]); // ✅ tambahkan dependencies
+  }, [q, params, router]);
 
-  // ✅ Hydrate hasil terbaru dari server
+  // Reset hasil jika initialResults berubah
   useEffect(() => {
     setResults(initialResults);
   }, [initialResults]);
 
+  // Tab counts
   const counts = useMemo(
     () => ({
       articles: results?.articles?.length || 0,
@@ -59,147 +94,172 @@ export default function SearchPageClient({ initialQuery, initialResults }) {
     [results]
   );
 
+  // Konfigurasi untuk setiap bagian hasil.
+  const resultSections = [
+    {
+      id: "articles",
+      title: "Artikel",
+      items: results?.articles,
+      noResultsMessage: "Tidak ada artikel yang cocok.",
+      renderItem: (a) => (
+        <article className="article-card" key={a.slug}>
+          <div className="article-content">
+            <h3>{a.title}</h3>
+            {/* Mode badge */}
+            {a.mode && (
+              <span
+                className={`badge badge-mode badge-mode-${a.mode}`}
+                style={{
+                  marginRight: 8,
+                  background: a.mode === "friendly" ? "#ff9800" : "#8e24aa",
+                  color: "#fff",
+                  fontSize: ".85em",
+                  fontWeight: 500,
+                  padding: "2px 8px",
+                  borderRadius: 8,
+                  display: "inline-block"
+                }}
+              >
+                {a.mode === "friendly"
+                  ? "Friendly Mode"
+                  : "Moderate Mode"}
+              </span>
+            )}
+            {a.excerpt ? <p className="muted">{a.excerpt}</p> : null}
+            <div className="meta">
+              {a.category ? <span className="badge">{a.category}</span> : null}
+              {Array.isArray(a.tags)
+                ? a.tags.slice(0, 4).map((t) => (
+                    <span className="tag" key={t}>{t}</span>
+                  ))
+                : null}
+            </div>
+            <div className="card-actions" style={{ marginTop: ".75rem" }}>
+              <Link href={`/articles/${a.slug}`} className="btn btn-ghost">
+                Baca Selengkapnya
+              </Link>
+            </div>
+          </div>
+        </article>
+      ),
+    },
+    {
+      id: "terms",
+      title: "Kamus",
+      items: results?.terms,
+      noResultsMessage: "Tidak ada istilah yang cocok.",
+      renderItem: (t) => (
+        <article className="article-card" key={t.id || t.term}>
+          <div className="article-content">
+            <h3>{t.term}</h3>
+            <p className="muted">{t.definitionFriendly || t.definitionModerate || ""}</p>
+            <div className="meta">
+              {t.category ? <span className="badge">{t.category}</span> : null}
+              {Array.isArray(t.aliases)
+                ? t.aliases.slice(0, 4).map((a) => (
+                    <span className="tag" key={a}>{a}</span>
+                  ))
+                : null}
+            </div>
+          </div>
+        </article>
+      ),
+    },
+    {
+      id: "flashcards",
+      title: "Flashcards",
+      items: results?.flashcards,
+      noResultsMessage: "Tidak ada kartu yang cocok.",
+      renderItem: (c) => (
+        <article className="article-card" key={c.id || c.term}>
+          <div className="article-content">
+            <h3>{c.term}</h3>
+            <p className="muted">{c.definitionFriendly || c.definitionModerate || c.back || ""}</p>
+          </div>
+        </article>
+      ),
+    },
+  ];
+
+  // Handler submit pencarian (tampilkan hasil penuh)
+  function handleSubmit(e) {
+    e.preventDefault();
+    const val = inputRef.current?.value?.trim();
+    if (!val) return;
+    setQ(val);
+    setShowHint(false);
+    // URL akan diupdate oleh useEffect
+  }
+
+  // Handler klik pada hint
+  function handleHintClick(item) {
+    setShowHint(false);
+    setQ(item.title || item.term || "");
+    router.push(`/articles/${item.slug}`);
+  }
+
   return (
     <>
-      <section className="hero small">
-        <h1>Cari Materi Keuangan</h1>
-        <p className="muted">
-          Telusuri artikel, istilah, dan flashcards dari satu tempat.
-        </p>
-      </section>
-
       <div className="search-area">
-        <div className="search-wrapper">
+        <form className="search-wrapper" onSubmit={handleSubmit} autoComplete="off" style={{ position: "relative" }}>
           <input
             id="globalSearchInput"
+            ref={inputRef}
             type="text"
             placeholder="Cari apa saja... (mis. inflasi, yield, rasio)"
             value={q}
-            onChange={(e) => setQ(e.target.value)}
+            onChange={e => {
+              setQ(e.target.value);
+              setHintQuery(e.target.value);
+              setShowHint(true);
+            }}
             aria-label="Ketik kata kunci pencarian"
+            onFocus={() => { if (hintQuery.length >= 2) setShowHint(true); }}
+            autoComplete="off"
           />
-        </div>
+          <button type="submit" className="btn btn-ghost" style={{ position: "absolute", right: 0, top: 0, height: "100%" }}>Cari</button>
+          {/* Dropdown hint/saran */}
+          {showHint && canHint && (q.trim().length >= 2) && (
+            <div className="search-suggest" role="listbox" aria-label="Saran pencarian" style={{ position: "absolute", left: 0, right: 0, top: "100%", zIndex: 10, background: "var(--bg, #fff)", border: "1px solid #eee", borderTop: "none", maxHeight: 320, overflowY: "auto" }}>
+              {hintLoading ? (
+                <p className="muted" style={{ margin: 8 }}>Mencari…</p>
+              ) : (
+                <SearchResultsList results={hintResults} onItemClick={() => setShowHint(false)} />
+              )}
+              {hintResults?.length > 0 && (
+                <button
+                  type="button"
+                  className="btn btn-outline btn-sm"
+                  onClick={() => { setShowHint(false); }}
+                  style={{ margin: 8, width: "100%" }}
+                >
+                  Lihat semua hasil untuk “{q}”
+                </button>
+              )}
+            </div>
+          )}
+        </form>
       </div>
 
       <div style={{ display: "flex", alignItems: "center", margin: "1rem 0" }}>
-        <TabButton
-          id="all"
-          active={activeTab === "all"}
-          label="Semua"
-          count={counts.all}
-          onClick={setActiveTab}
-        />
-        <TabButton
-          id="articles"
-          active={activeTab === "articles"}
-          label="Artikel"
-          count={counts.articles}
-          onClick={setActiveTab}
-        />
-        <TabButton
-          id="terms"
-          active={activeTab === "terms"}
-          label="Kamus"
-          count={counts.terms}
-          onClick={setActiveTab}
-        />
-        <TabButton
-          id="flashcards"
-          active={activeTab === "flashcards"}
-          label="Flashcards"
-          count={counts.flashcards}
-          onClick={setActiveTab}
-        />
+        <TabButton id="all" active={activeTab === "all"} label="Semua" count={counts.all} onClick={setActiveTab} />
+        <TabButton id="articles" active={activeTab === "articles"} label="Artikel" count={counts.articles} onClick={setActiveTab} />
+        <TabButton id="terms" active={activeTab === "terms"} label="Kamus" count={counts.terms} onClick={setActiveTab} />
+        <TabButton id="flashcards" active={activeTab === "flashcards"} label="Flashcards" count={counts.flashcards} onClick={setActiveTab} />
       </div>
 
-      {(activeTab === "all" || activeTab === "articles") && (
-        <section className="homepage-articles" style={{ marginTop: "1rem" }}>
-          <h2>Artikel</h2>
-          <div className="articles-list">
-            {results?.articles?.length ? (
-              results.articles.map((a) => (
-                <article className="article-card" key={a.slug}>
-                  <div className="article-content">
-                    <h3>{a.title}</h3>
-                    {a.excerpt ? <p className="muted">{a.excerpt}</p> : null}
-                    <div className="meta">
-                      {a.category ? <span className="badge">{a.category}</span> : null}
-                      {Array.isArray(a.tags)
-                        ? a.tags.slice(0, 4).map((t) => (
-                            <span className="tag" key={t}>
-                              {t}
-                            </span>
-                          ))
-                        : null}
-                    </div>
-                    <div className="card-actions" style={{ marginTop: ".75rem" }}>
-                      <Link href={`/articles/${a.slug}`} className="btn btn-ghost">
-                        Baca Selengkapnya
-                      </Link>
-                    </div>
-                  </div>
-                </article>
-              ))
-            ) : (
-              <p className="muted">Tidak ada artikel yang cocok.</p>
-            )}
-          </div>
-        </section>
-      )}
-
-      {(activeTab === "all" || activeTab === "terms") && (
-        <section className="homepage-articles" style={{ marginTop: "2rem" }}>
-          <h2>Kamus</h2>
-          <div className="articles-list">
-            {results?.terms?.length ? (
-              results.terms.map((t) => (
-                <article className="article-card" key={t.id || t.term}>
-                  <div className="article-content">
-                    <h3>{t.term}</h3>
-                    <p className="muted">
-                      {t.definitionFriendly || t.definitionModerate || ""}
-                    </p>
-                    <div className="meta">
-                      {t.category ? <span className="badge">{t.category}</span> : null}
-                      {Array.isArray(t.aliases)
-                        ? t.aliases.slice(0, 4).map((a) => (
-                            <span className="tag" key={a}>
-                              {a}
-                            </span>
-                          ))
-                        : null}
-                    </div>
-                  </div>
-                </article>
-              ))
-            ) : (
-              <p className="muted">Tidak ada istilah yang cocok.</p>
-            )}
-          </div>
-        </section>
-      )}
-
-      {(activeTab === "all" || activeTab === "flashcards") && (
-        <section className="homepage-articles" style={{ marginTop: "2rem" }}>
-          <h2>Flashcards</h2>
-          <div className="articles-list">
-            {results?.flashcards?.length ? (
-              results.flashcards.map((c) => (
-                <article className="article-card" key={c.id || c.term}>
-                  <div className="article-content">
-                    <h3>{c.term}</h3>
-                    <p className="muted">
-                      {c.definitionFriendly || c.definitionModerate || c.back || ""}
-                    </p>
-                  </div>
-                </article>
-              ))
-            ) : (
-              <p className="muted">Tidak ada kartu yang cocok.</p>
-            )}
-          </div>
-        </section>
-      )}
+      {resultSections
+        .filter((section) => activeTab === "all" || activeTab === section.id)
+        .map((section, index) => (
+          <ResultsSection
+            key={section.id}
+            title={section.title}
+            items={section.items}
+            renderItem={section.renderItem}
+            noResultsMessage={section.noResultsMessage}
+            style={{ marginTop: "2rem" }}
+          />
+        ))}
     </>
   );
 }

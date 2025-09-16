@@ -16,7 +16,7 @@ export default async function ArticlesPage() {
 
   // WAJIB: await cookies() sebelum menggunakan .get(...)
   const cookieStore = await cookies();
-  const cookieMode = cookieStore.get("site_mode")?.value;
+  const cookieMode = cookieStore.get("theme_mode")?.value;
   const activeMode = normMode(cookieMode);
 
   // enrich (full list, belum difilter)

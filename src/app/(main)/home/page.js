@@ -77,7 +77,7 @@ export default async function HomePage() {
 
   // baca cookie secara async (penting)
   const cookieStore = await cookies();
-  const cookieMode = cookieStore.get("site_mode")?.value;
+  const cookieMode = cookieStore.get("theme_mode")?.value;
   const activeMode = normMode(cookieMode);
 
   // enriched = sumber data lengkap yang akan dikirim ke client (UNFILTERED)

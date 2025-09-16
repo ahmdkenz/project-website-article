@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import Image from "next/image";
 import SearchPageClient from "@/components/SearchPageClient";
 import { searchAll } from "@/lib/search";
+import { cookies } from "next/headers";
 import {
   buildSummaryForArticle,
   buildSummaryForTerm,
@@ -12,12 +13,21 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function SearchPage({ searchParams }) {
-  // Blok kode untuk mengambil data pencarian tidak berubah
+  // Ambil mode dari cookie (atau default 'friendly')
   const params = await searchParams;
   const q = (params?.q || "").toString();
+  let mode = "friendly";
+  try {
+    const cookieStore = await cookies();
+    const cookieMode = cookieStore.get("theme_mode");
+    if (cookieMode && (cookieMode.value === "friendly" || cookieMode.value === "moderate")) {
+      mode = cookieMode.value;
+    }
+  } catch {}
+
   let rawResults = null;
   try {
-    rawResults = await searchAll(q);
+    rawResults = await searchAll(q, mode);
     rawResults = rawResults || {};
   } catch (err) {
     console.warn("searchAll failed, fallback ke default data:", err?.message || err);

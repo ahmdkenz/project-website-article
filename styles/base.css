@@ -8,8 +8,8 @@
   --border-color: #e2e8f0; /* Slate 200 */
   --primary-color: #2563eb; /* Blue 600 */
   --primary-text-color: #ffffff;
-  --friendly-color: #0230c7; /* Green 600 */
-  --moderate-color: #0230c7; /* Sky 600 */
+  --friendly-color: #ff9800; /* Orange 500 */
+  --moderate-color: #8e24aa; /* Purple 600 */
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   --ring-color: rgba(37, 99, 235, 0.35);
   --btn-bg: var(--primary-color);
@@ -26,8 +26,8 @@ html.dark {
   --muted-color: #94a3b8; /* Slate 400 */
   --border-color: #334155; /* Slate 700 */
   --primary-color: #3b82f6; /* Blue 500 */
-  --friendly-color: #0230c7; /* Green 500 */
-  --moderate-color: #0230c7; /* Sky 500 */
+  --friendly-color: #ff9800; /* Orange 500 */
+  --moderate-color: #8e24aa; /* Purple 600 */
   --shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
   --ring-color: rgba(96, 165, 250, 0.45);
 }

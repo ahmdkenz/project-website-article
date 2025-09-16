@@ -7,14 +7,17 @@ import { useMode } from "@/context/ModeContext";
 function normModeVal(v) {
   if (Array.isArray(v)) return v.map((x) => String(x).toLowerCase().trim());
   if (v === undefined || v === null) return v;
-  return String(v).toLowerCase().trim();
+  const val = String(v).toLowerCase().trim();
+  // Legacy support: convert 'both' to array ['friendly', 'moderate']
+  if (val === 'both') return ['friendly', 'moderate'];
+  return val;
 }
 
 /**
  * Usage in MDX:
  * <Only mode="friendly">...</Only>
  * <Only mode={["friendly","moderate"]}>...</Only>
- * <Only mode="both">...</Only> // will render in both
+ * <Only mode="both">...</Only> // legacy support: will render in both friendly and moderate
  */
 export default function Only({ mode, children }) {
   const ctx = useMode();
@@ -34,17 +37,15 @@ export default function Only({ mode, children }) {
     return null;
   }
 
-  // support "both" shortcut
+  // Hanya dukung 'friendly' atau 'moderate', 'both' sudah diubah menjadi array di normModeVal
   if (typeof m === "string") {
-    if (m === "both") return <>{children}</>;
     return current === m ? <>{children}</> : null;
   }
 
-  // array case
+  // array case - support hanya untuk 'friendly' dan 'moderate'
   if (Array.isArray(m)) {
-    const lowered = m.map((x) => String(x).toLowerCase().trim());
-    if (lowered.includes("both")) return <>{children}</>;
-    return lowered.includes(current) ? <>{children}</> : null;
+    const validModes = m.filter(mode => mode === 'friendly' || mode === 'moderate');
+    return validModes.includes(current) ? <>{children}</> : null;
   }
 
   // fallback: hide

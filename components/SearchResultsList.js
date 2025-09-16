@@ -19,6 +19,26 @@ export default function SearchResultsList({ results = [], onItemClick }) {
             style={{ textDecoration: "none", color: "inherit", display: "block" }}
           >
             <strong style={{ display: "block" }}>{r.title}</strong>
+            {/* Mode badge */}
+            {r.mode && (
+              <span
+                className={`badge badge-mode badge-mode-${r.mode}`}
+                style={{
+                  marginRight: 8,
+                  background: r.mode === "friendly" ? "#ff9800" : "#8e24aa",
+                  color: "#fff",
+                  fontSize: ".8em",
+                  fontWeight: 500,
+                  padding: "2px 8px",
+                  borderRadius: 8,
+                  display: "inline-block"
+                }}
+              >
+                {r.mode === "friendly"
+                  ? "Friendly Mode"
+                  : "Moderate Mode"}
+              </span>
+            )}
             {r.excerpt ? (
               <span className="muted" style={{ fontSize: ".9rem" }}>
                 {r.excerpt}

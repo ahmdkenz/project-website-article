@@ -3,7 +3,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
-export function useSearch({ minLen = 2, limit = 20, debounceMs = 200 } = {}) {
+export function useSearch({ minLen = 2, limit = 20, debounceMs = 200, mode } = {}) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -40,7 +40,8 @@ export function useSearch({ minLen = 2, limit = 20, debounceMs = 200 } = {}) {
         const ac = new AbortController();
         abortRef.current = ac;
 
-        const url = `/api/search?q=${encodeURIComponent(query)}&limit=${limit}`;
+        let url = `/api/search?q=${encodeURIComponent(query)}&limit=${limit}`;
+        if (mode) url += `&mode=${encodeURIComponent(mode)}`;
         const res = await fetch(url, { signal: ac.signal });
         if (!res.ok) throw new Error("Search request failed");
 
@@ -54,7 +55,7 @@ export function useSearch({ minLen = 2, limit = 20, debounceMs = 200 } = {}) {
     }, debounceMs);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, canSearch, limit]);
+  }, [query, canSearch, limit, mode]);
 
   return { query, setQuery, results, loading, error: err, canSearch };
 }
