@@ -7,8 +7,7 @@ export const revalidate = 60;
 
 export default async function DictionaryPage() {
   const termsData = await getAllTerms();
-  const allTermsList = Object.values(termsData).flat();
-
+  
   // Siapkan dua gambar untuk banner
   const bannerSrc1 = "/brand/hero-kamus.jpg";
   const bannerSrc2 = "/brand/hero-2.jpg";
@@ -59,7 +58,7 @@ export default async function DictionaryPage() {
         {/* Area pencarian */}
         <section className="options-section">
           <div className="search-area">
-            <DictionaryList allTerms={allTermsList} />
+            <DictionaryList allTerms={termsData} />
           </div>
         </section>
       </main>

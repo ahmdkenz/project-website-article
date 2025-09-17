@@ -1,7 +1,7 @@
 // app/(main)/flashcards/page.js
 import Image from "next/image";
 import { getAllFlashcards } from '@/lib/data';
-import FlashcardList from '@/components/FlashcardList'; // Import komponen client kita
+import DynamicFlashcardList from '@/components/DynamicFlashcardList';
 
 export default async function FlashcardsPage() {
   // 1. Ambil data di sisi server saat halaman di-build
@@ -17,7 +17,7 @@ export default async function FlashcardsPage() {
       <section className="hero">
         <div className="hero-media" aria-hidden="true">
           {/* --- PERUBAHAN: Struktur dikembalikan untuk animasi FADE --- */}
-          
+
           {/* Gambar Pertama */}
           <Image
             src={bannerSrc1}
@@ -38,7 +38,7 @@ export default async function FlashcardsPage() {
             className="hero-img"
             id="hero-img-2" // ID untuk target animasi
           />
-          
+
           {/* --- AKHIR PERUBAHAN --- */}
           <div className="hero-overlay" />
         </div>
@@ -46,18 +46,18 @@ export default async function FlashcardsPage() {
 
       {/* === Blok teks di bawah banner (Konten diperbarui) === */}
       <section className="hero-content" aria-labelledby="flashcards-title">
-        <h1 id="flashcards-title" style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
-          <span style={{fontSize:'1.2em',marginRight:6}}>⚡</span>
+        <h1 id="flashcards-title" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+          <span style={{ fontSize: '1.2em', marginRight: 6 }}>⚡</span>
           Flashcards Interaktif
         </h1>
-        <p className="muted" style={{textAlign:'center'}}>
+        <p className="muted" style={{ textAlign: 'center' }}>
           Manfaatkan metode <i>active recall</i> untuk menguji dan memperkuat pemahaman Anda terhadap terminologi esensial di bidang keuangan.
         </p>
       </section>
 
       {/* 2. Render komponen client dan kirim data sebagai props */}
       <section>
-        <FlashcardList allFlashcards={flashcards} />
+        <DynamicFlashcardList allFlashcards={flashcards} />
       </section>
     </>
   );
