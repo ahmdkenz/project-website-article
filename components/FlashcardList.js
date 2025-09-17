@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Flashcard from '@/components/Flashcard';
 import { useMode } from '@/context/ModeContext';
 
@@ -12,11 +13,21 @@ export default function FlashcardList({ allFlashcards = [] }) {
   
   // State untuk pencarian & filter
   const [searchTerm, setSearchTerm] = useState('');
+  const searchParams = useSearchParams();
   const { mode } = useMode();
   
   // State untuk filter kategori
   const [categoryFilter, setCategoryFilter] = useState('');
   
+  // Saat halaman pertama kali dibuka, cek apakah ada query search di URL
+  useEffect(() => {
+    const urlSearch = searchParams?.get('search');
+    if (urlSearch && !searchTerm) {
+      setSearchTerm(urlSearch);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
   // Filter flashcards berdasarkan mode
   const modeFilteredFlashcards = useMemo(() => {
     if (!Array.isArray(safeFlashcards)) return [];

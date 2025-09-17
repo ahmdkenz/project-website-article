@@ -3,6 +3,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import Only from "@/components/mdx/Only";    // keduanya client component — aman dipakai sbg child
 import Switch from "@/components/mdx/Switch";
+import FlashcardLink from "@/components/mdx/FlashcardLink";
 
 export default function ArticleContentClient({ article }) {
   if (!article) {
@@ -47,7 +48,7 @@ export default function ArticleContentClient({ article }) {
       
       <MDXRemote
         source={article.content}          // string MDX
-        components={{ Only, Switch }}     // komponen client untuk gating mode
+        components={{ Only, Switch, FlashcardLink }}     // komponen client untuk gating mode dan link flashcard
         options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
       />
     </article>
