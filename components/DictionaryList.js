@@ -103,9 +103,21 @@ export default function DictionaryList({ allTerms = {} }) {
             aria-label="Cari Istilah"
             style={{ flexGrow: 1 }}
           />
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary btn-cari-mobile">
             Cari
           </button>
+      {/* Style tombol Cari agar kecil di mobile */}
+      <style jsx global>{`
+        @media (max-width: 640px) {
+          .btn-cari-mobile {
+            font-size: 0.95rem !important;
+            padding: 0.45em 1em !important;
+            min-width: 64px !important;
+            height: 2.1em !important;
+            border-radius: 8px !important;
+          }
+        }
+      `}</style>
         </form>
       </section>
 

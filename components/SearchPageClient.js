@@ -261,7 +261,7 @@ export default function SearchPageClient({ initialQuery, initialResults }) {
             id="globalSearchInput"
             ref={inputRef}
             type="text"
-            placeholder="Cari apa saja... (mis. inflasi, yield, rasio)"
+            placeholder="Cari apa saja... (mis. inflasi, field, rasio)"
             value={q}
             onChange={e => {
               setQ(e.target.value);
@@ -272,7 +272,70 @@ export default function SearchPageClient({ initialQuery, initialResults }) {
             onFocus={() => { if (hintQuery.length >= 2) setShowHint(true); }}
             autoComplete="off"
           />
-          <button type="submit" className="btn btn-ghost" style={{ position: "absolute", right: 0, top: 0, height: "100%" }}>Cari</button>
+          <button
+            type="submit"
+            className="btn btn-ghost btn-cari-search"
+            aria-label="Cari"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 0,
+              background: 'none',
+              border: 'none',
+              boxShadow: 'none',
+              minWidth: 44,
+              minHeight: 44,
+              height: '100%',
+              width: 44,
+              marginLeft: 4,
+              color: mode === 'friendly' ? '#ffffffff' : '#ffffffff',
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ display: 'block' }}
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </button>
+      <style jsx global>{`
+        .search-wrapper {
+          display: flex;
+          align-items: center;
+          position: relative;
+          gap: 0.5rem;
+        }
+        .search-wrapper input[type="text"] {
+          flex: 1 1 0%;
+          min-width: 0;
+          font-size: 1rem;
+          padding-right: 0.5rem;
+        }
+        .btn-cari-search {
+          min-width: 44px;
+          min-height: 44px;
+          width: 44px;
+          height: 44px;
+          padding: 0;
+          margin-left: 4px;
+          background: none !important;
+          border: none !important;
+          box-shadow: none !important;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      `}</style>
           {/* Dropdown hint/saran */}
           {showHint && canHint && (q.trim().length >= 2) && (
             <div className="search-suggest" role="listbox" aria-label="Saran pencarian" style={{ position: "absolute", left: 0, right: 0, top: "100%", zIndex: 10, background: "var(--bg, #fff)", border: "1px solid #eee", borderTop: "none", maxHeight: 320, overflowY: "auto" }}>
