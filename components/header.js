@@ -100,7 +100,10 @@ export default function Header() {
           {/* ==================== */}
           {/* [DIBIARKAN ADA, TAPI DISEMBUNYIKAN VIA CSS .legacy-search-mobile] */}
           <Link href="/search" className="search-icon-mobile legacy-search-mobile" aria-label="Buka Pencarian">
-            🔍
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="2" />
+              <line x1="15.2" y1="15.2" x2="20" y2="20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
           </Link>
 
           {/* ===================== */}
@@ -112,9 +115,47 @@ export default function Header() {
             aria-label="Buka Pencarian"
             aria-expanded={isSearchOpen}
             onClick={() => setIsSearchOpen(true)}
+            style={{ background: 'none', border: 'none', boxShadow: 'none', padding: 0 }}
           >
-            🔍
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ display: 'block' }}>
+              <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="2" fill="none" />
+              <line x1="15.2" y1="15.2" x2="20" y2="20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
           </button>
+
+      {/* Script: Enter pada input search mobile langsung cari */}
+      <script dangerouslySetInnerHTML={{__html:`
+        document.addEventListener('DOMContentLoaded',function(){
+          var overlay=document.querySelector('.search-overlay');
+          if(!overlay)return;
+          var input=overlay.querySelector('.search-overlay-input');
+          if(!input)return;
+          input.addEventListener('keydown',function(e){
+            if(e.key==='Enter'){
+              var val=input.value.trim();
+              if(val.length>0){
+                window.location.href='/search?q='+encodeURIComponent(val);
+              }
+            }
+          });
+        });
+      `}} />
+      {/* Style agar ikon search mobile menyesuaikan theme dan tanpa background */}
+      <style jsx global>{`
+        .search-icon-mobile {
+          background: none !important;
+          border: none !important;
+          box-shadow: none !important;
+        }
+        .search-icon-mobile svg {
+          color: #222;
+          background: none !important;
+          transition: color .2s;
+        }
+        html.dark .search-icon-mobile svg {
+          color: #f1f5fa;
+        }
+      `}</style>
 
           <ThemeToggle />
 

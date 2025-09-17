@@ -128,26 +128,25 @@ export default function FlashcardList({ allFlashcards = [] }) {
         </div>
       </section>
 
-      {/* Filter kategori */}
+      {/* Filter kategori: dropdown */}
       {categories.length > 0 && (
-        <section className="category-filter" style={{ marginTop: '1rem' }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
-            <button 
-              className={`btn btn-sm ${!categoryFilter ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => setCategoryFilter('')}
-            >
-              Semua
-            </button>
+        <section className="category-filter" style={{ marginTop: '1rem', textAlign: 'center' }}>
+          <label htmlFor="categoryDropdown" style={{ marginRight: '.5rem', fontWeight: 500 }}>
+            Kategori:
+          </label>
+          <select
+            id="categoryDropdown"
+            value={categoryFilter}
+            onChange={e => setCategoryFilter(e.target.value)}
+            className="btn btn-sm"
+            style={{ minWidth: 120, maxWidth: 220 }}
+            aria-label="Filter kategori flashcard"
+          >
+            <option value="">Semua</option>
             {categories.map(cat => (
-              <button 
-                key={cat} 
-                className={`btn btn-sm ${categoryFilter === cat ? 'btn-primary' : 'btn-outline'}`}
-                onClick={() => setCategoryFilter(cat === categoryFilter ? '' : cat)}
-              >
-                {cat}
-              </button>
+              <option key={cat} value={cat}>{cat}</option>
             ))}
-          </div>
+          </select>
         </section>
       )}
 

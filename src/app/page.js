@@ -12,27 +12,46 @@ function ThemeFloatToggleInline() {
   const next = theme === "dark" ? "light" : "dark";
 
   return (
-    
-    <button
-      aria-label={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
-      title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
-      onClick={() => setTheme(next)}
-      className="btn-ghost btn-sm"
-      style={{
-        position: "fixed",
-        top: "12px",
-        right: "16px",
-        zIndex: 1000,
-        borderRadius: "999px",
-        padding: ".55rem .65rem",
-        lineHeight: 1,
-        background: "rgba(0,0,0,0.02)",
-        backdropFilter: "saturate(140%) blur(6px)",
-        border: "1px solid var(--border-color)",
-      }}
-    >
-      <span style={{ fontSize: "1.2rem" }}>{theme === "dark" ? "☀️" : "🌙"}</span>
-    </button>
+    <>
+      <button
+        aria-label={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+        title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+        onClick={() => setTheme(next)}
+        className="btn-ghost btn-sm theme-float-toggle"
+        style={{
+          position: "fixed",
+          top: "12px",
+          right: "16px",
+          zIndex: 1000,
+          borderRadius: "999px",
+          padding: ".55rem .65rem",
+          lineHeight: 1,
+          background: "rgba(0,0,0,0.02)",
+          backdropFilter: "saturate(140%) blur(6px)",
+          border: "1px solid var(--border-color)",
+          aspectRatio: "auto"
+        }}
+      >
+        <span style={{ fontSize: "1.2rem" }}>{theme === "dark" ? "☀️" : "🌙"}</span>
+      </button>
+      <style jsx global>{`
+        @media (max-width: 640px) {
+          .theme-float-toggle {
+            padding: 0.55rem !important;
+            width: 44px !important;
+            height: 44px !important;
+            min-width: 44px !important;
+            min-height: 44px !important;
+            max-width: 44px !important;
+            max-height: 44px !important;
+            border-radius: 50% !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      `}</style>
+    </>
   );
 }
 
