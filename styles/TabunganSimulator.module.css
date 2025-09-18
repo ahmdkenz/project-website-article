@@ -1,0 +1,144 @@
+
+
+.simulatorCard {
+  background: var(--sim-bg, var(--color-bg, #f8fafc));
+  border-radius: 1.25rem;
+  border: 2px solid var(--color-primary, #8e24aa);
+  box-shadow: 0 4px 24px var(--sim-shadow, rgba(142,36,170,0.10));
+  padding: 2rem 1.5rem;
+  max-width: 420px;
+  margin: 2rem auto;
+  transition: box-shadow 0.2s, transform 0.2s, border 0.2s, background 0.2s;
+  animation: fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) both;
+}
+
+@media (max-width: 600px) {
+  .simulatorCard {
+    padding: 1.1rem 0.5rem;
+    max-width: 98vw;
+    margin: 1rem auto;
+    border-radius: 0.85rem;
+  }
+  .simulatorTitle {
+    font-size: 1.15rem;
+    gap: 0.25rem;
+  }
+  .simulatorForm {
+    gap: 0.75rem;
+  }
+  .simulatorInput {
+    font-size: 0.98rem;
+    padding: 0.6rem 0.7rem;
+  }
+  .simulatorButton {
+    font-size: 1rem;
+    padding: 0.6rem 0.7rem;
+  }
+  .simulatorResult {
+    font-size: 0.98rem;
+  }
+}
+
+.simulatorCard:hover {
+  box-shadow: 0 6px 32px var(--sim-shadow-hover, rgba(142,36,170,0.18));
+  transform: translateY(-4px) scale(1.01);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+.simulatorTitle {
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--color-primary, #8e24aa);
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.simulatorForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.simulatorLabel {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: var(--color-label, #7c43bd);
+}
+
+.simulatorInput {
+  border: 1.5px solid var(--color-border, #e0e0e0);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+  background: var(--color-input-bg, #fafbfc);
+  box-shadow: 0 1px 4px var(--sim-input-shadow, rgba(142,36,170,0.03));
+}
+.simulatorInput:focus {
+  border: 1.5px solid var(--color-primary, #8e24aa);
+  box-shadow: 0 2px 8px var(--sim-input-shadow-focus, rgba(142,36,170,0.10));
+}
+
+.simulatorButton {
+  background: var(--sim-btn-bg, linear-gradient(90deg, var(--color-accent, #ff9800) 0%, var(--color-primary, #8e24aa) 100%));
+  color: var(--sim-btn-color, #fff);
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  box-shadow: 0 1px 6px var(--sim-btn-shadow, rgba(142,36,170,0.10));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.simulatorButton:hover {
+  background: var(--sim-btn-bg-hover, linear-gradient(90deg, var(--color-accent-hover, #ffb74d) 0%, var(--color-primary-hover, #ba68c8) 100%));
+  transform: scale(1.04);
+}
+
+.simulatorResult {
+  margin-top: 2rem;
+  text-align: center;
+  animation: fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) both;
+}
+
+.simulatorSuccess {
+  color: var(--sim-success, #43a047);
+  font-weight: 600;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.simulatorFail {
+  color: var(--sim-fail, #e53935);
+  font-weight: 600;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.simulatorHint {
+  color: var(--sim-hint, #ff9800);
+  margin-top: 0.75rem;
+  font-style: italic;
+  font-size: 1rem;
+  animation: fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) both;
+}
