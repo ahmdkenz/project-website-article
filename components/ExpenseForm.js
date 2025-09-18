@@ -10,8 +10,40 @@ export default function ExpenseForm({ onCalculate }) {
   const { mode } = useMode();
   const isDarkMode = mode === "dark";
   
+  // Format angka dengan pemisah ribuan
+  function formatNumber(value) {
+    if (!value && value !== 0) return "";
+    // Pastikan value adalah string dan hapus semua titik yang ada
+    const cleanValue = value.toString().replace(/\./g, "");
+    // Format ulang dengan pemisah ribuan
+    return cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+  
+  // Parse string menjadi number
+  function parseNumber(value) {
+    if (typeof value === 'number') return value;
+    // Hapus semua pemisah ribuan dan konversi ke number
+    const parsed = (value || "").replace(/\./g, "");
+    return parsed ? parseFloat(parsed) : 0;
+  }
+
+  // Handler untuk memformat input
+  function handleNumberInput(value, setter) {
+    // Hapus karakter non-digit dan titik
+    const cleaned = value.replace(/[^\d.]/g, "");
+    // Hapus semua titik
+    const numberOnly = cleaned.replace(/\./g, "");
+    // Set nilai baru
+    setter(numberOnly);
+  }
+  
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Parse semua nilai input
+    const parsedIncome = parseNumber(income);
+    const parsedNeeds = parseNumber(needs);
+    const parsedWants = parseNumber(wants);
     
     // Validate inputs
     if (!income || !needs || !wants) {
@@ -19,18 +51,18 @@ export default function ExpenseForm({ onCalculate }) {
       return;
     }
     
-    if (parseFloat(income) <= 0 || parseFloat(needs) < 0 || parseFloat(wants) < 0) {
+    if (parsedIncome <= 0 || parsedNeeds < 0 || parsedWants < 0) {
       alert("Please enter valid amounts (Income must be positive)");
       return;
     }
     
-    if (parseFloat(needs) + parseFloat(wants) > parseFloat(income)) {
+    if (parsedNeeds + parsedWants > parsedIncome) {
       alert("Your expenses exceed your income!");
       return;
     }
     
-    // Call the parent component's calculation function
-    onCalculate(income, needs, wants);
+    // Call the parent component's calculation function dengan nilai yang sudah di-parse
+    onCalculate(parsedIncome, parsedNeeds, parsedWants);
   };
 
   return (
@@ -43,10 +75,10 @@ export default function ExpenseForm({ onCalculate }) {
         <div className="input-icon-wrapper">
           <span className="input-icon">💵</span>
           <input 
-            type="number" 
+            type="text" 
             id="income" 
-            value={income}
-            onChange={(e) => setIncome(e.target.value)}
+            value={formatNumber(income)}
+            onChange={(e) => handleNumberInput(e.target.value, setIncome)}
             placeholder="Monthly Income (Rp)" 
             className="modern-input"
             required
@@ -58,10 +90,10 @@ export default function ExpenseForm({ onCalculate }) {
         <div className="input-icon-wrapper">
           <span className="input-icon">🏠</span>
           <input 
-            type="number" 
+            type="text" 
             id="needs" 
-            value={needs}
-            onChange={(e) => setNeeds(e.target.value)}
+            value={formatNumber(needs)}
+            onChange={(e) => handleNumberInput(e.target.value, setNeeds)}
             placeholder="Essential Expenses (Rp)" 
             className="modern-input"
             required
@@ -73,10 +105,10 @@ export default function ExpenseForm({ onCalculate }) {
         <div className="input-icon-wrapper">
           <span className="input-icon">🛍️</span>
           <input 
-            type="number" 
+            type="text" 
             id="wants" 
-            value={wants}
-            onChange={(e) => setWants(e.target.value)}
+            value={formatNumber(wants)}
+            onChange={(e) => handleNumberInput(e.target.value, setWants)}
             placeholder="Lifestyle Expenses (Rp)" 
             className="modern-input"
             required

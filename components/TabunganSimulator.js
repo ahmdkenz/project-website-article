@@ -3,24 +3,44 @@ import styles from "../styles/TabunganSimulator.module.css";
 import { useMode } from "@/context/ModeContext";
 
 function TabunganSimulator() {
-  const [target, setTarget] = useState(0);
-  const [perBulan, setPerBulan] = useState(0);
+  const [target, setTarget] = useState("");
+  const [perBulan, setPerBulan] = useState("");
   const [bulan, setBulan] = useState(0);
   const [hasil, setHasil] = useState(null);
   const { mode } = useMode();
 
   const isDarkMode = mode === "dark";
 
+  function formatNumber(value) {
+    if (!value && value !== 0) return "";
+    const cleanValue = value.toString().replace(/\./g, "");
+    return cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  function parseNumber(value) {
+    if (typeof value === 'number') return value;
+    const parsed = (value || "").replace(/\./g, "");
+    return parsed ? parseFloat(parsed) : 0;
+  }
+
+  function handleNumberInput(value, setter) {
+    const cleaned = value.replace(/[^\d]/g, ""); // Remove all non-digit characters
+    const numberOnly = cleaned.replace(/^0+/, ""); // Remove leading zeros
+    setter(numberOnly);
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
-    const total = perBulan * bulan;
-    const realistis = total >= target;
+    const parsedTarget = parseNumber(target);
+    const parsedPerBulan = parseNumber(perBulan);
+    const total = parsedPerBulan * bulan;
+    const realistis = total >= parsedTarget;
     let saran = null;
     if (!realistis && bulan > 0) {
-      const perluPerBulan = Math.ceil(target / bulan);
-      const selisih = perluPerBulan - perBulan;
-      const perluBulan = perBulan > 0 ? Math.ceil(target / perBulan) : 0;
-      saran = `Agar target tercapai, kamu perlu menambah tabungan jadi Rp${perluPerBulan.toLocaleString()}/bulan (tambah Rp${selisih.toLocaleString()}/bulan), atau perpanjang waktu menabung jadi ${perluBulan} bulan.`;
+      const perluPerBulan = Math.ceil(parsedTarget / bulan);
+      const selisih = perluPerBulan - parsedPerBulan;
+      const perluBulan = parsedPerBulan > 0 ? Math.ceil(parsedTarget / parsedPerBulan) : 0;
+      saran = `Agar target tercapai, kamu perlu menambah tabungan jadi Rp${formatNumber(perluPerBulan)}/bulan (tambah Rp${formatNumber(selisih)}/bulan), atau perpanjang waktu menabung jadi ${perluBulan} bulan.`;
     }
     setHasil({ total, realistis, saran });
   }
@@ -61,10 +81,9 @@ function TabunganSimulator() {
           <input
             id="target"
             className={styles.simulatorInput}
-            type="number"
-            value={target}
-            onChange={(e) => setTarget(Number(e.target.value))}
-            min={0}
+            type="text"
+            value={formatNumber(target)}
+            onChange={(e) => handleNumberInput(e.target.value, setTarget)}
             required
             placeholder="Contoh: 5.000.000"
           />
@@ -76,10 +95,9 @@ function TabunganSimulator() {
           <input
             id="perbulan"
             className={styles.simulatorInput}
-            type="number"
-            value={perBulan}
-            onChange={(e) => setPerBulan(Number(e.target.value))}
-            min={0}
+            type="text"
+            value={formatNumber(perBulan)}
+            onChange={(e) => handleNumberInput(e.target.value, setPerBulan)}
             required
             placeholder="Contoh: 500.000"
           />
@@ -91,10 +109,9 @@ function TabunganSimulator() {
           <input
             id="bulan"
             className={styles.simulatorInput}
-            type="number"
+            type="text" // Changed to text to apply formatting
             value={bulan}
-            onChange={(e) => setBulan(Number(e.target.value))}
-            min={1}
+            onChange={(e) => handleNumberInput(e.target.value, setBulan)}
             required
             placeholder="Contoh: 12"
           />
@@ -109,9 +126,9 @@ function TabunganSimulator() {
       {hasil && (
         <div className={styles.simulatorResult}>
           <b>
-            Total Terkumpul:{" "}
+            Total Terkumpul: {" "}
             <span style={{ color: isDarkMode ? "#ffcc00" : "#333" }}>
-              Rp{hasil.total.toLocaleString()}
+              Rp{formatNumber(hasil.total)}
             </span>
           </b>
           <div style={{ marginTop: 8 }}>

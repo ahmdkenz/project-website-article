@@ -3,28 +3,48 @@ import styles from "../styles/TabunganSimulator.module.css";
 import { useMode } from "@/context/ModeContext";
 
 function LoanSimulator() {
-  const [pinjaman, setPinjaman] = useState(0);
-  const [bunga, setBunga] = useState(0);
-  const [tenor, setTenor] = useState(0);
+  const [pinjaman, setPinjaman] = useState("");
+  const [bunga, setBunga] = useState(""); // Changed initial state to empty string
+  const [tenor, setTenor] = useState(""); // Changed initial state to empty string
   const [hasilPinjaman, setHasilPinjaman] = useState(null);
   const [scenario, setScenario] = useState("default");
 
   const { mode } = useMode();
   const isDarkMode = mode === "dark";
 
+  function formatNumber(value) {
+    if (!value && value !== 0) return "";
+    const cleanValue = value.toString().replace(/\./g, "");
+    return cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  function parseNumber(value) {
+    if (typeof value === 'number') return value;
+    const parsed = (value || "").replace(/\./g, "");
+    return parsed ? parseFloat(parsed) : 0;
+  }
+
+  function handleNumberInput(value, setter) {
+    const cleaned = value.replace(/[^\d.]/g, "");
+    const numberOnly = cleaned.replace(/^0+/, ""); // Remove leading zeros
+    setter(numberOnly);
+  }
+
   function handleLoanSubmit(e) {
     e.preventDefault();
+    const parsedPinjaman = parseNumber(pinjaman);
     const monthlyRate = bunga / 100 / 12;
-    const monthlyInstallment =
-      (pinjaman * monthlyRate * Math.pow(1 + monthlyRate, tenor)) /
-      (Math.pow(1 + monthlyRate, tenor) - 1);
+    const monthlyInstallment = Math.round(
+      (parsedPinjaman * monthlyRate * Math.pow(1 + monthlyRate, tenor)) /
+      (Math.pow(1 + monthlyRate, tenor) - 1)
+    );
     const totalPayment = monthlyInstallment * tenor;
 
     let scenarioResult = null;
     if (scenario === "increase-interest") {
       const newRate = (bunga + 2) / 100 / 12;
       const newInstallment =
-        (pinjaman * newRate * Math.pow(1 + newRate, tenor)) /
+        (parsedPinjaman * newRate * Math.pow(1 + newRate, tenor)) /
         (Math.pow(1 + newRate, tenor) - 1);
       const newTotal = newInstallment * tenor;
       scenarioResult = {
@@ -33,7 +53,7 @@ function LoanSimulator() {
         totalPayment: newTotal,
       };
     } else if (scenario === "late-payment") {
-      const penalty = pinjaman * 0.01; // 1% penalty for late payment
+      const penalty = parsedPinjaman * 0.01; // 1% penalty for late payment
       scenarioResult = {
         description: "Keterlambatan pembayaran 1 bulan",
         penalty,
@@ -42,7 +62,7 @@ function LoanSimulator() {
     } else if (scenario === "high-interest-loan") {
       const highRate = 20 / 100 / 12; // 20% per month for high-interest loans
       const highInstallment =
-        (pinjaman * highRate * Math.pow(1 + highRate, tenor)) /
+        (parsedPinjaman * highRate * Math.pow(1 + highRate, tenor)) /
         (Math.pow(1 + highRate, tenor) - 1);
       const highTotal = highInstallment * tenor;
       scenarioResult = {
@@ -91,10 +111,9 @@ function LoanSimulator() {
           <input
             id="pinjaman"
             className={styles.simulatorInput}
-            type="number"
-            value={pinjaman}
-            onChange={(e) => setPinjaman(Number(e.target.value))}
-            min={0}
+            type="text"
+            value={formatNumber(pinjaman)}
+            onChange={(e) => handleNumberInput(e.target.value, setPinjaman)}
             required
             placeholder="Contoh: 10.000.000"
           />
@@ -106,9 +125,9 @@ function LoanSimulator() {
           <input
             id="bunga"
             className={styles.simulatorInput}
-            type="number"
-            value={bunga}
-            onChange={(e) => setBunga(Number(e.target.value))}
+            type="text" // Changed to text to apply formatting
+            value={formatNumber(bunga)}
+            onChange={(e) => handleNumberInput(e.target.value, setBunga)}
             min={0}
             required
             placeholder="Contoh: 12"
@@ -121,9 +140,9 @@ function LoanSimulator() {
           <input
             id="tenor"
             className={styles.simulatorInput}
-            type="number"
-            value={tenor}
-            onChange={(e) => setTenor(Number(e.target.value))}
+            type="text" // Changed to text to apply formatting
+            value={formatNumber(tenor)}
+            onChange={(e) => handleNumberInput(e.target.value, setTenor)}
             min={1}
             required
             placeholder="Contoh: 24"
@@ -157,14 +176,14 @@ function LoanSimulator() {
           <b>
             Cicilan Per Bulan: {" "}
             <span style={{ color: isDarkMode ? "#ffcc00" : "#333" }}>
-              Rp{hasilPinjaman.monthlyInstallment.toFixed(2).toLocaleString()}
+              Rp{formatNumber(Math.round(hasilPinjaman.monthlyInstallment))}
             </span>
           </b>
           <div style={{ marginTop: 8 }}>
             <b>
               Total Pembayaran: {" "}
               <span style={{ color: isDarkMode ? "#ffcc00" : "#333" }}>
-                Rp{hasilPinjaman.totalPayment.toFixed(2).toLocaleString()}
+                Rp{formatNumber(Math.round(hasilPinjaman.totalPayment))}
               </span>
             </b>
           </div>
@@ -173,14 +192,14 @@ function LoanSimulator() {
               <b>{hasilPinjaman.scenarioResult.description}</b>
               <div>
                 Cicilan Per Bulan: {" "}
-                Rp{hasilPinjaman.scenarioResult.monthlyInstallment?.toFixed(2).toLocaleString() || "-"}
+                Rp{formatNumber(Math.round(hasilPinjaman.scenarioResult.monthlyInstallment)) || "-"}
               </div>
               <div>
                 Total Pembayaran: {" "}
-                Rp{hasilPinjaman.scenarioResult.totalPayment?.toFixed(2).toLocaleString() || "-"}
+                Rp{formatNumber(Math.round(hasilPinjaman.scenarioResult.totalPayment)) || "-"}
               </div>
               {hasilPinjaman.scenarioResult.penalty && (
-                <div>Denda: Rp{hasilPinjaman.scenarioResult.penalty.toLocaleString()}</div>
+                <div>Denda: Rp{formatNumber(Math.round(hasilPinjaman.scenarioResult.penalty))}</div>
               )}
             </div>
           )}
