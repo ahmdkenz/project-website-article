@@ -8,7 +8,7 @@ export default function FriendlyReminder() {
   
   return (
     <div className="friendly-reminder">
-      <h2 style={{ color: "#000" }}>
+      <h2 className="friendly-reminder-title">
         <span role="img" aria-label="tip">💡</span> Friendly Reminder
       </h2>
       <div className="reminder-card">

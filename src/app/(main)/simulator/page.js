@@ -123,7 +123,7 @@ export default function SimulatorPage() {
               boxShadow: "none", // Removed box shadow
               border: "none" // Removed border
             }}>
-              <h2 style={{ color: isDarkMode ? "#e0e0e0" : "#333" }}>Digital Expense Tracker</h2>
+              <h2 style={{ color: isDarkMode ? "#e0e0e0" : "" }}>Digital Expense Tracker</h2>
               <ExpenseForm onCalculate={handleExpenseCalculation} />
               {calculationResults && (
                 <div className="calculation-results" style={{

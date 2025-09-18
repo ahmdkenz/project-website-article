@@ -1,10 +1,62 @@
-/* Simplified Simulator Page Styles */
+/* ============================
+   Theme + Chart CSS Variables
+   ============================
+   Tambahan ini kompatibel dengan PieChartVisualization.js yang membaca
+   CSS variables via getComputedStyle(document.documentElement).
+   Jangan hapus bagian ini — ini hanya mendefinisikan variabel tema.
+*/
+:root{
+  /* Primary gradient (dipakai oleh tombol/tab aktif) */
+  --primary: linear-gradient(135deg, #4CAF50, #43a047);
+
+  /* General theme */
+  --result-item-bg: #ffffff;      /* card bg in light mode */
+  --text-default: #111827;        /* slate-800 / dark text on light mode */
+  --muted: #666666;
+  --surface: #f5f5f5;
+
+  /* Chart specific vars (Chart.js akan membaca ini via JS) */
+  --chart-text: #111827;
+  --chart-bg: #ffffff;
+  --chart-border: rgba(0,0,0,0.08);
+}
+
+/* Dark mode overrides */
+html.dark {
+  --primary: linear-gradient(135deg, #8e24aa, #7b1fa2);
+  --result-item-bg: #333333;      /* darker card bg in dark mode */
+  --text-default: #f0f0f0;
+  --muted: #bbbbbb;
+  --surface: #3b3b3b;
+
+  /* Chart-specific overrides for dark theme */
+  --chart-text: #f0f0f0;
+  --chart-bg: #111827;
+  --chart-border: rgba(255,255,255,0.06);
+}
+
+/* Optional explicit light class if you toggle html.light */
+html.light {
+  --primary: linear-gradient(135deg, #4CAF50, #43a047);
+  --result-item-bg: #ffffff;
+  --text-default: #111827;
+  --chart-text: #111827;
+  --chart-bg: #ffffff;
+  --chart-border: rgba(0,0,0,0.08);
+}
+
+/* ============================
+   Original/Simplified Simulator Page Styles
+   (keaslian kodemu dipertahankan, hanya memakai var untuk warna dimana relevan)
+   ============================ */
+
 .simulator-container {
   max-width: 1000px; /* Reduced max width */
   margin: 0 auto;
   padding: 1.5rem 1rem; /* Reduced padding */
   border-radius: 8px; /* Slightly smaller border radius */
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  color: var(--text-default);
 }
 
 .simulator-title {
@@ -40,10 +92,11 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: var(--text-default);
 }
 
 .simulator-tab.active {
-  background: linear-gradient(135deg, #4CAF50, #43a047);
+  background: var(--primary);
   color: white;
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
@@ -71,6 +124,7 @@
   backdrop-filter: blur(10px);
   border-radius: 12px; /* Slightly smaller border radius */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  color: var(--text-default);
 }
 
 @keyframes fadeIn {
@@ -117,6 +171,8 @@
   font-size: 14px; /* Slightly smaller font size */
   transition: all 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  background: white;
+  color: var(--text-default);
 }
 
 .modern-input:focus {
@@ -168,9 +224,10 @@
 .calculation-results {
   margin: 1.5rem 0;
   padding: 0.75rem; /* Reduced padding */
-  background-color: #f5f5f5; /* Subtle light gray */
+  background-color: var(--surface); /* Subtle light gray */
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  color: var(--text-default);
 }
 
 .results-container {
@@ -185,31 +242,31 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0.75rem; /* Reduced padding */
-  background-color: var(--result-item-bg, #ffffff); /* Use CSS variable for theme */
+  background-color: var(--result-item-bg); /* Use CSS variable for theme */
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .result-label {
   font-weight: 600;
-  color: #333;
+  color: var(--text-default);
 }
 
 .result-value {
   font-weight: 500;
 }
 
-/* Dark mode styles for calculation results */
+/* Dark mode styles for calculation results (kept for compatibility) */
 html.dark .calculation-results {
   background-color: #444; /* Subtle dark gray */
 }
 
 html.dark .result-item {
-  background-color: #333; /* Darker gray for contrast */
+  background-color: var(--result-item-bg); /* stays driven by var */
 }
 
 html.dark .result-label {
-  color: #f0f0f0;
+  color: var(--text-default);
 }
 
 /* Reminder Styles */
@@ -255,7 +312,7 @@ html.dark .result-label {
 /* Dark Mode Styles */
 html.dark .simulator-tab {
   background-color: #444;
-  color: #f0f0f0;
+  color: var(--text-default);
 }
 
 html.dark .simulator-tab.active {
@@ -277,7 +334,7 @@ html.dark .simulator-section {
 html.dark .modern-input {
   background-color: #333;
   border-color: #555;
-  color: #f0f0f0;
+  color: var(--text-default);
 }
 
 html.dark .modern-input::placeholder {
@@ -306,7 +363,7 @@ html.dark .friendly-reminder {
 html.dark .reminder-card,
 html.dark .tip-item {
   background-color: #444;
-  color: #f0f0f0;
+  color: var(--text-default);
 }
 
 /* Responsive Adjustments */
@@ -348,10 +405,4 @@ html.dark .tip-item {
   }
 }
 
-html.dark {
-  --result-item-bg: #333; /* Darker gray for contrast */
-}
-
-html.light {
-  --result-item-bg: #ffffff; /* Default white for light theme */
-}
+/* End of file */
