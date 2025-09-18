@@ -1,17 +1,17 @@
-/* Simulator Page Styles */
+/* Simplified Simulator Page Styles */
 .simulator-container {
-  max-width: 1200px;
+  max-width: 1000px; /* Reduced max width */
   margin: 0 auto;
-  padding: 2rem 1rem;
-  border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem 1rem; /* Reduced padding */
+  border-radius: 8px; /* Slightly smaller border radius */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow */
 }
 
 .simulator-title {
   text-align: center;
-  margin-bottom: 2rem;
-  font-size: 2.5rem;
-  font-weight: 700;
+  margin-bottom: 1.5rem; /* Reduced margin */
+  font-size: 2rem; /* Slightly smaller font size */
+  font-weight: 600; /* Slightly lighter font weight */
   background: linear-gradient(90deg, #4CAF50, #2196F3);
   -webkit-background-clip: text;
   background-clip: text;
@@ -22,19 +22,19 @@
 .simulator-tabs {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 0.5rem; /* Reduced gap */
+  margin-bottom: 1.5rem; /* Reduced margin */
   flex-wrap: wrap;
 }
 
 .simulator-tab {
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1rem; /* Reduced padding */
   background-color: #f8f9fa;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px; /* Smaller border radius */
   cursor: pointer;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.9rem; /* Slightly smaller font size */
   transition: all 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   display: flex;
@@ -59,17 +59,17 @@
 }
 
 .simulator-content {
-  min-height: 400px;
+  min-height: 300px; /* Reduced minimum height */
 }
 
 .simulator-section {
   animation: fadeIn 0.5s ease;
   max-width: 800px;
   margin: 0 auto;
-  padding: 1.5rem;
-  background-color: rgba(255, 255, 255, 0.6);
+  padding: 1rem; /* Reduced padding */
+  background-color: rgba(240, 240, 240, 0.9); /* Softer neutral background */
   backdrop-filter: blur(10px);
-  border-radius: 16px;
+  border-radius: 12px; /* Slightly smaller border radius */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
@@ -84,11 +84,11 @@
   }
 }
 
-/* Form Styles */
+/* Simplified Form Styles */
 .expense-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem; /* Reduced gap */
   margin-bottom: 2rem;
 }
 
@@ -111,10 +111,10 @@
 
 .modern-input {
   width: 100%;
-  padding: 12px 12px 12px 45px;
+  padding: 10px 10px 10px 40px; /* Reduced padding */
   border: 1px solid #e0e0e0;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 14px; /* Slightly smaller font size */
   transition: all 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
@@ -130,12 +130,12 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
+  padding: 10px 20px; /* Reduced padding */
   background: linear-gradient(135deg, #4CAF50, #43a047);
   color: white;
   border: none;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 14px; /* Slightly smaller font size */
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -152,23 +152,23 @@
   font-size: 18px;
 }
 
-/* Chart Styles */
+/* Simplified Chart Styles */
 .chart-container {
   margin: 2rem 0;
 }
 
 .chart-wrapper {
-  height: 300px;
+  height: 250px; /* Reduced height */
   position: relative;
   margin: 0 auto;
   max-width: 500px;
 }
 
-/* Calculation Results Styles */
+/* Simplified Calculation Results Styles */
 .calculation-results {
   margin: 1.5rem 0;
-  padding: 1rem;
-  background-color: #f9f9f9;
+  padding: 0.75rem; /* Reduced padding */
+  background-color: #f5f5f5; /* Subtle light gray */
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
@@ -184,8 +184,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1rem;
-  background-color: white;
+  padding: 0.5rem 0.75rem; /* Reduced padding */
+  background-color: var(--result-item-bg, #ffffff); /* Use CSS variable for theme */
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
@@ -201,11 +201,11 @@
 
 /* Dark mode styles for calculation results */
 html.dark .calculation-results {
-  background-color: #333;
+  background-color: #444; /* Subtle dark gray */
 }
 
 html.dark .result-item {
-  background-color: #444;
+  background-color: #333; /* Darker gray for contrast */
 }
 
 html.dark .result-label {
@@ -215,7 +215,7 @@ html.dark .result-label {
 /* Reminder Styles */
 .friendly-reminder {
   margin-top: 2rem;
-  padding: 1.5rem;
+  padding: 1rem; /* Reduced padding */
   background-color: #f9f9f9;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -225,7 +225,7 @@ html.dark .result-label {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
+  padding: 0.75rem; /* Reduced padding */
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
@@ -246,7 +246,7 @@ html.dark .result-label {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem;
+  padding: 0.5rem; /* Reduced padding */
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -271,7 +271,7 @@ html.dark .simulator-tab.active:hover {
 }
 
 html.dark .simulator-section {
-  background-color: rgba(30, 30, 30, 0.7);
+  background-color: rgba(50, 50, 50, 0.8); /* Softer dark background */
 }
 
 html.dark .modern-input {
@@ -309,78 +309,49 @@ html.dark .tip-item {
   color: #f0f0f0;
 }
 
-/* Responsive Styles */
+/* Responsive Adjustments */
 @media (max-width: 768px) {
   .simulator-title {
-    font-size: 2rem;
+    font-size: 1.75rem; /* Slightly smaller font size */
   }
-  
+
   .simulator-tabs {
-    gap: 0.5rem;
+    gap: 0.5rem; /* Reduced gap */
   }
-  
+
   .simulator-tab {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+    padding: 0.5rem; /* Reduced padding */
   }
-  
-  .simulator-section {
-    padding: 1rem;
-  }
-  
+
   .chart-wrapper {
-    height: 250px;
-  }
-  
-  .reminder-tips {
-    gap: 0.5rem;
-  }
-  
-  .reminder-card {
-    flex-direction: column;
-    text-align: center;
+    height: 200px; /* Reduced height */
   }
 }
 
 @media (max-width: 480px) {
   .simulator-title {
-    font-size: 1.75rem;
+    font-size: 1.5rem; /* Slightly smaller font size */
   }
-  
+
   .simulator-tabs {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto 2rem auto;
+    gap: 0.5rem; /* Reduced gap */
   }
-  
-  .simulator-tab {
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .chart-wrapper {
-    height: 220px;
-  }
-  
+
   .modern-input {
-    font-size: 14px;
-    padding: 10px 10px 10px 40px;
+    font-size: 12px; /* Slightly smaller font size */
+    padding: 8px 8px 8px 35px; /* Reduced padding */
   }
-  
-  .input-icon {
-    font-size: 1rem;
-    left: 10px;
-  }
-  
+
   .modern-button {
-    padding: 10px 20px;
-    font-size: 14px;
+    padding: 8px 16px; /* Reduced padding */
+    font-size: 12px; /* Slightly smaller font size */
   }
-  
-  .tip-item {
-    padding: 0.5rem;
-  }
+}
+
+html.dark {
+  --result-item-bg: #333; /* Darker gray for contrast */
+}
+
+html.light {
+  --result-item-bg: #ffffff; /* Default white for light theme */
 }

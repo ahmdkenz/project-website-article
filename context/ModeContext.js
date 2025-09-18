@@ -114,6 +114,18 @@ export function ModeProvider({ children }) {
     document.body.setAttribute('data-theme-color', theme);
   }, [theme, isInitialized]);
 
+  // Add logging to verify theme application
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    console.log(`[ModeContext] Current theme: ${theme}`);
+    const root = document.documentElement;
+    root.classList.toggle("dark", theme === "dark");
+    console.log(`[ModeContext] Applied class 'dark': ${theme === "dark"}`);
+
+    document.body.setAttribute('data-theme-color', theme);
+  }, [theme, isInitialized]);
+
   // Wrapper untuk setMode dengan validasi
   const setMode = (newMode) => {
     const validatedMode = normalizeMode(newMode);

@@ -62,77 +62,113 @@ export default function SimulatorPage() {
   };
   
   return (
-    <div className="simulator-container" style={{
-      backgroundColor: isDarkMode ? "#333" : "#fff",
-      color: isDarkMode ? "#fff" : "#000",
+    <div className="main-container" style={{
+      backgroundColor: isDarkMode ? "transparent" : "", // Set transparent background for dark mode
+      color: isDarkMode ? "#e0e0e0" : "#333", // Adjusted text color for better contrast
+      boxShadow: "none", // Removed box shadow
+      border: "none" // Removed border
     }}>
-      <h1 className="simulator-title" style={{ color: "#000" }}>Simulator Keuangan</h1>
-      
-      <div className="simulator-tabs">
-        <button 
-          className={`simulator-tab ${activeTab === "tabungan" ? "active" : ""}`}
-          onClick={() => setActiveTab("tabungan")}
-        >
-          💰 Tabungan
-        </button>
-        <button 
-          className={`simulator-tab ${activeTab === "pinjaman" ? "active" : ""}`}
-          onClick={() => setActiveTab("pinjaman")}
-        >
-          💵 Pinjaman
-        </button>
-        <button 
-          className={`simulator-tab ${activeTab === "pengeluaran" ? "active" : ""}`}
-          onClick={() => setActiveTab("pengeluaran")}
-        >
-          📊 Expense Tracker
-        </button>
-      </div>
-      
-      <div className="simulator-content">
-        {activeTab === "tabungan" && (
-          <div className="simulator-section">
-            <TabunganSimulator />
-          </div>
-        )}
+      <div className="simulator-container" style={{
+        backgroundColor: "transparent", // Ensure transparent background
+        boxShadow: "none", // Removed box shadow
+        border: "none" // Removed border
+      }}>
+        <h1 className="simulator-title" style={{ color: isDarkMode ? "#e0e0e0" : "#333" }}>Simulator Keuangan</h1>
         
-        {activeTab === "pinjaman" && (
-          <div className="simulator-section">
-            <LoanSimulator />
-          </div>
-        )}
+        <div className="simulator-tabs">
+          <button 
+            className={`simulator-tab ${activeTab === "tabungan" ? "active" : ""}`}
+            onClick={() => setActiveTab("tabungan")}
+          >
+            💰 Tabungan
+          </button>
+          <button 
+            className={`simulator-tab ${activeTab === "pinjaman" ? "active" : ""}`}
+            onClick={() => setActiveTab("pinjaman")}
+          >
+            💵 Pinjaman
+          </button>
+          <button 
+            className={`simulator-tab ${activeTab === "pengeluaran" ? "active" : ""}`}
+            onClick={() => setActiveTab("pengeluaran")}
+          >
+            📊 Expense Tracker
+          </button>
+        </div>
         
-        {activeTab === "pengeluaran" && (
-          <div className="simulator-section">
-            <h2 style={{ color: isDarkMode ? "#fff" : "#000" }}>Digital Expense Tracker</h2>
-            <ExpenseForm onCalculate={handleExpenseCalculation} />
-            {calculationResults && (
-              <div className="calculation-results">
-                <h3 style={{ color: "#000" }}>Results:</h3>
-                <div className="results-container">
-                  <div className="result-item">
-                    <span className="result-label">Income:</span>
-                    <span className="result-value">Rp {calculationResults.income.toLocaleString()}</span>
-                  </div>
-                  <div className="result-item">
-                    <span className="result-label">Needs:</span>
-                    <span className="result-value">Rp {calculationResults.needs.toLocaleString()} ({calculationResults.needsPercent}%)</span>
-                  </div>
-                  <div className="result-item">
-                    <span className="result-label">Wants:</span>
-                    <span className="result-value">Rp {calculationResults.wants.toLocaleString()} ({calculationResults.wantsPercent}%)</span>
-                  </div>
-                  <div className="result-item">
-                    <span className="result-label">Savings:</span>
-                    <span className="result-value">Rp {calculationResults.savings.toLocaleString()} ({calculationResults.savingsPercent}%)</span>
+        <div className="simulator-content">
+          {activeTab === "tabungan" && (
+            <div className="simulator-section" style={{
+              backgroundColor: "transparent", // Removed background color for sections
+              boxShadow: "none", // Removed box shadow
+              border: "none" // Removed border
+            }}>
+              <TabunganSimulator />
+            </div>
+          )}
+
+          {activeTab === "pinjaman" && (
+            <div className="simulator-section" style={{
+              backgroundColor: "transparent", // Removed background color for sections
+              boxShadow: "none", // Removed box shadow
+              border: "none" // Removed border
+            }}>
+              <LoanSimulator />
+            </div>
+          )}
+
+          {activeTab === "pengeluaran" && (
+            <div className="simulator-section" style={{
+              backgroundColor: "transparent", // Removed background color for sections
+              boxShadow: "none", // Removed box shadow
+              border: "none" // Removed border
+            }}>
+              <h2 style={{ color: isDarkMode ? "#e0e0e0" : "#333" }}>Digital Expense Tracker</h2>
+              <ExpenseForm onCalculate={handleExpenseCalculation} />
+              {calculationResults && (
+                <div className="calculation-results" style={{
+                  backgroundColor: "transparent", // Removed background color
+                  boxShadow: "none", // Removed box shadow
+                  border: "none" // Removed border
+                }}>
+                  <h3 style={{ color: isDarkMode ? "#e0e0e0" : "#333" }}>Results:</h3>
+                  <div className="results-container">
+                    <div className="result-item" style={{ 
+                      backgroundColor: isDarkMode ? "transparent" : "#ffffff",
+                      color: isDarkMode ? "#e0e0e0" : "#333"
+                    }}>
+                      <span className="result-label">Income:</span>
+                      <span className="result-value">Rp {calculationResults.income.toLocaleString()}</span>
+                    </div>
+                    <div className="result-item" style={{ 
+                      backgroundColor: isDarkMode ? "transparent" : "#ffffff",
+                      color: isDarkMode ? "#e0e0e0" : "#333"
+                    }}>
+                      <span className="result-label">Needs:</span>
+                      <span className="result-value">Rp {calculationResults.needs.toLocaleString()} ({calculationResults.needsPercent}%)</span>
+                    </div>
+                    <div className="result-item" style={{ 
+                      backgroundColor: isDarkMode ? "transparent" : "#ffffff",
+                      color: isDarkMode ? "#e0e0e0" : "#333"
+                    }}>
+                      <span className="result-label">Wants:</span>
+                      <span className="result-value">Rp {calculationResults.wants.toLocaleString()} ({calculationResults.wantsPercent}%)</span>
+                    </div>
+                    <div className="result-item" style={{ 
+                      backgroundColor: isDarkMode ? "transparent" : "#ffffff",
+                      color: isDarkMode ? "#e0e0e0" : "#333"
+                    }}>
+                      <span className="result-label">Savings:</span>
+                      <span className="result-value">Rp {calculationResults.savings.toLocaleString()} ({calculationResults.savingsPercent}%)</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-            <PieChartVisualization data={expenseData} />
-            <FriendlyReminder />
-          </div>
-        )}
+              )}
+              <PieChartVisualization data={expenseData} />
+              <FriendlyReminder />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

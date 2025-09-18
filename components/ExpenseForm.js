@@ -67,7 +67,7 @@ export default function ExpenseForm({ onCalculate }) {
 
   return (
     <form onSubmit={handleSubmit} className="expense-form">
-      <h2 style={{ color: "#000" }}>
+      <h2 className={`expense-title ${isDarkMode ? "dark" : "light"}`}>
         <span role="img" aria-label="Input">📝</span> Input Your Expenses
       </h2>
       
@@ -82,6 +82,11 @@ export default function ExpenseForm({ onCalculate }) {
             placeholder="Monthly Income (Rp)" 
             className="modern-input"
             required
+            style={{
+              backgroundColor: isDarkMode ? "#333" : "#fff",
+              color: isDarkMode ? "#fff" : "#000",
+              border: isDarkMode ? "1px solid #555" : "1px solid #ccc"
+            }}
           />
         </div>
       </div>
@@ -97,6 +102,11 @@ export default function ExpenseForm({ onCalculate }) {
             placeholder="Essential Expenses (Rp)" 
             className="modern-input"
             required
+            style={{
+              backgroundColor: isDarkMode ? "#333" : "#fff",
+              color: isDarkMode ? "#fff" : "#000",
+              border: isDarkMode ? "1px solid #555" : "1px solid #ccc"
+            }}
           />
         </div>
       </div>
@@ -112,6 +122,11 @@ export default function ExpenseForm({ onCalculate }) {
             placeholder="Lifestyle Expenses (Rp)" 
             className="modern-input"
             required
+            style={{
+              backgroundColor: isDarkMode ? "#333" : "#fff",
+              color: isDarkMode ? "#fff" : "#000",
+              border: isDarkMode ? "1px solid #555" : "1px solid #ccc"
+            }}
           />
         </div>
       </div>

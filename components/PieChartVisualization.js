@@ -10,7 +10,12 @@ export default function PieChartVisualization({ data = { needs: 50, wants: 30, s
   const { mode } = useMode();
   const isDarkMode = mode === "dark";
 
+  console.log("Rendering PieChartVisualization component. Dark mode:", isDarkMode);
+
   useEffect(() => {
+    console.log("Dark mode status inside useEffect:", isDarkMode);
+    console.log("Chart data:", data);
+
     // Clean up any existing chart before creating a new one
     if (chartInstance.current) {
       chartInstance.current.destroy();
@@ -84,7 +89,7 @@ export default function PieChartVisualization({ data = { needs: 50, wants: 30, s
 
   return (
     <div className="chart-container">
-      <h2 style={{ color: "#000", marginBottom: '15px', fontSize: '1.5rem' }}>
+      <h2 style={{ color: isDarkMode ? "#fff" : "#000", marginBottom: '15px', fontSize: '1.5rem' }}>
         Expense Distribution <span role="img" aria-label="chart">📊</span>
       </h2>
       <div className="chart-wrapper">
