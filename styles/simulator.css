@@ -1,0 +1,386 @@
+/* Simulator Page Styles */
+.simulator-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.simulator-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #4CAF50, #2196F3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.simulator-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.simulator-tab {
+  padding: 0.75rem 1.5rem;
+  background-color: #f8f9fa;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.simulator-tab.active {
+  background: linear-gradient(135deg, #4CAF50, #43a047);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.simulator-tab:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.simulator-tab.active:hover {
+  background: linear-gradient(135deg, #43a047, #388e3c);
+}
+
+.simulator-content {
+  min-height: 400px;
+}
+
+.simulator-section {
+  animation: fadeIn 0.5s ease;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Form Styles */
+.expense-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.input-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 1.2rem;
+  z-index: 1;
+}
+
+.modern-input {
+  width: 100%;
+  padding: 12px 12px 12px 45px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.modern-input:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+  outline: none;
+}
+
+.modern-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #4CAF50, #43a047);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.modern-button:hover {
+  background: linear-gradient(135deg, #43a047, #388e3c);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+}
+
+.button-icon {
+  font-size: 18px;
+}
+
+/* Chart Styles */
+.chart-container {
+  margin: 2rem 0;
+}
+
+.chart-wrapper {
+  height: 300px;
+  position: relative;
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+/* Calculation Results Styles */
+.calculation-results {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.results-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.result-label {
+  font-weight: 600;
+  color: #333;
+}
+
+.result-value {
+  font-weight: 500;
+}
+
+/* Dark mode styles for calculation results */
+html.dark .calculation-results {
+  background-color: #333;
+}
+
+html.dark .result-item {
+  background-color: #444;
+}
+
+html.dark .result-label {
+  color: #f0f0f0;
+}
+
+/* Reminder Styles */
+.friendly-reminder {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.reminder-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+.reminder-icon {
+  font-size: 2rem;
+}
+
+.reminder-tips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tip-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Dark Mode Styles */
+html.dark .simulator-tab {
+  background-color: #444;
+  color: #f0f0f0;
+}
+
+html.dark .simulator-tab.active {
+  background: linear-gradient(135deg, #8e24aa, #7b1fa2);
+}
+
+html.dark .simulator-tab:hover {
+  background-color: #555;
+}
+
+html.dark .simulator-tab.active:hover {
+  background: linear-gradient(135deg, #7b1fa2, #6a1b9a);
+}
+
+html.dark .simulator-section {
+  background-color: rgba(30, 30, 30, 0.7);
+}
+
+html.dark .modern-input {
+  background-color: #333;
+  border-color: #555;
+  color: #f0f0f0;
+}
+
+html.dark .modern-input::placeholder {
+  color: #aaa;
+}
+
+html.dark .modern-input:focus {
+  border-color: #8e24aa;
+  box-shadow: 0 0 0 3px rgba(142, 36, 170, 0.2);
+}
+
+html.dark .modern-button {
+  background: linear-gradient(135deg, #8e24aa, #7b1fa2);
+  box-shadow: 0 4px 8px rgba(142, 36, 170, 0.3);
+}
+
+html.dark .modern-button:hover {
+  background: linear-gradient(135deg, #7b1fa2, #6a1b9a);
+  box-shadow: 0 6px 12px rgba(142, 36, 170, 0.4);
+}
+
+html.dark .friendly-reminder {
+  background-color: #333;
+}
+
+html.dark .reminder-card,
+html.dark .tip-item {
+  background-color: #444;
+  color: #f0f0f0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .simulator-title {
+    font-size: 2rem;
+  }
+  
+  .simulator-tabs {
+    gap: 0.5rem;
+  }
+  
+  .simulator-tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .simulator-section {
+    padding: 1rem;
+  }
+  
+  .chart-wrapper {
+    height: 250px;
+  }
+  
+  .reminder-tips {
+    gap: 0.5rem;
+  }
+  
+  .reminder-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .simulator-title {
+    font-size: 1.75rem;
+  }
+  
+  .simulator-tabs {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto 2rem auto;
+  }
+  
+  .simulator-tab {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .chart-wrapper {
+    height: 220px;
+  }
+  
+  .modern-input {
+    font-size: 14px;
+    padding: 10px 10px 10px 40px;
+  }
+  
+  .input-icon {
+    font-size: 1rem;
+    left: 10px;
+  }
+  
+  .modern-button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  
+  .tip-item {
+    padding: 0.5rem;
+  }
+}
