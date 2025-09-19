@@ -1,0 +1,99 @@
+.storyContainer {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin: 2rem 0;
+  max-width: 800px;
+}
+
+.storyTitle {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.storyText {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 1.5rem;
+}
+
+.questionSection {
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+
+.question {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.choiceButton {
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.choiceButton:hover {
+  background-color: #e0e0e0;
+}
+
+.choiceButton.selected {
+  background-color: #2e7ef8;
+  color: white;
+}
+
+.feedback {
+  background-color: #f8f8f8;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.correctFeedback {
+  color: #2e7d32;
+}
+
+.incorrectFeedback {
+  color: #c62828;
+}
+
+.resetButton {
+  background-color: #2e7ef8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.resetButton:hover {
+  background-color: #1565c0;
+}
+
+.placeholder {
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
