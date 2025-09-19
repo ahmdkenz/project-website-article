@@ -56,66 +56,7 @@ export default function YukLiterasiPage() {
       </div>
 
       {/* Kiat & Tutorial (Konten diperbarui) */}
-      <section className="options-section">
-        <h2 className="section-title">Panduan Praktis</h2>
-
-        <div className="options-grid">
-          <article className="option-card">
-            <div className="icon" aria-hidden="true">📝</div>
-            <h3>Manajemen Arus Kas</h3>
-            <p className="muted">
-              Lacak dan alokasikan pendapatan serta pengeluaran Anda untuk 
-              mencapai kontrol finansial penuh.
-            </p>
-          </article>
-
-          <article className="option-card">
-            <div className="icon" aria-hidden="true">💳</div>
-            <h3>Pengelolaan Utang</h3>
-            <p className="muted">
-              Manfaatkan instrumen kredit secara strategis dan hindari 
-              beban bunga yang tidak perlu.
-            </p>
-          </article>
-
-          <article className="option-card">
-            <div className="icon" aria-hidden="true">💰</div>
-            <h3>Akumulasi Aset</h3>
-            <p className="muted">
-              Alokasikan sebagian pendapatan secara konsisten untuk membangun 
-              dana darurat dan modal masa depan.
-            </p>
-          </article>
-
-          <article className="option-card">
-            <div className="icon" aria-hidden="true">📈</div>
-            <h3>Pengenalan Investasi</h3>
-            <p className="muted">
-              Pahami prinsip dasar instrumen investasi yang sesuai 
-              dengan profil risiko dan tujuan Anda.
-            </p>
-          </article>
-
-          <article className="option-card">
-            <div className="icon" aria-hidden="true">🚫</div>
-            <h3>Prioritas Finansial</h3>
-            <p className="muted">
-              Terapkan kerangka keputusan untuk membedakan pengeluaran 
-              esensial dari pengeluaran konsumtif.
-            </p>
-          </article>
-
-          <article className="option-card">
-            <div className="icon" aria-hidden="true">📚</div>
-            <h3>Edukasi Berkelanjutan</h3>
-            <p className="muted">
-              Akses sumber daya edukatif secara rutin untuk mempertajam 
-              kecerdasan finansial Anda.
-            </p>
-          </article>
-        </div>
-      </section>
-      
+      {/* The options-grid block has been removed as its content is now dynamically generated from Markdown tutorials. */}
       <style jsx>{`
         .container {
           max-width: 1200px;

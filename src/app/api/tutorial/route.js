@@ -1,7 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
+import yaml from 'js-yaml';
 import { NextResponse } from 'next/server';
+
+// Configure gray-matter to use yaml.load instead of yaml.safeLoad
+matter.engines.yaml = (input) => yaml.load(input);
 
 export async function GET(request) {
   try {
@@ -9,31 +13,31 @@ export async function GET(request) {
     const slug = searchParams.get('slug');
 
     if (!slug) {
-      return NextResponse.json({ error: 'Tutorial slug is required' }, { status: 400 });
+      return NextResponse.json({ error: 'Slug tutorial diperlukan' }, { status: 400 });
     }
 
-    // Build path to the markdown file
+    // Bangun path ke file markdown
     const filePath = path.join(process.cwd(), 'content', 'yuk-literasi', `${slug}.md`);
 
-    // Check if file exists
+    // Periksa apakah file ada
     if (!fs.existsSync(filePath)) {
-      return NextResponse.json({ error: 'Tutorial not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Tutorial tidak ditemukan' }, { status: 404 });
     }
 
-    // Read file content
+    // Baca konten file
     const fileContents = fs.readFileSync(filePath, 'utf8');
     
-    // Parse markdown frontmatter and content
+    // Parse frontmatter dan konten markdown
     const { data, content } = matter(fileContents);
 
-    // Return the data and content
+    // Kembalikan data dan konten
     return NextResponse.json({
       metadata: data,
       content
     });
     
   } catch (error) {
-    console.error('Error fetching tutorial:', error);
-    return NextResponse.json({ error: 'Failed to load tutorial' }, { status: 500 });
+    console.error('Kesalahan saat mengambil tutorial:', error.message, error.stack);
+    return NextResponse.json({ error: 'Gagal memuat tutorial. Silakan coba lagi nanti.' }, { status: 500 });
   }
 }

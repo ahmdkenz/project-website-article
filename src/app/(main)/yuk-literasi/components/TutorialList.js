@@ -3,26 +3,24 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 export default function TutorialList() {
-  const [tutorials, setTutorials] = useState([
-    {
-      slug: 'cara-bikin-dana-darurat',
-      title: 'Cara Membuat Dana Darurat dalam 30 Hari',
-      description: 'Panduan langkah demi langkah untuk membangun dana darurat dengan mudah',
-      icon: '💰'
-    },
-    {
-      slug: 'cara-mengelola-utang',
-      title: 'Cara Mengelola Utang dengan Bijak',
-      description: 'Pelajari cara mengelola utang agar tidak menjadi beban finansial',
-      icon: '💳'
-    },
-    {
-      slug: 'memulai-investasi-modal-kecil',
-      title: 'Memulai Investasi dengan Modal Kecil',
-      description: 'Panduan langkah demi langkah untuk memulai investasi meski dengan dana terbatas',
-      icon: '📈'
+  const [tutorials, setTutorials] = useState([]);
+
+  useEffect(() => {
+    async function fetchTutorials() {
+      try {
+        const response = await fetch('/api/tutorials');
+        if (!response.ok) {
+          throw new Error('Gagal memuat daftar tutorial.');
+        }
+        const data = await response.json();
+        setTutorials(data);
+      } catch (error) {
+        console.error('Error fetching tutorials:', error);
+      }
     }
-  ]);
+
+    fetchTutorials();
+  }, []);
 
   return (
     <section className="tutorial-list-section">
