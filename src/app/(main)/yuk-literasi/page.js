@@ -1,26 +1,8 @@
+'use client';
+
 // app/(main)/yuk-literasi/page.js
 import Image from "next/image";
-
-export const metadata = {
-  // --- Metadata diperbarui ---
-  title: "Panduan Praktis - Literasi Keuangan",
-  description:
-    "Panduan strategis dan tutorial aplikatif untuk menguasai manajemen keuangan, mulai dari penganggaran, investasi, hingga perencanaan finansial jangka panjang.",
-  openGraph: {
-    title: "Panduan Praktis Literasi Keuangan",
-    description: "Kuasai manajemen keuangan melalui panduan strategis dan aplikatif.",
-    type: "website",
-    url: "https://namadomainmu.com/yuk-literasi", // URL disesuaikan
-    images: [
-      {
-        url: "https://namadomainmu.com/assets/cover-yuk-literasi.jpg", // Gambar disesuaikan
-        width: 1200,
-        height: 630,
-        alt: "Panduan Praktis Literasi Keuangan",
-      },
-    ],
-  },
-};
+import TutorialList from './components/TutorialList';
 
 export default function YukLiterasiPage() {
   // Siapkan dua gambar untuk banner
@@ -67,6 +49,11 @@ export default function YukLiterasiPage() {
           Kumpulan panduan praktis dan studi kasus yang dirancang untuk membantu Anda menerapkan konsep keuangan dalam kehidupan sehari-hari.
         </p>
       </section>
+
+      {/* Mini Tutorial Section */}
+      <div className="container">
+        <TutorialList />
+      </div>
 
       {/* Kiat & Tutorial (Konten diperbarui) */}
       <section className="options-section">
@@ -128,6 +115,14 @@ export default function YukLiterasiPage() {
           </article>
         </div>
       </section>
+      
+      <style jsx>{`
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 1rem;
+        }
+      `}</style>
     </>
   );
 }
