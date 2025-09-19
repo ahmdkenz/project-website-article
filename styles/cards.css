@@ -1,4 +1,3 @@
-
 .card-grid, .options-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -22,4 +21,20 @@ html.dark .article-card:hover,
 html.dark .option-card:hover,
 html.dark .mode-card:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
 .card-actions { margin-top: auto; padding-top: 1rem; }
+.list-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.list-footer .btn {
+  min-width: 180px;
+}
+
+.list-hint {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted-color);
+}
 

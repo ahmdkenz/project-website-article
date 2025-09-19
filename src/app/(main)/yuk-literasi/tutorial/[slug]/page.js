@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import MarkdownRenderer from '../components/MarkdownRenderer';
+import MarkdownRenderer from '../../components/MarkdownRenderer';
 
-export default function TutorialPage({ params: paramsPromise }) {
-  const [params, setParams] = useState(null);
+export default function TutorialPage({ params }) {
   const [content, setContent] = useState('');
   const [metadata, setMetadata] = useState({
     title: 'Loading...',
@@ -17,26 +16,12 @@ export default function TutorialPage({ params: paramsPromise }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function unwrapParams() {
-      try {
-        const resolvedParams = await paramsPromise;
-        setParams(resolvedParams);
-      } catch (err) {
-        console.error('Error unwrapping params:', err);
-        setError('Failed to load tutorial parameters.');
-      }
-    }
-
-    unwrapParams();
-  }, [paramsPromise]);
-
-  useEffect(() => {
     if (!params) return;
 
     async function fetchTutorial() {
       try {
         setIsLoading(true);
-        const response = await fetch(`/api/tutorial?slug=${params.tutorial}`);
+        const response = await fetch(`/api/tutorial?slug=${params.slug}`);
 
         if (!response.ok) {
           throw new Error(`Failed to load tutorial content (${response.status})`);

@@ -1,13 +1,20 @@
-'use client';
-
 // app/(main)/yuk-literasi/page.js
 import Image from "next/image";
+import Link from "next/link";
 import TutorialList from './components/TutorialList';
+import RelatableStory from '../../../../components/RelatableStory';
+import StoriesShowMoreClient from '../../../../components/StoriesShowMoreClient';
+import { getStories } from '../../../../lib/server/stories';
+import './styles.css';
 
-export default function YukLiterasiPage() {
+export default async function YukLiterasiPage() {
   // Siapkan dua gambar untuk banner
   const bannerSrc1 = "/brand/hero-yuk-literasi.jpg";
   const bannerSrc2 = "/brand/hero-2.jpg";
+  
+  // Ambil cerita pertama dari direktori content/stories
+  const stories = await getStories();
+  const firstStory = stories.length > 0 ? stories[0] : null;
 
   return (
     <>
@@ -55,15 +62,29 @@ export default function YukLiterasiPage() {
         <TutorialList />
       </div>
 
+      {/* Relatable Story Section */}
+      <div className="container" style={{ marginTop: '3rem', marginBottom: '3rem' }}>
+        <section>
+          <h2 style={{ fontSize: '1.75rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '1.2em', marginRight: '6px' }}>💡</span>
+            Yuk Pahami
+          </h2>
+          <p className="muted" style={{ marginBottom: '1.5rem' }}>
+            Cerita relatable yang membantu Anda memahami konsep keuangan dengan cara yang lebih personal dan menarik.
+          </p>
+          
+          {/* Daftar cerita dengan komponen StoriesShowMoreClient */}
+          <StoriesShowMoreClient 
+            stories={stories} 
+            initialCount={3} 
+            step={3}
+            listId="relatable-stories-list" 
+          />
+        </section>
+      </div>
+
       {/* Kiat & Tutorial (Konten diperbarui) */}
       {/* The options-grid block has been removed as its content is now dynamically generated from Markdown tutorials. */}
-      <style jsx>{`
-        .container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 1rem;
-        }
-      `}</style>
     </>
   );
 }
