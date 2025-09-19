@@ -61,36 +61,43 @@ export default function SimulatorPage() {
     });
   };
   
+  // Safety: prefer CSS vars, fallback to isDarkMode-based color
+  const textColorVar = "var(--text-default, " + (isDarkMode ? "#e0e0e0" : "#333") + ")";
+  const resultBgVar = "var(--result-item-bg, " + (isDarkMode ? "transparent" : "#ffffff") + ")";
+
   return (
     <div className="main-container" style={{
-      backgroundColor: isDarkMode ? "transparent" : "", // Set transparent background for dark mode
-      color: isDarkMode ? "#e0e0e0" : "#333", // Adjusted text color for better contrast
-      boxShadow: "none", // Removed box shadow
-      border: "none" // Removed border
+      backgroundColor: "transparent", // keep transparent background for dark mode
+      color: textColorVar, // use CSS var for text color with fallback
+      boxShadow: "none",
+      border: "none"
     }}>
       <div className="simulator-container" style={{
-        backgroundColor: "transparent", // Ensure transparent background
-        boxShadow: "none", // Removed box shadow
-        border: "none" // Removed border
+        backgroundColor: "transparent",
+        boxShadow: "none",
+        border: "none"
       }}>
-        <h1 className="simulator-title" style={{ color: isDarkMode ? "#e0e0e0" : "#333" }}>Simulator Keuangan</h1>
+        <h1 className="simulator-title" style={{ color: textColorVar }}>Simulator Keuangan</h1>
         
         <div className="simulator-tabs">
           <button 
             className={`simulator-tab ${activeTab === "tabungan" ? "active" : ""}`}
             onClick={() => setActiveTab("tabungan")}
+            aria-pressed={activeTab === "tabungan"}
           >
             💰 Tabungan
           </button>
           <button 
             className={`simulator-tab ${activeTab === "pinjaman" ? "active" : ""}`}
             onClick={() => setActiveTab("pinjaman")}
+            aria-pressed={activeTab === "pinjaman"}
           >
             💵 Pinjaman
           </button>
           <button 
             className={`simulator-tab ${activeTab === "pengeluaran" ? "active" : ""}`}
             onClick={() => setActiveTab("pengeluaran")}
+            aria-pressed={activeTab === "pengeluaran"}
           >
             📊 Expense Tracker
           </button>
@@ -99,9 +106,9 @@ export default function SimulatorPage() {
         <div className="simulator-content">
           {activeTab === "tabungan" && (
             <div className="simulator-section" style={{
-              backgroundColor: "transparent", // Removed background color for sections
-              boxShadow: "none", // Removed box shadow
-              border: "none" // Removed border
+              backgroundColor: "transparent",
+              boxShadow: "none",
+              border: "none"
             }}>
               <TabunganSimulator />
             </div>
@@ -109,9 +116,9 @@ export default function SimulatorPage() {
 
           {activeTab === "pinjaman" && (
             <div className="simulator-section" style={{
-              backgroundColor: "transparent", // Removed background color for sections
-              boxShadow: "none", // Removed box shadow
-              border: "none" // Removed border
+              backgroundColor: "transparent",
+              boxShadow: "none",
+              border: "none"
             }}>
               <LoanSimulator />
             </div>
@@ -119,47 +126,70 @@ export default function SimulatorPage() {
 
           {activeTab === "pengeluaran" && (
             <div className="simulator-section" style={{
-              backgroundColor: "transparent", // Removed background color for sections
-              boxShadow: "none", // Removed box shadow
-              border: "none" // Removed border
+              backgroundColor: "transparent",
+              boxShadow: "none",
+              border: "none"
             }}>
-              <h2 style={{ color: isDarkMode ? "#e0e0e0" : "" }}>Digital Expense Tracker</h2>
+              <h2 style={{ color: textColorVar }}>Digital Expense Tracker</h2>
               <ExpenseForm onCalculate={handleExpenseCalculation} />
               {calculationResults && (
                 <div className="calculation-results" style={{
-                  backgroundColor: "transparent", // Removed background color
-                  boxShadow: "none", // Removed box shadow
-                  border: "none" // Removed border
+                  backgroundColor: "transparent",
+                  boxShadow: "none",
+                  border: "none",
+                  color: textColorVar
                 }}>
-                  <h3 style={{ color: isDarkMode ? "#e0e0e0" : "#333" }}>Results:</h3>
+                  <h3 style={{ color: textColorVar }}>Results:</h3>
+
                   <div className="results-container">
-                    <div className="result-item" style={{ 
-                      backgroundColor: isDarkMode ? "transparent" : "#ffffff",
-                      color: isDarkMode ? "#e0e0e0" : "#333"
-                    }}>
+                    <div
+                      className="result-item"
+                      style={{
+                        backgroundColor: resultBgVar,
+                        color: textColorVar
+                      }}
+                    >
                       <span className="result-label">Income:</span>
                       <span className="result-value">Rp {calculationResults.income.toLocaleString()}</span>
                     </div>
-                    <div className="result-item" style={{ 
-                      backgroundColor: isDarkMode ? "transparent" : "#ffffff",
-                      color: isDarkMode ? "#e0e0e0" : "#333"
-                    }}>
+
+                    <div
+                      className="result-item"
+                      style={{
+                        backgroundColor: resultBgVar,
+                        color: textColorVar
+                      }}
+                    >
                       <span className="result-label">Needs:</span>
-                      <span className="result-value">Rp {calculationResults.needs.toLocaleString()} ({calculationResults.needsPercent}%)</span>
+                      <span className="result-value">
+                        Rp {calculationResults.needs.toLocaleString()} ({calculationResults.needsPercent}%)
+                      </span>
                     </div>
-                    <div className="result-item" style={{ 
-                      backgroundColor: isDarkMode ? "transparent" : "#ffffff",
-                      color: isDarkMode ? "#e0e0e0" : "#333"
-                    }}>
+
+                    <div
+                      className="result-item"
+                      style={{
+                        backgroundColor: resultBgVar,
+                        color: textColorVar
+                      }}
+                    >
                       <span className="result-label">Wants:</span>
-                      <span className="result-value">Rp {calculationResults.wants.toLocaleString()} ({calculationResults.wantsPercent}%)</span>
+                      <span className="result-value">
+                        Rp {calculationResults.wants.toLocaleString()} ({calculationResults.wantsPercent}%)
+                      </span>
                     </div>
-                    <div className="result-item" style={{ 
-                      backgroundColor: isDarkMode ? "transparent" : "#ffffff",
-                      color: isDarkMode ? "#e0e0e0" : "#333"
-                    }}>
+
+                    <div
+                      className="result-item"
+                      style={{
+                        backgroundColor: resultBgVar,
+                        color: textColorVar
+                      }}
+                    >
                       <span className="result-label">Savings:</span>
-                      <span className="result-value">Rp {calculationResults.savings.toLocaleString()} ({calculationResults.savingsPercent}%)</span>
+                      <span className="result-value">
+                        Rp {calculationResults.savings.toLocaleString()} ({calculationResults.savingsPercent}%)
+                      </span>
                     </div>
                   </div>
                 </div>
