@@ -1,4 +1,4 @@
-import { getStories } from '../../../../lib/stories';
+import { getStories } from '../../../../lib/server/stories';
 import RelatableStory from '../../../../components/RelatableStory';
 
 export const metadata = {
@@ -6,9 +6,9 @@ export const metadata = {
   description: 'Cerita keuangan relatable yang dapat membantumu memahami konsep keuangan dengan cara yang lebih personal.'
 };
 
-export default function RelatableStoryPage() {
+export default async function RelatableStoryPage() {
   // Ambil semua cerita, gunakan yang pertama
-  const stories = getStories();
+  const stories = await getStories();
   const firstStory = stories.length > 0 ? stories[0] : null;
 
   return (
