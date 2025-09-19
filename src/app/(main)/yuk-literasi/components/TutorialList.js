@@ -1,9 +1,11 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import styles from './TutorialList.module.css';
 
-export default function TutorialList() {
+export default function TutorialList({ initialCount = 6, step = 6, listId = 'tutorial-list' }) {
   const [tutorials, setTutorials] = useState([]);
+  const [visible, setVisible] = useState(initialCount);
 
   useEffect(() => {
     async function fetchTutorials() {
@@ -22,92 +24,88 @@ export default function TutorialList() {
     fetchTutorials();
   }, []);
 
+  const total = tutorials.length;
+  const items = useMemo(() => tutorials.slice(0, visible), [tutorials, visible]);
+
+  const canShowMore = visible < total;
+  const canShowLess = visible > initialCount;
+
+  const handleShowMore = () => setVisible((v) => Math.min(v + step, total));
+  const handleShowLess = () => setVisible(initialCount);
+
+  // Tambahkan fungsi untuk memetakan judul ke emoticon berdasarkan konten di `content/yuk-literasi`
+  function getEmoticonByTitle(title) {
+    const mapping = {
+      'Akumulasi Aset': '💰',
+      'Cara Membuat Dana Darurat dalam 30 Hari': '⛑️',
+      'Cara Mengelola Utang dengan Bijak': '📉',
+      'Edukasi Berkelanjutan': '📚',
+      'Manajemen Arus Kas': '💵',
+      'Memulai Investasi dengan Modal Kecil': '📈',
+      'Pengelolaan Utang': '🧾',
+      'Pengenalan Investasi': '💡',
+      'Prioritas Finansial': '🎯',
+    };
+    return mapping[title] || '📘'; // Default emoticon jika tidak ada pemetaan
+  }
+
+  if (!total) {
+    return <p className="muted">Belum ada tutorial untuk ditampilkan.</p>;
+  }
+
   return (
-    <section className="tutorial-list-section">
-      <h2 className="section-title">Mini Tutorial Keuangan</h2>
-      <p className="section-description">
-        Panduan praktis langkah demi langkah untuk mengelola keuangan Anda dengan lebih baik
-      </p>
-      
-      <div className="tutorial-grid">
-        {tutorials.map((tutorial) => (
-          <Link href={`/yuk-literasi/${tutorial.slug}`} key={tutorial.slug} className="tutorial-card-link">
-            <article className="tutorial-card">
-              <div className="tutorial-icon">{tutorial.icon}</div>
-              <h3 className="tutorial-title">{tutorial.title}</h3>
-              <p className="tutorial-description">{tutorial.description}</p>
-              <div className="tutorial-action">Baca Selengkapnya →</div>
-            </article>
-          </Link>
-        ))}
-      </div>
-      
-      <style jsx>{`
-        .tutorial-list-section {
-          margin: 3rem 0;
-        }
-        
-        .section-title {
-          font-size: 1.8rem;
-          margin-bottom: 0.5rem;
-          text-align: center;
-        }
-        
-        .section-description {
-          text-align: center;
-          color: #666;
-          margin-bottom: 2rem;
-        }
-        
-        .tutorial-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-          gap: 1.5rem;
-        }
-        
-        .tutorial-card-link {
-          text-decoration: none;
-          color: inherit;
-        }
-        
-        .tutorial-card {
-          border: 1px solid #eaeaea;
-          border-radius: 8px;
-          padding: 1.5rem;
-          transition: all 0.3s ease;
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-        }
-        
-        .tutorial-card:hover {
-          border-color: #0070f3;
-          transform: translateY(-5px);
-          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .tutorial-icon {
-          font-size: 2rem;
-          margin-bottom: 1rem;
-        }
-        
-        .tutorial-title {
-          margin: 0.5rem 0;
-          font-size: 1.3rem;
-        }
-        
-        .tutorial-description {
-          color: #666;
-          margin-bottom: 1.5rem;
-          flex-grow: 1;
-        }
-        
-        .tutorial-action {
-          margin-top: auto;
-          color: #0070f3;
-          font-weight: 500;
-        }
-      `}</style>
-    </section>
+    <>
+      <section className={styles['tutorial-list-section']}>
+        <h2 className={styles['section-title']}>Mini Tutorial Keuangan</h2>
+        <p className={styles['section-description']}>
+          Panduan praktis langkah demi langkah untuk mengelola keuangan Anda dengan lebih baik
+        </p>
+
+        <div id={listId} className={styles['tutorial-grid']} aria-live="polite">
+          {items.map((tutorial) => (
+            <Link href={`/yuk-literasi/${tutorial.slug}`} key={tutorial.slug} className={styles['tutorial-card-link']}>
+              <article className={styles['tutorial-card']}>
+                <h3 className={styles['tutorial-title']}>
+                  <span className="emoticon">{getEmoticonByTitle(tutorial.title)}</span>
+                  {tutorial.title}
+                </h3>
+                <p className={styles['tutorial-description']}>{tutorial.description}</p>
+                <div className={styles['tutorial-action']}>Baca Selengkapnya →</div>
+              </article>
+            </Link>
+          ))}
+        </div>
+
+        <div className={styles['list-footer']}>
+          {canShowMore && (
+            <button
+              type="button"
+              className={`${styles.btn} ${styles['btn-outline']}`}
+              onClick={handleShowMore}
+              aria-controls={listId}
+              aria-expanded={visible > initialCount}
+            >
+              Lihat {Math.min(step, total - visible)} lagi
+            </button>
+          )}
+
+          {canShowLess && (
+            <button
+              type="button"
+              className={`${styles.btn} ${styles['btn-ghost']}`}
+              onClick={handleShowLess}
+              aria-controls={listId}
+              aria-expanded={visible > initialCount}
+            >
+              Tampilkan lebih sedikit
+            </button>
+          )}
+        </div>
+
+        <div className={styles['list-hint']}>
+          Menampilkan <strong>{visible}</strong> dari <strong>{total}</strong> tutorial
+        </div>
+      </section>
+    </>
   );
 }
