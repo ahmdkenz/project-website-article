@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import MarkdownRenderer from '../components/MarkdownRenderer';
 
 export default function TutorialPage({ params: paramsPromise }) {
@@ -70,7 +71,7 @@ export default function TutorialPage({ params: paramsPromise }) {
       <div className="tutorial-error-container">
         <h1>Oops, terjadi kesalahan!</h1>
         <p>{error}</p>
-        <a href="/yuk-literasi" className="btn-back">Kembali ke Daftar Tutorial</a>
+        <Link href="/yuk-literasi" className="btn-back">Kembali ke Daftar Tutorial</Link>
       </div>
     );
   }
@@ -84,7 +85,7 @@ export default function TutorialPage({ params: paramsPromise }) {
       ) : (
         <>
           <div className="tutorial-header">
-            <a href="/yuk-literasi" className="btn-back">← Kembali ke Daftar Tutorial</a>
+            <Link href="/yuk-literasi" className="btn-back">← Kembali ke Daftar Tutorial</Link>
             <div className="tutorial-meta">
               {metadata.date && <span className="tutorial-date">Diperbarui: {metadata.date}</span>}
               {metadata.author && <span className="tutorial-author">Oleh: {metadata.author}</span>}
