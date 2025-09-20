@@ -1,7 +1,27 @@
-
-
 @media (max-width: 480px) {
-  .btn, .btn-primary, .btn-ghost, .btn-outline { width: 100%; }
+  .btn, .btn-primary, .btn-ghost, .btn-outline {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .article-card {
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .hero-content {
+    padding: 1rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 360px) {
+  .btn {
+    white-space: normal;
+    line-height: 1.25;
+    text-align: center;
+  }
 }
 
 @media (max-width: 768px) {
