@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import MarkdownRenderer from '../../components/MarkdownRenderer';
 
@@ -14,8 +14,14 @@ export default function TutorialPage({ params: paramsPromise }) {
     date: '',
     author: ''
   });
+  const [steps, setSteps] = useState([]); // steps from metadata if available
+  const [currentStep, setCurrentStep] = useState(0); // current step index
+  const [transitionDirection, setTransitionDirection] = useState('next'); // 'next' | 'prev'
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const stepTopRef = useRef(null);
+  const touchStartXRef = useRef(null);
 
   useEffect(() => {
     if (!params) return;
@@ -23,9 +29,14 @@ export default function TutorialPage({ params: paramsPromise }) {
     async function fetchTutorial() {
       try {
         setIsLoading(true);
+        console.log(`Fetching tutorial for slug: ${params.slug}`); // Log the slug value
         const response = await fetch(`/api/tutorial?slug=${params.slug}`);
 
         if (!response.ok) {
+          if (response.status === 404) {
+            console.error(`Tutorial not found for slug: ${params.slug}`);
+            throw new Error(`Tutorial not found (404)`);
+          }
           throw new Error(`Failed to load tutorial content (${response.status})`);
         }
 
@@ -42,6 +53,20 @@ export default function TutorialPage({ params: paramsPromise }) {
           date: data.metadata.date || '',
           author: data.metadata.author || ''
         });
+        setSteps(Array.isArray(data.steps) ? data.steps : []);
+
+        // Initialize step from URL hash if present (#step-N)
+        if (Array.isArray(data.steps) && data.steps.length > 0 && typeof window !== 'undefined') {
+          const match = window.location.hash.match(/#step-(\d+)/);
+          if (match) {
+            const idx = Math.max(0, Math.min(parseInt(match[1], 10) - 1, data.steps.length - 1));
+            setCurrentStep(idx);
+          } else {
+            setCurrentStep(0);
+          }
+        } else {
+          setCurrentStep(0);
+        }
       } catch (err) {
         console.error('Error fetching tutorial:', err);
         setError(err.message);
@@ -53,6 +78,76 @@ export default function TutorialPage({ params: paramsPromise }) {
     fetchTutorial();
   }, [params]);
 
+  // Keep URL hash in sync with current step and smooth scroll to top of step content
+  useEffect(() => {
+    if (steps.length > 0 && typeof window !== 'undefined') {
+      const newHash = `#step-${currentStep + 1}`;
+      if (window.location.hash !== newHash) {
+        // Avoid adding extra history entries
+        history.replaceState(null, '', newHash);
+      }
+    }
+    // Smooth scroll to the top of the step area
+    stepTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [currentStep, steps.length]);
+
+  // Keyboard navigation (Left/Right arrows)
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (steps.length === 0) return;
+      if (e.key === 'ArrowRight') handleNextStep();
+      if (e.key === 'ArrowLeft') handlePreviousStep();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [steps.length, currentStep]);
+
+  const handleNextStep = () => {
+    if (currentStep < steps.length - 1) {
+      setTransitionDirection('next');
+      setCurrentStep((s) => s + 1);
+    }
+  };
+
+  const handlePreviousStep = () => {
+    if (currentStep > 0) {
+      setTransitionDirection('prev');
+      setCurrentStep((s) => s - 1);
+    }
+  };
+
+  const goToStep = (idx) => {
+    if (idx === currentStep || idx < 0 || idx >= steps.length) return;
+    setTransitionDirection(idx > currentStep ? 'next' : 'prev');
+    setCurrentStep(idx);
+  };
+
+  const onTouchStart = (e) => {
+    if (e.touches && e.touches.length > 0) {
+      touchStartXRef.current = e.touches[0].clientX;
+    }
+  };
+
+  const onTouchEnd = (e) => {
+    const startX = touchStartXRef.current;
+    if (startX == null) return;
+    const endX = (e.changedTouches && e.changedTouches[0]?.clientX) ?? startX;
+    const deltaX = endX - startX;
+    const threshold = 50; // px
+    if (deltaX < -threshold) handleNextStep();
+    if (deltaX > threshold) handlePreviousStep();
+    touchStartXRef.current = null;
+  };
+
+  const stepsCount = steps.length;
+  const progressPct = stepsCount > 0 ? Math.round(((currentStep + 1) / stepsCount) * 100) : 0;
+
+  useEffect(() => {
+    console.log(`Steps count: ${steps.length}`);
+    console.log(`Current step: ${currentStep}`);
+    console.log(`Progress percentage: ${progressPct}%`);
+  }, [steps.length, currentStep, progressPct]);
+
   if (error) {
     return (
       <div className="tutorial-error-container">
@@ -62,6 +157,15 @@ export default function TutorialPage({ params: paramsPromise }) {
       </div>
     );
   }
+
+  if (!content && steps.length === 0) {
+    return <div>Content not found. Please check the URL or try again later.</div>;
+  }
+
+  // Resolve current step item (string or object with title/content)
+  const stepItem = stepsCount > 0 ? steps[currentStep] : null;
+  const stepTitle = stepItem && typeof stepItem === 'object' && stepItem !== null ? stepItem.title : null;
+  const stepContent = stepItem && typeof stepItem === 'object' && stepItem !== null ? (stepItem.content ?? '') : (typeof stepItem === 'string' ? stepItem : '');
 
   return (
     <div className="tutorial-container">
@@ -74,13 +178,51 @@ export default function TutorialPage({ params: paramsPromise }) {
           <div className="tutorial-header">
             <Link href="/yuk-literasi" className="btn-back">← Kembali ke Daftar Tutorial</Link>
             <div className="tutorial-meta">
-              {metadata.date && <span className="tutorial-date">Diperbarui: {metadata.date}</span>}
-              {metadata.author && <span className="tutorial-author">Oleh: {metadata.author}</span>}
+              {metadata.date && <span className="tutorial-date">📅 {metadata.date}</span>}
+              {metadata.author && <span className="tutorial-author">✍️ {metadata.author}</span>}
             </div>
           </div>
 
-          <div className="tutorial-content">
-            <MarkdownRenderer markdownContent={content} />
+          <div className="tutorial-content" ref={stepTopRef} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+            <h1>{metadata.title}</h1>
+            {metadata.description && <p>{metadata.description}</p>}
+
+            {stepsCount > 0 ? (
+              <div className="step-guide" aria-live="polite">
+                <div className="sg-progress" aria-label={`Progres ${progressPct}%`}>
+                  <div className="sg-progressBar" style={{ width: `${progressPct}%` }} />
+                </div>
+
+                <div className={`step-slide ${transitionDirection === 'next' ? 'slide-in-right' : 'slide-in-left'}`} key={currentStep}>
+                  <h2>Langkah {currentStep + 1} dari {stepsCount}{stepTitle ? `: ${stepTitle}` : ''}</h2>
+                  {stepContent ? (
+                    <MarkdownRenderer markdownContent={stepContent} />
+                  ) : (
+                    <p>Ikuti instruksi pada langkah ini.</p>
+                  )}
+                </div>
+
+                <div className="step-navigation">
+                  <button onClick={handlePreviousStep} disabled={currentStep === 0} aria-label="Langkah sebelumnya">Sebelumnya</button>
+                  <div className="step-dots" role="tablist" aria-label="Navigasi langkah">
+                    {steps.map((_, idx) => (
+                      <button
+                        key={idx}
+                        role="tab"
+                        aria-selected={idx === currentStep}
+                        className={`dot ${idx === currentStep ? 'active' : ''}`}
+                        onClick={() => goToStep(idx)}
+                        aria-label={`Pergi ke langkah ${idx + 1}`}
+                        title={`Langkah ${idx + 1}`}
+                      />
+                    ))}
+                  </div>
+                  <button onClick={handleNextStep} disabled={currentStep === stepsCount - 1} aria-label="Langkah berikutnya">Berikutnya</button>
+                </div>
+              </div>
+            ) : (
+              <MarkdownRenderer markdownContent={content} />
+            )}
           </div>
         </>
       )}
@@ -95,23 +237,28 @@ export default function TutorialPage({ params: paramsPromise }) {
         .loading-container {
           text-align: center;
           padding: 2rem;
+          font-size: 1.2rem;
+          color: #555;
         }
 
         .tutorial-error-container {
           text-align: center;
           padding: 2rem;
+          color: #d9534f;
         }
 
         .tutorial-header {
           margin-bottom: 2rem;
           border-bottom: 1px solid #eaeaea;
           padding-bottom: 1rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
         }
 
         .tutorial-meta {
           display: flex;
-          justify-content: space-between;
-          margin-top: 1rem;
+          gap: 1rem;
           font-size: 0.9rem;
           color: #666;
         }
@@ -121,14 +268,109 @@ export default function TutorialPage({ params: paramsPromise }) {
           margin-bottom: 1rem;
           color: #0070f3;
           text-decoration: none;
+          font-weight: bold;
+          transition: color 0.3s;
         }
 
         .btn-back:hover {
+          color: #0056b3;
           text-decoration: underline;
         }
 
         .tutorial-content {
-          line-height: 1.6;
+          line-height: 1.8;
+          font-size: 1.1rem;
+          color: #333;
+        }
+
+        .tutorial-content h1, .tutorial-content h2, .tutorial-content h3 {
+          color: #0070f3;
+        }
+
+        .tutorial-content p {
+          margin-bottom: 1rem;
+        }
+
+        /* Step Guide Styles */
+        .sg-progress {
+          width: 100%;
+          height: 6px;
+          background: #eee;
+          border-radius: 4px;
+          overflow: hidden;
+          margin: 12px 0 20px;
+        }
+        .sg-progressBar {
+          height: 100%;
+          background: linear-gradient(90deg, #0070f3, #00b3ff);
+          transition: width 300ms ease;
+        }
+
+        .step-guide {
+          margin-top: 1rem;
+        }
+
+        .step-navigation {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          margin-top: 16px;
+        }
+        .step-navigation button {
+          padding: 0.5rem 1rem;
+          font-size: 1rem;
+          cursor: pointer;
+          border: 1px solid #e0e0e0;
+          background: #fff;
+          border-radius: 6px;
+          transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+        }
+        .step-navigation button:hover:enabled {
+          background: #f5f9ff;
+          border-color: #cfe6ff;
+          color: #0056b3;
+        }
+        .step-navigation button:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .step-dots {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          border: 1px solid #9ecaff;
+          background: #eaf4ff;
+          cursor: pointer;
+        }
+        .dot.active {
+          background: #0070f3;
+          border-color: #0070f3;
+        }
+
+        .step-slide {
+          animation-duration: 280ms;
+          animation-fill-mode: both;
+        }
+        .slide-in-right {
+          animation-name: slideInRight;
+        }
+        .slide-in-left {
+          animation-name: slideInLeft;
+        }
+        @keyframes slideInRight {
+          from { opacity: 0; transform: translateX(24px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInLeft {
+          from { opacity: 0; transform: translateX(-24px); }
+          to { opacity: 1; transform: translateX(0); }
         }
       `}</style>
     </div>
