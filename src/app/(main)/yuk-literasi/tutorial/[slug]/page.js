@@ -1,10 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
 import MarkdownRenderer from '../../components/MarkdownRenderer';
 
-export default function TutorialPage({ params }) {
+export default function TutorialPage({ params: paramsPromise }) {
+  const params = use(paramsPromise);
+
   const [content, setContent] = useState('');
   const [metadata, setMetadata] = useState({
     title: 'Loading...',
