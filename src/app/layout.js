@@ -25,7 +25,7 @@ import '@/styles/footer-extra.css';
 import { ModeProvider } from '@/context/ModeContext'; // <-- 1. IMPORT PROVIDER
 
 export const metadata = {
-  title: "Yuk Literasi Keuangan",
+  title: "Mudamelekfinansial",
   description: "Belajar finansial dengan cara menyenangkan",
 };
 
