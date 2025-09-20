@@ -3,8 +3,18 @@
 import { use, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import MarkdownRenderer from '../../components/MarkdownRenderer';
+import MainLayout from '../../layout';
+import '@/styles/footer.css';
 
-export default function TutorialPage({ params: paramsPromise }) {
+export default function TutorialPageWrapper(props) {
+  return (
+    <MainLayout>
+      <TutorialPage {...props} />
+    </MainLayout>
+  );
+}
+
+function TutorialPage({ params: paramsPromise }) {
   const params = use(paramsPromise);
 
   const [content, setContent] = useState('');

@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="container">
-        <p>© {currentYear} Yuk Literasi Keuangan. Dibuat dengan ❤ untuk edukasi finansial.</p>
+        <p>© {currentYear} Muda Melek Finansial. Dibuat dengan ❤ untuk edukasi finansial.</p>
       </div>
     </footer>
   );
