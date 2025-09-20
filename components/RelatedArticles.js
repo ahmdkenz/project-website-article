@@ -1,8 +1,15 @@
-// components/RelatedArticles.js
+"use client"; // Tambahkan ini di bagian atas
+
 import Link from "next/link";
+import { useMode } from "../context/ModeContext";
 
 export default function RelatedArticles({ items = [] }) {
-  if (!items.length) return null;
+  const { mode } = useMode();
+
+  // Filter articles based on the current mode
+  const filteredItems = items.filter((a) => a.mode === mode);
+
+  if (!filteredItems.length) return null;
 
   return (
     <section
@@ -23,7 +30,7 @@ export default function RelatedArticles({ items = [] }) {
           gap: "1rem",
         }}
       >
-        {items.map((a) => (
+        {filteredItems.map((a) => (
           <article key={a.slug} className="article-card">
             <div className="article-content">
               <h4>{a.title}</h4>
