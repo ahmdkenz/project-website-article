@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import RelatableStory from '../../../../../components/RelatableStory';
 import { getStoryBySlug } from '../../../../../lib/server/stories';
 import Link from 'next/link';
+import '../../../../../styles/base.css'; // Pastikan file CSS global sudah diimpor
 
 export default async function StoryPage({ params }) {
   const { slug } = params;
@@ -24,7 +25,9 @@ export default async function StoryPage({ params }) {
         </div>
 
         {/* Tampilkan cerita dengan komponen yang sudah ada */}
-        <RelatableStory story={story} />
+        <div className="story-content">
+          <RelatableStory story={story} />
+        </div>
       </div>
     </>
   );
