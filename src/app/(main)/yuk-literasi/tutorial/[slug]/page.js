@@ -5,6 +5,7 @@ import Link from 'next/link';
 import MarkdownRenderer from '../../components/MarkdownRenderer';
 import MainLayout from '../../layout';
 import '@/styles/footer.css';
+import '@/styles/base.css'; // Import base CSS untuk variabel tema
 
 export default function TutorialPageWrapper(props) {
   return (
@@ -248,13 +249,13 @@ function TutorialPage({ params: paramsPromise }) {
           text-align: center;
           padding: 2rem;
           font-size: 1.2rem;
-          color: #555;
+          color: var(--text-color);
         }
 
         .tutorial-error-container {
           text-align: center;
           padding: 2rem;
-          color: #d9534f;
+          color: var(--text-color);
         }
 
         .tutorial-header {
@@ -270,13 +271,13 @@ function TutorialPage({ params: paramsPromise }) {
           display: flex;
           gap: 1rem;
           font-size: 0.9rem;
-          color: #666;
+          color: var(--muted-color);
         }
 
         .btn-back {
           display: inline-block;
           margin-bottom: 1rem;
-          color: #0070f3;
+          color: var(--primary-color);
           text-decoration: none;
           font-weight: bold;
           transition: color 0.3s;
@@ -290,29 +291,30 @@ function TutorialPage({ params: paramsPromise }) {
         .tutorial-content {
           line-height: 1.8;
           font-size: 1.1rem;
-          color: #333;
+          color: var(--text-color);
         }
 
         .tutorial-content h1, .tutorial-content h2, .tutorial-content h3 {
-          color: #0070f3;
+          color: var(--text-color);
         }
 
         .tutorial-content p {
           margin-bottom: 1rem;
+          color: var(--text-color);
         }
 
         /* Step Guide Styles */
         .sg-progress {
           width: 100%;
           height: 6px;
-          background: #eee;
+          background: var(--border-color);
           border-radius: 4px;
           overflow: hidden;
           margin: 12px 0 20px;
         }
         .sg-progressBar {
           height: 100%;
-          background: linear-gradient(90deg, #0070f3, #00b3ff);
+          background: linear-gradient(90deg, var(--primary-color), var(--primary-color));
           transition: width 300ms ease;
         }
 
@@ -331,15 +333,16 @@ function TutorialPage({ params: paramsPromise }) {
           padding: 0.5rem 1rem;
           font-size: 1rem;
           cursor: pointer;
-          border: 1px solid #e0e0e0;
-          background: #fff;
+          border: 1px solid var(--border-color);
+          background: var(--surface-color);
+          color: var(--text-color);
           border-radius: 6px;
           transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
         }
         .step-navigation button:hover:enabled {
-          background: #f5f9ff;
-          border-color: #cfe6ff;
-          color: #0056b3;
+          background: var(--bg-color);
+          border-color: var(--primary-color);
+          color: var(--primary-color);
         }
         .step-navigation button:disabled {
           opacity: 0.5;
@@ -355,13 +358,13 @@ function TutorialPage({ params: paramsPromise }) {
           width: 10px;
           height: 10px;
           border-radius: 50%;
-          border: 1px solid #9ecaff;
-          background: #eaf4ff;
+          border: 1px solid var(--border-color);
+          background: var(--surface-color);
           cursor: pointer;
         }
         .dot.active {
-          background: #0070f3;
-          border-color: #0070f3;
+          background: var(--primary-color);
+          border-color: var(--primary-color);
         }
 
         .step-slide {

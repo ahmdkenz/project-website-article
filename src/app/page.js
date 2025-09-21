@@ -195,7 +195,13 @@ export default function SelectModePage() {
             margin-bottom: 0.25rem;
           }
           .hero-media { position: absolute; inset: 0; overflow: hidden; }
-          .hero-img { object-fit: cover; object-position: center; filter: saturate(1.05) contrast(1.03); }
+          .hero-img { 
+            object-fit: cover; 
+            object-position: center; 
+            filter: saturate(1.05) contrast(1.03); 
+            width: 100%; /* Ensure full width */
+            height: 100%; /* Ensure full height */
+          }
           .hero-overlay { position: absolute; inset: 0;
             background: linear-gradient(180deg, rgba(2,6,23,.55), rgba(2,6,23,.65) 40%, rgba(2,6,23,.75));
           }

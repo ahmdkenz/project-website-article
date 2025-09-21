@@ -1,0 +1,41 @@
+.markdown-content h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.markdown-content h2 {
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.markdown-content p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+.markdown-content ol, .markdown-content ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.markdown-content li {
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.markdown-content strong {
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+/* Pastikan semua elemen dalam markdown-content menggunakan warna tema */
+.markdown-content * {
+  color: var(--text-color) !important;
+}
