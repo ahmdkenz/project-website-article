@@ -1,3 +1,20 @@
+/* responsive.css - Pengaturan responsif untuk semua tampilan */
+
+/* Extra small devices (≤ 360px) */
+@media (max-width: 360px) {
+  .btn {
+    white-space: normal;
+    line-height: 1.25;
+    text-align: center;
+  }
+  
+  /* Welcome page - extra small adjustments */
+  .welcome-title { 
+    font-size: clamp(1.4rem, 1.2rem + 2vw, 1.6rem);
+  }
+}
+
+/* Small devices (≤ 480px) */
 @media (max-width: 480px) {
   .btn, .btn-primary, .btn-ghost, .btn-outline {
     width: 100%;
@@ -14,17 +31,115 @@
     padding: 1rem;
     text-align: center;
   }
-}
-
-@media (max-width: 360px) {
-  .btn {
-    white-space: normal;
-    line-height: 1.25;
-    text-align: center;
+  
+  /* Welcome page responsive adjustments */
+  .welcome-title { 
+    font-size: clamp(1.5rem, 1.2rem + 2vw, 1.75rem);
+  }
+  .welcome-subtitle {
+    font-size: 0.95rem;
   }
 }
 
+/* Mobile devices (≤ 640px) */
+@media (max-width: 640px) {
+  .navbar nav { display: none; }
+
+  /* Logo & Search responsif */
+  .logo-desktop { display: none; }
+  .logo-mobile { display: inline-block; }
+
+  .search-bar-global { display: none; }
+  .search-toggle-mobile {
+    display: inline-flex;
+    background: none; border: none;
+    font-size: 1.5rem; cursor: pointer; color: var(--text-color);
+  }
+  
+  /* Options Grid (welcome page) */
+  .options-grid { 
+    width: min(100%, 480px); /* Lebar maksimum pada mobile */
+    margin-inline: auto;
+    gap: 1rem !important; 
+    grid-template-columns: 1fr !important; /* Stack vertikal pada mobile */
+  }
+  
+  /* Mode cards (welcome page) */
+  .mode-card {
+    padding: 1.15rem !important;
+    margin-bottom: 0.5rem;
+  }
+  
+  .welcome-head {
+    width: 92%;
+    margin-bottom: 1rem;
+  }
+  
+  /* Hero Banner di welcome page */
+  .hero.hero--welcome {
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: var(--hero-ar, 16/9);
+    margin-bottom: 1rem; /* Margin bawah lebih besar di mobile */
+    border-radius: 12px; /* Rounded corners di mobile */
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    width: min(100%, 520px); /* Batasi lebar pada mobile */
+    margin-inline: auto;
+  }
+  
+  /* Hero Image */
+  .hero.hero--welcome .hero-img {
+    object-fit: contain !important;
+    object-position: center;
+    transition: transform 0.2s ease-out;
+  }
+  
+  /* Hero Media Background */
+  .hero.hero--welcome .hero-media { 
+    background: var(--surface-color);
+    border-radius: inherit; /* Mengikuti border radius parent */
+  }
+  
+  /* Hero Overlay */
+  .hero.hero--welcome .hero-overlay {
+    background: linear-gradient(180deg, rgba(2,6,23,.35), rgba(2,6,23,.45) 40%, rgba(2,6,23,.55));
+    border-radius: inherit; /* Mengikuti border radius parent */
+  }
+  
+  /* Brand Banner responsif */
+  .brand-banner {
+    position: relative;
+    width: min(100%, 520px);
+    margin-inline: auto;
+    margin-bottom: 1rem;
+  }
+  
+  /* Brand Badge Responsive Mobile */
+  .brand-badge {
+    top: calc(10px + env(safe-area-inset-top, 0px));
+    right: calc(10px + env(safe-area-inset-right, 0px));
+    font-size: 1.05rem;
+    opacity: 0.88;
+    padding: .34rem .5rem;
+    /* Perbaikan positioning di mobile */
+    position: absolute;
+    z-index: 10;
+  }
+  .brand-badge::before { top: -14px; height: 14px; } /* tali lebih pendek di mobile */
+  .brand-badge::after  { top: -21px; width: 11px; height: 11px; } /* ring sedikit lebih kecil */
+  
+  /* Mobile animation */
+  @media (prefers-reduced-motion: no-preference) {
+    .brand-badge {
+      animation: keychain-swing-sm 2.6s ease-in-out .4s 3;
+    }
+  }
+}
+
+/* Tablet devices (≤ 768px) */
 @media (max-width: 768px) {
+  /* Existing styles kept for backward compatibility */
   .navbar nav { display: none; }
 
   /* Logo & Search responsif */
@@ -39,18 +154,205 @@
   }
 }
 
+/* Medium devices (≥ 600px) */
 @media (min-width: 600px) {
   .hero { padding: 60px 0; }
   .hero h1 { font-size: clamp(32px, 5vw, 48px); }
 }
 
+/* Tablet and medium desktop (641px - 1279px) */
+@media (min-width: 641px) and (max-width: 1279px) {
+  /* Mode cards layout responsif */
+  .mode-card {
+    padding: 1.2rem 1.4rem !important; /* Padding lebih nyaman pada tablet */
+    transition: transform .18s ease-out, box-shadow .18s ease-out;
+  }
+  
+  /* Brand banner pada tablet */
+  .brand-banner {
+    max-width: 860px;
+    margin-inline: auto;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  
+  /* Container width */
+  .container {
+    width: min(100%, 1100px);
+    padding-inline: clamp(1rem, 3vw, 1.5rem);
+  }
+}
+
+/* Large devices (≥ 992px) */
 @media (min-width: 992px) {
   /* placeholder untuk konsistensi */
+  
+  /* Hero animation for desktop */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero:hover .hero-img {
+      transform: scale(1.03); /* Sedikit zoom in saat hover */
+    }
+  }
 }
 
+/* Large desktop (≥ 1280px) */
 @media (min-width: 1280px) {
-  .container { max-width: 1200px; margin: 0 auto; }
+  .container { 
+    max-width: 1200px; 
+    margin: 0 auto;
+    width: min(100%, 1600px); /* Lebar maksimum pada layar besar */
+  }
+  
   .hero h1 { font-size: 56px; }
+  
+  /* Brand banner container */
+  .brand-banner {
+    max-width: 1600px;
+    margin-inline: auto;
+    position: relative;
+  }
+  
+  /* Hero banner */
+  .hero {
+    border-radius: 16px; /* Rounded corners untuk layar besar */
+    height: clamp(var(--hero-h-min, 220px), var(--hero-h-fluid, 25vw), 520px); /* Sedikit lebih tinggi */
+    max-width: 1600px; /* Batasi lebar maksimum */
+    margin-inline: auto;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  }
+  
+  /* Mode card responsive */
+  .mode-card {
+    transition: transform .2s ease-out, box-shadow .2s ease-out;
+  }
+  
+  .mode-card:hover {
+    transform: translateY(-6px); /* Efek hover lebih terasa pada layar besar */
+    box-shadow: var(--shadow-lg, 0 10px 25px -5px rgba(0, 0, 0, 0.1)); /* Shadow lebih terasa */
+  }
 }
 
+/* 4K and ultra-wide screens (≥ 2560px) */
+@media (min-width: 2560px) {
+  .brand-banner {
+    max-width: 2000px;
+  }
+  
+  .hero {
+    height: clamp(380px, 22vw, 600px); /* Tinggi proporsional tapi dibatasi */
+    max-width: 2000px; /* Batasi lebar pada layar sangat besar */
+    border-radius: 20px; /* Border radius lebih besar pada layar besar */
+  }
+  
+  .welcome-title {
+    font-size: clamp(2.2rem, 1.8rem + 0.8vw, 3rem); /* Font proporsional dengan layar */
+  }
+  
+  .welcome-subtitle {
+    font-size: clamp(1.125rem, 1rem + 0.3vw, 1.3rem); /* Font proporsional dengan layar */
+  }
+  
+  .container {
+    max-width: 2000px;
+  }
+}
 
+/* Global responsive animations */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes softPulse {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50%     { transform: scale(1.06); opacity: .96; }
+  }
+  
+  @keyframes keychain-swing {
+    0%   { transform: rotate(-2.2deg); }
+    50%  { transform: rotate( 2.2deg); }
+    100% { transform: rotate(-2.2deg); }
+  }
+  
+  @keyframes keychain-swing-sm {
+    0%   { transform: rotate(-1.2deg); }
+    50%  { transform: rotate( 1.2deg); }
+    100% { transform: rotate(-1.2deg); }
+  }
+}
+
+/* Support for hover-capable devices */
+@media (hover: hover) {
+  .brand-badge:hover {
+    animation: keychain-swing 1.6s ease-in-out infinite;
+  }
+  
+  .hero:hover .hero-img {
+    transform: scale(1.03);
+  }
+}
+
+/* Hero image standard styles */
+.hero-img { 
+  object-fit: cover; 
+  object-position: center; 
+  filter: saturate(1.05) contrast(1.03); 
+  width: 100%; 
+  height: 100%; 
+  transition: transform 0.3s ease-out; /* Transisi halus untuk interaksi */
+}
+
+/* Brand banner base styles */
+.brand-banner {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Basic Hero layout */
+.hero {
+  position: relative;
+  min-height: var(--hero-h-min, 220px);
+  height: clamp(var(--hero-h-min, 220px), var(--hero-h-fluid, 30vw), var(--hero-h-max, 380px));
+  display: grid;
+  place-items: center;
+  overflow: clip;
+  margin-bottom: 0.25rem;
+}
+
+.hero-media { 
+  position: absolute; 
+  inset: 0; 
+  overflow: hidden; 
+  border-radius: inherit;
+}
+
+.hero-inner { 
+  position: relative; 
+  z-index: 1; 
+  width: min(1100px, 92%); 
+  height: 0; 
+}
+
+/* Container responsif untuk semua ukuran */
+.container {
+  width: min(100%, 1920px);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 3vw, 2rem);
+}
+
+/* Transisi yang lebih halus untuk semua elemen responsif */
+.hero, .hero-img, .mode-card, .container, .options-grid,
+.welcome-title, .welcome-subtitle, .brand-badge {
+  transition: all 0.3s ease-out;
+}
+
+/* Transisi yang lebih cepat untuk interaksi */
+@media (prefers-reduced-motion: no-preference) {
+  .mode-card:hover, .mode-card:active,
+  .hero:hover .hero-img {
+    transition-duration: 0.2s;
+  }
+}

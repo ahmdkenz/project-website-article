@@ -6,6 +6,9 @@ import Image from "next/image";
 import { useMode } from "@/context/ModeContext";
 import Footer from "@/components/footer"; // ⬅️ tambahkan import footer
 
+// Import CSS untuk responsivitas
+import "@/styles/responsive.css";
+
 /** Toggle tema melayang (khusus halaman ini saja) */
 function ThemeFloatToggleInline() {
   const { theme, setTheme } = useMode();
@@ -70,20 +73,23 @@ export default function SelectModePage() {
 
   return (
     <>
-      <main className="container" style={{ padding: "2rem 0" }}>
+      <main className="container" style={{ 
+        padding: "2rem 0"
+      }}>
         {/* Toggle tema hanya ada di halaman ini (pojok kanan atas) */}
         <ThemeFloatToggleInline />
 
         {/* ===== HERO Brand (gambar saja) ===== */}
-        <section
-          className="hero hero--welcome small"
-          style={{
-            textAlign: "center",
-            "--hero-h-min": "300px",  // tinggi minimum (mobile)
-            "--hero-h-fluid": "20vw", // tinggi proporsional (tablet–desktop)
-            "--hero-h-max": "480px",  // tinggi maksimum (desktop lebar)
-            "--hero-ar": "16/9",      // ← rasio gambar (ubah jika gambar bukan 16:9)
-          }}
+        <div className="brand-banner">
+          <section
+            className="hero hero--welcome small"
+            style={{
+              textAlign: "center",
+              "--hero-h-min": "300px",  // tinggi minimum (mobile)
+              "--hero-h-fluid": "20vw", // tinggi proporsional (tablet–desktop)
+              "--hero-h-max": "480px",  // tinggi maksimum (desktop lebar)
+              "--hero-ar": "16/9",      // ← rasio gambar (ubah jika gambar bukan 16:9)
+            }}
         >
           <div className="hero-media" aria-hidden="true">
             <Image
@@ -102,6 +108,7 @@ export default function SelectModePage() {
             <span className="brand-badge">✨</span>
           </div>
         </section>
+        </div>
 
         {/* ===== Judul & subjudul di BAWAH banner ===== */}
         <section className="welcome-head" style={{ textAlign: "center", marginTop: "0.75rem" }}>
@@ -118,7 +125,7 @@ export default function SelectModePage() {
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
             gap: "1.1rem",
-            marginTop: "1.2rem",
+            marginTop: "1.2rem"
           }}
         >
           {/* Friendly card */}
@@ -184,23 +191,20 @@ export default function SelectModePage() {
 
         {/* ===== CSS global khusus halaman ini (animasi + hero + welcome) ===== */}
         <style jsx global>{`
-          /* HERO layout */
-          .hero {
-            position: relative;
-            min-height: var(--hero-h-min, 220px);
-            height: clamp(var(--hero-h-min, 220px), var(--hero-h-fluid, 30vw), var(--hero-h-max, 380px));
-            display: grid;
-            place-items: center;
-            overflow: clip;
-            margin-bottom: 0.25rem;
-          }
-          .hero-media { position: absolute; inset: 0; overflow: hidden; }
-          .hero-img { 
-            object-fit: cover; 
+          /* CSS yang masih dibutuhkan di page.js, sisanya dikelola oleh responsive.css */
+          /* Brand badge animations, class overrides, welcome animations */
             object-position: center; 
             filter: saturate(1.05) contrast(1.03); 
-            width: 100%; /* Ensure full width */
-            height: 100%; /* Ensure full height */
+            width: 100%; 
+            height: 100%; 
+            transition: transform 0.3s ease-out; /* Transisi halus untuk interaksi */
+          }
+          
+          /* Micro-interaction pada hover hero image (hanya untuk device dengan hover) */
+          @media (hover: hover) {
+            .hero:hover .hero-img {
+              transform: scale(1.03); /* Sedikit zoom in saat hover */
+            }
           }
           .hero-overlay { position: absolute; inset: 0;
             background: linear-gradient(180deg, rgba(2,6,23,.55), rgba(2,6,23,.65) 40%, rgba(2,6,23,.75));
@@ -239,13 +243,7 @@ export default function SelectModePage() {
             .brand-badge { display: inline-flex; font-size: 1.25rem; animation: softPulse 2.2s ease-in-out .6s 2; }
           }
 
-          /* Micro-interactions pada kartu */
-          .mode-card {
-            transition: transform .18s ease-out, box-shadow .18s ease-out;
-            will-change: transform;
-          }
-          .mode-card:hover  { transform: translateY(-4px); }
-          .mode-card:active { transform: translateY(-1px); }
+          /* Card interactions moved to responsive.css */
 
           /* Fokus keyboard aksesibel */
           .mode-card:focus-visible,
@@ -255,31 +253,9 @@ export default function SelectModePage() {
             border-radius: 12px;
           }
 
-          /* Responsif kecil: grid lebih rapat sedikit */
-          @media (max-width: 640px) {
-            .options-grid { gap: 1rem !important; }
-          }
+          /* Mobile responsive styles moved to responsive.css */
 
-          /* ===== Mobile hero: jangan terpotong, menyesuaikan box ===== */
-          @media (max-width: 640px) {
-            /* Box hero mengikuti aspect ratio gambar */
-            .hero.hero--welcome {
-              height: auto !important;
-              min-height: 0 !important;
-              aspect-ratio: var(--hero-ar, 16/9);
-            }
-            /* Tampilkan seluruh gambar (letterbox jika rasio beda) */
-            .hero.hero--welcome .hero-img {
-              object-fit: contain !important;
-              object-position: center;
-            }
-            /* Warna dasar di balik gambar agar rapi saat contain */
-            .hero.hero--welcome .hero-media { background: var(--surface-color); }
-            /* Overlay sedikit lebih ringan agar gambar tetap terlihat */
-            .hero.hero--welcome .hero-overlay {
-              background: linear-gradient(180deg, rgba(2,6,23,.35), rgba(2,6,23,.45) 40%, rgba(2,6,23,.55));
-            }
-          }
+          /* Mobile hero and small screen styles moved to responsive.css */
 
           /* ====== POSISI DASAR BRAND BADGE DI KANAN ATAS ====== */
           .brand-badge {
