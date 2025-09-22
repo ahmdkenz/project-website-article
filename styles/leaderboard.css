@@ -31,6 +31,9 @@
 
 .col-name {
   min-width: 0; /* allow text to truncate */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .col-badge {
@@ -57,4 +60,24 @@
 .col-score {
   text-align: right;
   font-variant-numeric: tabular-nums;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 480px) {
+  .leaderboard-header,
+  .leaderboard-row {
+    grid-template-columns: 48px 1fr 64px 64px; /* No. | Name | Badge | Score */
+  }
+
+  .col-name {
+    font-size: 13px; /* Slightly smaller text for names */
+  }
+
+  .col-score {
+    font-size: 13px; /* Slightly smaller text for scores */
+  }
+
+  .col-badge {
+    font-size: 12px; /* Adjust badge font size for mobile */
+  }
 }
