@@ -72,7 +72,8 @@ html.dark .hero {
 .hero {
   position: relative;
   overflow: hidden;
-  min-height: clamp(280px, 36vw, 220px); /* tinggi responsif supaya gambar terlihat */
+  /* Use global hero sizing variables for consistency */
+  min-height: clamp(var(--hero-h-min, 220px), var(--hero-h-fluid, 28vw), var(--hero-h-max, 380px));
 }
 
 .hero .hero-media {

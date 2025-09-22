@@ -1,5 +1,3 @@
-
-
 :root {
   --bg-color: #f8f9fa;
   --surface-color: #ffffff;
@@ -17,6 +15,15 @@
 
   /* Tinggi navbar global (mudah diganti saat logo diperbesar) */
   --navbar-h: 60px;
+
+  /* Global layout vars (non-breaking) */
+  --container-max: 1120px;
+  --container-pad: clamp(0.75rem, 3vw, 1.5rem);
+
+  /* Global hero sizing (can be overridden per page) */
+  --hero-h-min: 220px;
+  --hero-h-fluid: 28vw;
+  --hero-h-max: 380px;
 }
 
 html.dark {
@@ -45,9 +52,11 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Container: unified across pages */
 .container {
-  width: min(1120px, 92%);
+  width: min(var(--container-max, 1120px), 92%);
   margin-inline: auto;
+  padding-inline: var(--container-pad, 0);
 }
 
 h1, h2, h3, h4 {
@@ -88,6 +97,20 @@ a:hover { text-decoration: underline; }
   object-fit: contain; /* Mengganti 'cover' agar seluruh gambar terlihat */
 }
 
+/* Default hero media/image behavior: cover */
+.hero .hero-img,
+.hero-media .hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Keep slider-specific contain only inside slider wrapper */
+.hero-slider-wrapper .hero-img {
+  object-fit: contain;
+}
+
 /* 4. Definisikan animasinya (@keyframes) */
 @keyframes slideRightLoop {
   0% {
@@ -106,6 +129,95 @@ a:hover { text-decoration: underline; }
     transform: translateX(0%);
   }
 }
+
+/* ========== Global Safe Defaults & Utilities (non-intrusive) ========== */
+
+/* 1) Box sizing and media defaults */
+*, *::before, *::after { box-sizing: border-box; }
+img, svg, video, canvas, audio, iframe { max-width: 100%; height: auto; }
+
+/* 2) Word wrapping to avoid layout push from long tokens */
+:where(p, h1, h2, h3, h4, h5, h6, .text, .copy, .card-title, .card-text) {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+/* 3) Ensure children of grid/flex can shrink inside their tracks */
+:where(.flex, .d-flex, .grid, .row, [class*="grid"], [class*="row"]) > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* 4) Utilities for centering and width control */
+.u-center { display: grid; place-items: center; }
+.u-center-x { margin-left: auto; margin-right: auto; }
+.u-center-y { display: flex; flex-direction: column; justify-content: center; }
+.u-center-abs { position: absolute; inset: 0; display: grid; place-items: center; }
+.u-mx-auto { margin-left: auto; margin-right: auto; }
+.u-min-w-0 { min-width: 0 !important; }
+.u-w-full { width: 100% !important; }
+
+/* 5) Normalize buttons to avoid overflow */
+:where(.btn) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  vertical-align: middle;
+  white-space: nowrap;     /* keep single-line unless .btn--wrap */
+  max-width: 100%;         /* never exceed its column */
+}
+:where(.btn.btn--wrap) { white-space: normal; }
+
+/* 6) Button groups and action rows that wrap neatly */
+:where(.btn-group, .button-group, .actions, .card-actions) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+:where(.btn-group, .button-group, .actions, .card-actions) > :where(.btn, button, a) {
+  flex: 0 1 auto;
+  max-width: 100%;
+}
+
+/* 7) Form controls never overflow */
+:where(
+  input[type="text" i],
+  input[type="email" i],
+  input[type="search" i],
+  input[type="number" i],
+  input[type="tel" i],
+  input[type="url" i],
+  input[type="password" i],
+  input[type="date" i],
+  input[type="time" i],
+  select,
+  textarea
+) {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  display: block;
+  box-sizing: border-box;
+  background-clip: padding-box;
+}
+
+/* 8) Form rows and input groups */
+:where(.form-row, .field-row, .form-group-row) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1rem;
+  align-items: center;
+}
+:where(.form-row, .field-row, .form-group-row) > * { min-width: 0; }
+:where(.input-group) {
+  display: flex; align-items: stretch; width: 100%; max-width: 100%; gap: 0.5rem;
+}
+:where(.input-group) > :where(input, select, textarea) { flex: 1 1 auto; min-width: 0; }
+:where(.input-group) > :where(.btn, button, a, .addon, .icon) { flex: 0 0 auto; }
 
 /* =============================
    Global responsive safeguards

@@ -197,11 +197,12 @@
 
 /* Large desktop (≥ 1280px) */
 @media (min-width: 1280px) {
-  .container { 
-    max-width: 1200px; 
-    margin: 0 auto;
-    width: min(100%, 1600px); /* Lebar maksimum pada layar besar */
+  :root {
+    --container-max: 1200px;
+    --hero-h-fluid: 25vw;
+    --hero-h-max: 520px;
   }
+  .container { max-width: var(--container-max); }
   
   .hero h1 { font-size: 56px; }
   
@@ -215,8 +216,8 @@
   /* Hero banner */
   .hero {
     border-radius: 16px; /* Rounded corners untuk layar besar */
-    height: clamp(var(--hero-h-min, 220px), var(--hero-h-fluid, 25vw), 520px); /* Sedikit lebih tinggi */
-    max-width: 1600px; /* Batasi lebar maksimum */
+    min-height: clamp(var(--hero-h-min, 220px), var(--hero-h-fluid, 25vw), var(--hero-h-max, 520px));
+    max-width: var(--container-max);
     margin-inline: auto;
     box-shadow: 0 8px 30px rgba(0,0,0,0.06);
   }
@@ -234,13 +235,16 @@
 
 /* 4K and ultra-wide screens (≥ 2560px) */
 @media (min-width: 2560px) {
-  .brand-banner {
-    max-width: 2000px;
+  :root {
+    --container-max: 2000px;
+    --hero-h-min: 380px;
+    --hero-h-fluid: 22vw;
+    --hero-h-max: 600px;
   }
-  
+  .brand-banner { max-width: var(--container-max); }
   .hero {
-    height: clamp(380px, 22vw, 600px); /* Tinggi proporsional tapi dibatasi */
-    max-width: 2000px; /* Batasi lebar pada layar sangat besar */
+    min-height: clamp(var(--hero-h-min), var(--hero-h-fluid), var(--hero-h-max));
+    max-width: var(--container-max);
     border-radius: 20px; /* Border radius lebih besar pada layar besar */
   }
   
@@ -279,6 +283,23 @@
     0%   { transform: rotate(-1.2deg); }
     50%  { transform: rotate( 1.2deg); }
     100% { transform: rotate(-1.2deg); }
+  }
+}
+
+/* ========== Helpers: forms and buttons on small screens ========== */
+@media (max-width: 640px) {
+  :where(.form-row, .field-row, .form-group-row) {
+    grid-template-columns: 1fr; /* stack to single column */
+  }
+  :where(.btn-group, .button-group, .actions, .card-actions) {
+    flex-wrap: wrap;
+    gap: 0.5rem 0.5rem;
+    justify-content: flex-start;
+  }
+  :where(.btn).btn--block,
+  :where(.btn-group.stack-on-mobile) > .btn,
+  :where(.button-group.stack-on-mobile) > .btn {
+    width: 100%;
   }
 }
 
@@ -338,9 +359,9 @@
 
 /* Container responsif untuk semua ukuran */
 .container {
-  width: min(1120px, 92%);
+  width: min(var(--container-max, 1120px), 92%);
   margin-inline: auto;
-  padding-inline: clamp(1rem, 3vw, 2rem);
+  padding-inline: var(--container-pad, clamp(1rem, 3vw, 2rem));
 }
 
 /* Transisi yang lebih halus untuk semua elemen responsif */

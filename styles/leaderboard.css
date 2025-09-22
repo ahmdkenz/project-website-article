@@ -23,6 +23,13 @@
   padding: 6px 0;
 }
 
+/* Let grid children shrink within columns */
+.leaderboard-row,
+.leaderboard-row > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .col-rank {
   text-align: right;
   padding-right: 8px;

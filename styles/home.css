@@ -58,33 +58,12 @@
   .article-card .btn, .home-card .btn { width: 100%; max-width: 100%; min-width: 0; }
   .article-card .btn-row, .home-card .btn-row { grid-template-columns: 1fr; }
 }
-/* Membuat container siap untuk menumpuk gambar */
-.hero-media {
-  position: relative; /* Wajib untuk menumpuk elemen di dalamnya */
-}
-
-/* Mengatur agar semua gambar di dalam hero-media menumpuk di posisi yang sama */
+/* Hero media: single definition (deduplicated) */
+.hero-media { position: relative; }
 .hero-media .hero-img {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Memastikan gambar menutupi area tanpa distorsi */
-}
-
-/* Membuat container siap untuk menumpuk gambar */
-.hero-media {
-  position: relative;
-}
-
-/* Mengatur agar semua gambar di dalam hero-media menumpuk di posisi yang sama */
-.hero-media .hero-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   object-fit: cover;
 }
 

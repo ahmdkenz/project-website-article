@@ -214,7 +214,8 @@ html.light {
 }
 
 .chart-wrapper {
-  height: 250px; /* Reduced height */
+  /* Adaptive height across screen sizes */
+  height: clamp(200px, 40vw, 300px);
   position: relative;
   margin: 0 auto;
   max-width: 500px;
@@ -380,9 +381,7 @@ html.dark .tip-item {
     padding: 0.5rem; /* Reduced padding */
   }
 
-  .chart-wrapper {
-    height: 200px; /* Reduced height */
-  }
+  .chart-wrapper { height: clamp(180px, 42vw, 260px); }
 }
 
 @media (max-width: 480px) {
