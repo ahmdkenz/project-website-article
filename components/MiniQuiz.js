@@ -19,7 +19,7 @@ export default function MiniQuiz({ title = 'Mini Quiz', questions = [], pointsPe
   const badge = useMemo(() => {
     if (!total) return '';
     const max = questions.reduce((acc, q) => acc + (q.points ?? pointsPerCorrect), 0);
-    const pct = max ? Math.round((score / max) * 100) : 0;
+    const pct = max ? Math.floor((score / max) * 100) : 0; // use floor to avoid rounding up
     if (pct >= 80) return 'Master';
     if (pct >= 50) return 'Ahli';
     if (pct > 0) return 'Pemula';
@@ -51,7 +51,9 @@ export default function MiniQuiz({ title = 'Mini Quiz', questions = [], pointsPe
       setSelected(null);
     } else {
       setFinished(true);
-      onFinish?.({ score, answers: nextAnswers });
+      // Recompute final score from nextAnswers to avoid stale score from useMemo
+      const finalScore = nextAnswers.reduce((acc, a) => acc + (a?.correct ? (a.points ?? pointsPerCorrect) : 0), 0);
+      onFinish?.({ score: finalScore, answers: nextAnswers });
     }
   };
 

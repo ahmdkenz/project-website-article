@@ -14,7 +14,7 @@ export const runtime = "nodejs";
 
 // Helper to calculate badge based on score
 function calculateBadge(score, maxScore) {
-  const pct = maxScore ? Math.round((score / maxScore) * 100) : 0;
+  const pct = maxScore ? Math.floor((score / maxScore) * 100) : 0;
   if (pct >= 80) return "Master";
   if (pct >= 50) return "Ahli";
   if (pct > 0) return "Pemula";
@@ -87,7 +87,7 @@ export async function POST(req) {
     if (!Number.isFinite(score) || score < 0) return NextResponse.json({ error: "invalid score" }, { status: 400 });
 
     const name = nameRaw || "Anon";
-    const badge = calculateBadge(score, maxScore); // Calculate badge
+    const badge = calculateBadge(score, maxScore); // Calculate badge with floor
 
     const entriesRef = collection(db, "leaderboards", quizId, "entries");
     await addDoc(entriesRef, {

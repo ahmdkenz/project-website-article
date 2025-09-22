@@ -3,7 +3,7 @@
 .leaderboard-header,
 .leaderboard-row {
   display: grid;
-  grid-template-columns: 64px 1fr 88px 88px; /* No. | Name | Badge | Score */
+  grid-template-columns: 64px 1fr 120px 88px; /* No. | Name | Badge | Score */
   align-items: center;
   gap: 8px;
 }
@@ -35,8 +35,23 @@
 
 .col-badge {
   text-align: center;
-  font-size: 12px;
+}
+
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
   color: #374151;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.badge-pill .emoji {
+  display: inline-block;
 }
 
 .col-score {

@@ -55,6 +55,14 @@ export default function Leaderboard({ quizId, pageSize = 10, autoRotateMs = 5000
 
   if (!quizId) return null;
 
+  const renderBadge = (b) => {
+    if (!b) return "-";
+    const icon = b === "Master" ? "🏅" : b === "Ahli" ? "🎖️" : b === "Pemula" ? "🥉" : b === "Coba Lagi" ? "🔁" : "";
+    return (
+      <span className="badge-pill"><span className="emoji">{icon}</span>{b}</span>
+    );
+  };
+
   return (
     <section aria-label={`${title} untuk ${quizId}`} style={{ marginTop: "1rem" }}>
       <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: ".5rem" }}>
@@ -89,7 +97,7 @@ export default function Leaderboard({ quizId, pageSize = 10, autoRotateMs = 5000
                 <div key={it.id || idx} className="leaderboard-row">
                   <span className="col-rank">{page * pageSize + idx + 1}.</span>
                   <span className="col-name">{it.name || "Anon"}</span>
-                  <span className="col-badge">{it.badge || "-"}</span>
+                  <span className="col-badge">{renderBadge(it.badge)}</span>
                   <span className="col-score">{it.score}</span>
                 </div>
               ))
