@@ -47,6 +47,9 @@
 .navbar nav.nav-open a { padding: 0.5rem; border-radius: 6px; }
 .navbar nav.nav-open a:hover { background-color: var(--bg-color); }
 
+/* Ensure logo images scale safely */
+.navbar .logo img { max-width: 100%; height: auto; }
+
 /* Desktop (≥ 992px) */
 @media (min-width: 992px) {
   .navbar .logo-desktop,

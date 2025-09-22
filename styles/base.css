@@ -106,3 +106,35 @@ a:hover { text-decoration: underline; }
     transform: translateX(0%);
   }
 }
+
+/* =============================
+   Global responsive safeguards
+   (additive, non-breaking)
+   ============================= */
+
+/* Prevent unexpected text auto-zoom on mobile Safari */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+/* Make media elements scale within their containers */
+img, video, canvas { max-width: 100%; height: auto; }
+iframe { max-width: 100%; width: 100%; }
+
+/* Avoid horizontal overflow from long tokens inside content areas */
+.markdown-content,
+.article-body {
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: auto;
+}
+
+/* Mobile-friendly tables inside rich content */
+@media (max-width: 640px) {
+  .article-body table,
+  .markdown-content table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap; /* keep cells readable, enable horizontal scroll */
+  }
+}

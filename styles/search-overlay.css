@@ -27,13 +27,15 @@
 .search-overlay-panel {
   position: relative;
   background: var(--surface-color);
-  height: 100%;
+  height: 100dvh; /* gunakan dvh agar akurat di mobile */
   width: min(720px, 100%);
   margin-left: auto; margin-right: auto;
   display: grid;
   grid-template-rows: auto 1fr auto;
   border-left: 1px solid var(--border-color);
   border-right: 1px solid var(--border-color);
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 .search-overlay-head {
   display: flex; gap: .5rem; align-items: center;
@@ -61,6 +63,12 @@
   .search-overlay-panel {
     border-left: none; border-right: none;
   }
+}
+
+/* Saat overlay terbuka, cegah body scroll (dibantu oleh penambahan class dari komponen jika diperlukan) */
+.overlay-open {
+  overflow: hidden;
+  height: 100dvh;
 }
 
 /* Sembunyikan elemen legacy agar tidak dobel (tanpa menghapus markup) */

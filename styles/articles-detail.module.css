@@ -107,6 +107,12 @@
   border: 1px solid var(--border-color);
 }
 
+/* Prevent wide code blocks from causing horizontal scroll on body */
+.article-body pre {
+  max-width: 100%;
+  overflow: auto;
+}
+
 /* Link */
 .article-body a {
   text-decoration: none;
