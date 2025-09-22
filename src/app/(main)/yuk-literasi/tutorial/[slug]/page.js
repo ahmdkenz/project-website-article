@@ -6,6 +6,8 @@ import MarkdownRenderer from '../../components/MarkdownRenderer';
 import MainLayout from '../../layout';
 import '@/styles/footer.css';
 import '@/styles/base.css'; // Import base CSS untuk variabel tema
+import '@/styles/mini-quizzes.css';
+import MiniQuiz from '@/components/MiniQuiz';
 
 export default function TutorialPageWrapper(props) {
   return (
@@ -25,6 +27,7 @@ function TutorialPage({ params: paramsPromise }) {
     date: '',
     author: ''
   });
+  const [questions, setQuestions] = useState([]);
   const [steps, setSteps] = useState([]); // steps from metadata if available
   const [currentStep, setCurrentStep] = useState(0); // current step index
   const [transitionDirection, setTransitionDirection] = useState('next'); // 'next' | 'prev'
@@ -64,6 +67,12 @@ function TutorialPage({ params: paramsPromise }) {
           date: data.metadata.date || '',
           author: data.metadata.author || ''
         });
+        // Load quiz questions if type is quiz
+        if (data?.metadata?.type === 'quiz' && Array.isArray(data?.metadata?.questions)) {
+          setQuestions(data.metadata.questions);
+        } else {
+          setQuestions([]);
+        }
         setSteps(Array.isArray(data.steps) ? data.steps : []);
 
         // Initialize step from URL hash if present (#step-N)
@@ -169,7 +178,7 @@ function TutorialPage({ params: paramsPromise }) {
     );
   }
 
-  if (!content && steps.length === 0) {
+  if (!content && steps.length === 0 && questions.length === 0) {
     return <div>Content not found. Please check the URL or try again later.</div>;
   }
 
@@ -198,7 +207,9 @@ function TutorialPage({ params: paramsPromise }) {
             <h1>{metadata.title}</h1>
             {metadata.description && <p>{metadata.description}</p>}
 
-            {stepsCount > 0 ? (
+            {Array.isArray(questions) && questions.length > 0 ? (
+              <MiniQuiz title={metadata.title} questions={questions} pointsPerCorrect={metadata.pointsPerCorrect ?? 10} />
+            ) : stepsCount > 0 ? (
               <div className="step-guide" aria-live="polite">
                 <div className="sg-progress" aria-label={`Progres ${progressPct}%`}>
                   <div className="sg-progressBar" style={{ width: `${progressPct}%` }} />

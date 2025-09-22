@@ -1,0 +1,118 @@
+"use client";
+
+import { useMemo, useState } from 'react';
+
+// NOTE: We won't add new folders. CSS is imported globally from styles in app/layout. This local import is a no-op placeholder.
+
+export default function MiniQuiz({ title = 'Mini Quiz', questions = [], pointsPerCorrect = 10, onFinish }) {
+  const [current, setCurrent] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [answers, setAnswers] = useState([]); // {choiceIndex, correct}
+  const [finished, setFinished] = useState(false);
+
+  const total = questions.length;
+
+  const score = useMemo(() => {
+    return answers.reduce((acc, a) => acc + (a.correct ? (a.points ?? pointsPerCorrect) : 0), 0);
+  }, [answers, pointsPerCorrect]);
+
+  const badge = useMemo(() => {
+    if (!total) return '';
+    const max = questions.reduce((acc, q) => acc + (q.points ?? pointsPerCorrect), 0);
+    const pct = max ? Math.round((score / max) * 100) : 0;
+    if (pct >= 80) return 'Master';
+    if (pct >= 50) return 'Ahli';
+    if (pct > 0) return 'Pemula';
+    return 'Coba Lagi';
+  }, [score, questions, pointsPerCorrect, total]);
+
+  if (!Array.isArray(questions) || questions.length === 0) {
+    return <div className="mini-quiz"><p>Tidak ada pertanyaan.</p></div>;
+  }
+
+  const q = questions[current];
+
+  const selectOption = (idx) => {
+    setSelected(idx);
+  };
+
+  const submit = () => {
+    if (selected == null) return;
+    const correct = Array.isArray(q.correctIndex)
+      ? q.correctIndex.includes(selected)
+      : selected === q.correctIndex;
+    const entry = { choiceIndex: selected, correct, points: q.points ?? pointsPerCorrect };
+    const nextAnswers = [...answers];
+    nextAnswers[current] = entry;
+    setAnswers(nextAnswers);
+
+    if (current < total - 1) {
+      setCurrent((c) => c + 1);
+      setSelected(null);
+    } else {
+      setFinished(true);
+      onFinish?.({ score, answers: nextAnswers });
+    }
+  };
+
+  const reset = () => {
+    setCurrent(0);
+    setSelected(null);
+    setAnswers([]);
+    setFinished(false);
+  };
+
+  return (
+    <div className="mini-quiz">
+      <div className="mini-quiz-header">
+        <div className="mini-quiz-title">{title}</div>
+        <div className="mini-quiz-progress">{current + 1} / {total}</div>
+      </div>
+
+      {!finished ? (
+        <div>
+          <div className="mq-question">{q.question}</div>
+          <ul className="mq-options" role="listbox" aria-label="Pilihan jawaban">
+            {q.options?.map((opt, idx) => {
+              const isAnswered = answers[current] != null;
+              const isCorrect = !isAnswered ? false : (Array.isArray(q.correctIndex) ? q.correctIndex.includes(idx) : idx === q.correctIndex);
+              const isSelected = selected === idx || answers[current]?.choiceIndex === idx;
+              return (
+                <li
+                  key={idx}
+                  className={`mq-option ${isAnswered ? (isCorrect ? 'correct' : (isSelected ? 'wrong' : '')) : ''}`}
+                  role="option"
+                  aria-pressed={isSelected}
+                  onClick={() => !isAnswered && selectOption(idx)}
+                >
+                  <span>{String.fromCharCode(65 + idx)}.</span>
+                  <span>{opt}</span>
+                </li>
+              );
+            })}
+          </ul>
+
+          {q.explanation && answers[current] && (
+            <div className="mq-explanation">{q.explanation}</div>
+          )}
+
+          <div className="mq-controls">
+            <button className="mq-btn" onClick={() => setCurrent((c) => Math.max(0, c - 1))} disabled={current === 0}>Sebelumnya</button>
+            <button className="mq-btn primary" onClick={submit} disabled={selected == null && !answers[current]}> {current === total - 1 ? 'Selesai' : 'Jawab'} </button>
+            <button className="mq-btn" onClick={() => setCurrent((c) => Math.min(total - 1, c + 1))} disabled={current >= total - 1}>Berikutnya</button>
+          </div>
+        </div>
+      ) : (
+        <div className="mq-result">
+          <div className="mq-score">Skor: {score}</div>
+          <div style={{ marginTop: '.5rem' }}>
+            <span className="mq-badge" aria-label={`Badge ${badge}`}>🏅 {badge}</span>
+          </div>
+          <div style={{ marginTop: '1rem' }}>
+            <button className="mq-btn" onClick={reset}>Ulangi</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

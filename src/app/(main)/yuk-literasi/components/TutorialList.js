@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import styles from './TutorialList.module.css';
@@ -63,7 +63,7 @@ export default function TutorialList({ initialCount = 6, step = 6, listId = 'tut
 
         <div id={listId} className={styles['tutorial-grid']} aria-live="polite">
           {items.map((tutorial) => (
-            <Link href={`/yuk-literasi/tutorial/${tutorial.slug}`} key={tutorial.slug} className={styles['tutorial-card-link']}>
+            <Link href={tutorial.type === 'quiz' ? `/quizzes/${tutorial.slug}` : `/yuk-literasi/tutorial/${tutorial.slug}`} key={tutorial.slug} className={styles['tutorial-card-link']}>
               <article className={styles['tutorial-card']}>
                 <h3 className={styles['tutorial-title']}>
                   <span className="emoticon">{getEmoticonByTitle(tutorial.title)}</span>

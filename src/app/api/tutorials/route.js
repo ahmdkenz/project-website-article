@@ -8,16 +8,17 @@ export async function GET() {
     const tutorialsDir = path.join(process.cwd(), 'content', 'yuk-literasi');
     const files = fs.readdirSync(tutorialsDir);
 
-    const tutorials = files.map((file) => {
+    const tutorials = files.filter(f => f.endsWith('.md') || f.endsWith('.mdx')).map((file) => {
       const filePath = path.join(tutorialsDir, file);
       const fileContents = fs.readFileSync(filePath, 'utf8');
       const { data } = matter(fileContents);
 
       return {
-        slug: file.replace(/\.md$/, ''),
+        slug: file.replace(/\.(md|mdx)$/i, ''),
         title: data.title || 'Untitled',
         description: data.description || '',
         icon: data.icon || '📄',
+        type: data.type || 'tutorial',
       };
     });
 
