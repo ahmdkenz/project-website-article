@@ -46,8 +46,8 @@ export default function SearchOverlay({ open, onClose }) {
     <>
       <div className="search-overlay" role="dialog" aria-modal="true" aria-label="Pencarian">
         <div className="search-overlay-backdrop" onClick={onClose} />
-        <div className="search-overlay-panel" role="document" style={{ maxWidth: 420, width: "96vw", margin: "8vw auto", borderRadius: 12, padding: 0 }}>
-          <div className="search-overlay-head" style={{ padding: 8, borderBottom: "1px solid #eee", display: "flex", alignItems: "center", gap: 8 }}>
+        <div className="search-overlay-panel" role="document">
+          <div className="search-overlay-head">
             <input
               ref={inputRef}
               className="search-overlay-input"
@@ -56,10 +56,8 @@ export default function SearchOverlay({ open, onClose }) {
               aria-label="Ketik untuk mencari"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              style={{ fontSize: 16, padding: 8, flex: 1, borderRadius: 8, border: "1px solid #eee" }}
             />
-            <button className="btn btn-ghost btn-sm search-overlay-close" onClick={onClose} aria-label="Tutup" style={{ fontSize: 20, marginLeft: 4, padding: 4, minWidth: 32 }}>
-              {/* Ikon loop (kaca pembesar) SVG */}
+            <button className="btn btn-ghost btn-sm search-overlay-close" onClick={goAll} aria-label="Cari" disabled={!query.trim()}>
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="2" />
                 <line x1="15.2" y1="15.2" x2="20" y2="20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -67,123 +65,25 @@ export default function SearchOverlay({ open, onClose }) {
             </button>
           </div>
 
-          <div className="search-overlay-body" style={{ padding: 0, maxHeight: 240, overflowY: "auto" }}>
+          <div className="search-overlay-body">
             {query.trim().length < 2 ? (
-              <p className="muted" style={{ padding: 12, fontSize: 14 }}>Ketik minimal 2 karakter…</p>
+              <p className="muted">Ketik minimal 2 karakter…</p>
             ) : loading ? (
-              <p className="muted" style={{ padding: 12, fontSize: 14 }}>Mencari…</p>
+              <p className="muted">Mencari…</p>
             ) : (
-              <SearchResultsList
-                results={results}
-                onItemClick={onClose}
-              />
+              <SearchResultsList results={results} onItemClick={onClose} />
             )}
           </div>
 
-          <div className="search-overlay-foot" style={{ padding: 8, borderTop: "1px solid #eee" }}>
-            <button className="btn btn-outline btn-sm" onClick={goAll} disabled={!query.trim()} style={{ width: "100%", fontSize: 15, padding: 8 }}>
+          <div className="search-overlay-foot">
+            <button className="btn btn-outline btn-sm" onClick={goAll} disabled={!query.trim()}>
               Lihat semua hasil
             </button>
           </div>
         </div>
       </div>
-      {/* Style khusus untuk mobile-friendly dan tampilan sederhana */}
-      <style jsx global>{`
-        .search-overlay-panel {
-          max-width: 420px;
-          width: 96vw;
-          margin: 8vw auto;
-          border-radius: 12px;
-          padding: 0;
-          background: #fff;
-          box-shadow: 0 4px 32px rgba(0,0,0,0.13);
-        }
-        .search-overlay-head {
-          padding: 8px;
-          border-bottom: 1px solid #eee;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        .search-overlay-input {
-          font-size: 16px;
-          padding: 8px;
-          flex: 1;
-          border-radius: 8px;
-          border: 1px solid #eee;
-          background: #fff;
-          color: #222;
-        }
-        .search-overlay-close {
-          font-size: 20px;
-          margin-left: 4px;
-          padding: 4px;
-          min-width: 32px;
-          background: none;
-          border: none;
-          color: #555;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .search-overlay-body {
-          padding: 0;
-          max-height: 240px;
-          overflow-y: auto;
-        }
-        .search-overlay-foot {
-          padding: 8px;
-          border-top: 1px solid #eee;
-        }
-        .search-overlay-foot .btn {
-          width: 100%;
-          font-size: 15px;
-          padding: 8px;
-        }
-        /* DARK MODE */
-        html.dark .search-overlay-panel {
-          background: #181f2a;
-          box-shadow: 0 4px 32px rgba(0,0,0,0.33);
-        }
-        html.dark .search-overlay-head {
-          border-bottom: 1px solid #232b3a;
-        }
-        html.dark .search-overlay-input {
-          background: #232b3a;
-          color: #f1f5fa;
-          border: 1px solid #232b3a;
-        }
-        html.dark .search-overlay-close {
-          color: #cbd5e1;
-        }
-        html.dark .search-overlay-foot {
-          border-top: 1px solid #232b3a;
-        }
-        @media (max-width: 640px) {
-          .search-overlay-panel {
-            max-width: 99vw;
-            width: 99vw;
-            margin: 2vw auto;
-            border-radius: 10px;
-            box-shadow: 0 2px 16px rgba(0,0,0,0.13);
-          }
-          .search-overlay-head {
-            padding: 6px;
-            gap: 6px;
-          }
-          .search-overlay-input {
-            font-size: 15px;
-            padding: 7px;
-            border-radius: 7px;
-          }
-          .search-overlay-body {
-            max-height: 180px;
-          }
-          .search-overlay-foot {
-            padding: 6px;
-          }
-        }
-      `}</style>
+      {/* Removed inline style block to rely on global CSS file */}
+      {/* <style jsx global>{` ... `}</style> */}
     </>
   );
 }
