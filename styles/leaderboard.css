@@ -1,18 +1,26 @@
 /* Leaderboard Styles */
 
+/* Container for centering the leaderboard */
+.leaderboard-container {
+  max-width: 800px;
+  margin: 0 auto; /* Center horizontally */
+  padding: 0 16px; /* Add padding for smaller screens */
+  color: var(--text-color); /* Use theme text color */
+}
+
 .leaderboard-header,
 .leaderboard-row {
   display: grid;
-  grid-template-columns: 64px 1fr 120px 88px; /* No. | Name | Badge | Score */
+  grid-template-columns: 60px minmax(100px, 2fr) minmax(120px, 1fr) 80px; /* No. | Name | Badge | Score */
   align-items: center;
-  gap: 8px;
+  gap: 16px; /* Increased gap for better spacing */
 }
 
 .leaderboard-header {
   font-weight: 600;
   padding: 8px 0;
-  border-bottom: 1px solid #e5e7eb; /* light gray */
-  color: #4b5563; /* muted */
+  border-bottom: 1px solid var(--border-color); /* Use theme border color */
+  color: var(--muted-color); /* Use theme muted color */
 }
 
 .leaderboard-entries {
@@ -21,6 +29,7 @@
 
 .leaderboard-row {
   padding: 6px 0;
+  color: var(--text-color); /* Use theme text color */
 }
 
 /* Let grid children shrink within columns */
@@ -33,7 +42,8 @@
 .col-rank {
   text-align: right;
   padding-right: 8px;
-  color: #6b7280;
+  color: var(--muted-color); /* Use theme muted color */
+  font-size: clamp(14px, 2.5vw, 16px); /* Responsive font size */
 }
 
 .col-name {
@@ -41,50 +51,90 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding-right: 8px; /* Added padding to prevent text running into badge column */
+  font-size: clamp(14px, 2.5vw, 16px); /* Responsive font size that scales with viewport width */
+  color: var(--text-color); /* Use theme text color */
 }
 
 .col-badge {
   text-align: center;
+  min-width: 0; /* Allow content to shrink if needed */
+  overflow: hidden; /* Prevent overflow */
+  font-weight: 500; /* Make badge text slightly bolder */
+  color: var(--text-color); /* Use theme text color */
 }
 
 .badge-pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
-  color: #374151;
-  padding: 3px 8px;
-  border-radius: 999px;
-  font-size: 12px;
+  color: var(--text-color); /* Use theme text color */
+  font-size: clamp(11px, 2vw, 12px); /* Responsive font size */
   white-space: nowrap;
+  max-width: 100%; /* Ensure it doesn't exceed its container */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .badge-pill .emoji {
   display: inline-block;
+  font-size: 1.2em; /* Make emoji slightly larger than text */
+  margin-right: 2px; /* Small spacing between emoji and text */
 }
 
 .col-score {
   text-align: right;
   font-variant-numeric: tabular-nums;
+  font-size: clamp(14px, 2.5vw, 16px); /* Responsive font size */
+  color: var(--text-color); /* Use theme text color */
 }
 
 /* Responsive adjustments for mobile */
-@media (max-width: 480px) {
+@media (max-width: 640px) {
+  .leaderboard-container {
+    padding: 0 12px; /* Slightly reduced padding on smaller screens */
+  }
+  
   .leaderboard-header,
   .leaderboard-row {
-    grid-template-columns: 48px 1fr 64px 64px; /* No. | Name | Badge | Score */
+    grid-template-columns: 48px minmax(80px, 1.5fr) minmax(80px, 1fr) 64px; /* No. | Name | Badge | Score */
+    gap: 10px; /* Adjusted gap for mobile */
+    text-align: justify; /* Justify text for mobile */
   }
 
   .col-name {
-    font-size: 13px; /* Slightly smaller text for names */
+    padding-right: 6px; /* Add padding to prevent overlap */
+    text-align: justify; /* Justify text for names */
   }
 
   .col-score {
     font-size: 13px; /* Slightly smaller text for scores */
+    text-align: justify; /* Justify text for scores */
+  }
+  
+  .col-badge {
+    padding-left: 4px; /* Add some padding on the left */
+    text-align: justify; /* Justify text for badges */
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 380px) {
+  .leaderboard-container {
+    padding: 0 8px; /* Minimal padding on very small screens */
+  }
+  
+  .leaderboard-header,
+  .leaderboard-row {
+    grid-template-columns: 40px minmax(60px, 1.2fr) minmax(70px, 0.8fr) 50px; /* No. | Name | Badge | Score */
+    gap: 8px; /* Minimal gap for very small screens */
   }
 
-  .col-badge {
-    font-size: 12px; /* Adjust badge font size for mobile */
+  .col-rank {
+    padding-right: 4px;
+  }
+  
+  .badge-pill {
+    padding: 2px 6px;
   }
 }

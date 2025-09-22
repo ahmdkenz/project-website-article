@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useMode } from '@/context/ModeContext';
 import "../styles/leaderboard.css";
 
 export default function Leaderboard({ quizId, pageSize = 10, autoRotateMs = 5000, title = "Leaderboard", refreshToken = 0 }) {
@@ -9,6 +10,7 @@ export default function Leaderboard({ quizId, pageSize = 10, autoRotateMs = 5000
   const [error, setError] = useState("");
   const [page, setPage] = useState(0);
   const timerRef = useRef(null);
+  const { theme } = useMode(); // Access theme from ModeContext
 
   const pages = useMemo(() => {
     if (!Array.isArray(items) || items.length === 0) return [];
@@ -57,14 +59,35 @@ export default function Leaderboard({ quizId, pageSize = 10, autoRotateMs = 5000
 
   const renderBadge = (b) => {
     if (!b) return "-";
-    const icon = b === "Master" ? "🏅" : b === "Ahli" ? "🎖️" : b === "Pemula" ? "🥉" : b === "Coba Lagi" ? "🔁" : "";
+    
+    // Convert old badge names to new format
+    let newBadge;
+    let icon;
+    
+    if (b === "Master" || b === "Pro") {
+      newBadge = "Pro";
+      icon = "🏅";
+    } else if (b === "Ahli" || b === "Expert") {
+      newBadge = "Expert";
+      icon = "🎖️";
+    } else if (b === "Pemula" || b === "Amatir") {
+      newBadge = "Amatir";
+      icon = "🥉";
+    } else if (b === "Coba Lagi" || b === "Newbie") {
+      newBadge = "Newbie";
+      icon = "🔁";
+    } else {
+      newBadge = b;
+      icon = "🔹";
+    }
+    
     return (
-      <span className="badge-pill"><span className="emoji">{icon}</span>{b}</span>
+      <span className="badge-pill"><span className="emoji">{icon}</span>{newBadge}</span>
     );
   };
 
   return (
-    <section aria-label={`${title} untuk ${quizId}`} style={{ marginTop: "1rem" }}>
+    <section aria-label={`${title} untuk ${quizId}`} style={{ marginTop: "1rem" }} className="leaderboard-container">
       <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: ".5rem" }}>
         <h3 style={{ margin: 0, fontSize: "1.1rem" }}>🏆 {title}</h3>
         {totalPages > 1 && (
