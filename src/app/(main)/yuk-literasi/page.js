@@ -18,6 +18,7 @@ export default async function YukLiterasiPage() {
   const quizzes = quizFiles.map((file) => {
     const { data } = getQuizData(file);
     return {
+      id: data.id || file.replace(/\.[^./]+$/, ""),
       title: data.title,
       description: data.description,
       questions: data.questions,

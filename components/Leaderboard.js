@@ -1,0 +1,102 @@
+"use client";
+
+import { useEffect, useMemo, useRef, useState } from "react";
+import "../styles/leaderboard.css";
+
+export default function Leaderboard({ quizId, pageSize = 10, autoRotateMs = 5000, title = "Leaderboard", refreshToken = 0 }) {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [page, setPage] = useState(0);
+  const timerRef = useRef(null);
+
+  const pages = useMemo(() => {
+    if (!Array.isArray(items) || items.length === 0) return [];
+    const chunks = [];
+    for (let i = 0; i < items.length; i += pageSize) {
+      chunks.push(items.slice(i, i + pageSize));
+    }
+    return chunks;
+  }, [items, pageSize]);
+
+  const totalPages = pages.length;
+  const currentItems = pages[page] || [];
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      if (!quizId) return;
+      setLoading(true);
+      setError("");
+      try {
+        const res = await fetch(`/api/leaderboard?quizId=${encodeURIComponent(quizId)}&limit=100&_=${Date.now()}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!cancelled) setItems(Array.isArray(data.items) ? data.items : []);
+      } catch (e) {
+        if (!cancelled) setError("Gagal memuat leaderboard");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    load();
+    return () => { cancelled = true; };
+  }, [quizId, refreshToken]);
+
+  // Auto-rotate when more than one page
+  useEffect(() => {
+    if (totalPages <= 1) return;
+    timerRef.current && clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setPage((p) => (p + 1) % totalPages);
+    }, autoRotateMs);
+    return () => timerRef.current && clearInterval(timerRef.current);
+  }, [totalPages, autoRotateMs]);
+
+  if (!quizId) return null;
+
+  return (
+    <section aria-label={`${title} untuk ${quizId}`} style={{ marginTop: "1rem" }}>
+      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: ".5rem" }}>
+        <h3 style={{ margin: 0, fontSize: "1.1rem" }}>🏆 {title}</h3>
+        {totalPages > 1 && (
+          <div style={{ display: "flex", gap: ".25rem" }}>
+            <button className="btn btn-sm" onClick={() => setPage((p) => (p - 1 + totalPages) % totalPages)} aria-label="Sebelumnya">‹</button>
+            <div className="muted" style={{ minWidth: 48, textAlign: "center" }}>{page + 1}/{totalPages}</div>
+            <button className="btn btn-sm" onClick={() => setPage((p) => (p + 1) % totalPages)} aria-label="Berikutnya">›</button>
+          </div>
+        )}
+      </header>
+
+      {loading && <p className="muted">Memuat...</p>}
+      {error && <p className="muted" role="alert">{error}</p>}
+
+      {!loading && !error && (
+        <div className="leaderboard">
+          {/* Header Section: 4 columns (No., Nama, Badge, Skor) */}
+          <div className="leaderboard-header">
+            <span className="col-rank">No.</span>
+            <span className="col-name">Nama</span>
+            <span className="col-badge">Badge</span>
+            <span className="col-score">Skor</span>
+          </div>
+          {/* Leaderboard Entries */}
+          <div className="leaderboard-entries">
+            {currentItems.length === 0 ? (
+              <div className="muted">Belum ada peserta.</div>
+            ) : (
+              currentItems.map((it, idx) => (
+                <div key={it.id || idx} className="leaderboard-row">
+                  <span className="col-rank">{page * pageSize + idx + 1}.</span>
+                  <span className="col-name">{it.name || "Anon"}</span>
+                  <span className="col-badge">{it.badge || "-"}</span>
+                  <span className="col-score">{it.score}</span>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}

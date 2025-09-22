@@ -1,0 +1,45 @@
+/* Leaderboard Styles */
+
+.leaderboard-header,
+.leaderboard-row {
+  display: grid;
+  grid-template-columns: 64px 1fr 88px 88px; /* No. | Name | Badge | Score */
+  align-items: center;
+  gap: 8px;
+}
+
+.leaderboard-header {
+  font-weight: 600;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb; /* light gray */
+  color: #4b5563; /* muted */
+}
+
+.leaderboard-entries {
+  margin-top: 8px;
+}
+
+.leaderboard-row {
+  padding: 6px 0;
+}
+
+.col-rank {
+  text-align: right;
+  padding-right: 8px;
+  color: #6b7280;
+}
+
+.col-name {
+  min-width: 0; /* allow text to truncate */
+}
+
+.col-badge {
+  text-align: center;
+  font-size: 12px;
+  color: #374151;
+}
+
+.col-score {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

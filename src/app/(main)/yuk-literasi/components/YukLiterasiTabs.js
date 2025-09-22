@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import TutorialList from './TutorialList';
 import StoriesShowMoreClient from '@/components/StoriesShowMoreClient';
-import MiniQuiz from '@/components/MiniQuiz';
+// import MiniQuiz from '@/components/MiniQuiz';
+import QuizWithLeaderboard from '@/components/QuizWithLeaderboard';
 import '@/styles/simulator.css';
 import '@/styles/mini-quizzes.css';
 
@@ -95,7 +96,7 @@ export default function YukLiterasiTabs({ stories = [], quizzes = [] }) {
                     <div key={idx} className="quiz-item" style={{ marginBottom: '2rem' }}>
                       <h2>{quiz.title}</h2>
                       {quiz.description && <p className="muted">{quiz.description}</p>}
-                      <MiniQuiz title={quiz.title} questions={quiz.questions} pointsPerCorrect={quiz.pointsPerCorrect} />
+                      <QuizWithLeaderboard quiz={quiz} />
                     </div>
                   ))}
                 </div>
