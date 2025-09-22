@@ -5,16 +5,14 @@ import TutorialList from './TutorialList';
 import StoriesShowMoreClient from '@/components/StoriesShowMoreClient';
 // import MiniQuiz from '@/components/MiniQuiz';
 import QuizWithLeaderboard from '@/components/QuizWithLeaderboard';
-import '@/styles/simulator.css';
-import '@/styles/mini-quizzes.css';
+// CSS now loaded through layout.js in proper order
 
 export default function YukLiterasiTabs({ stories = [], quizzes = [] }) {
   const [activeTab, setActiveTab] = useState('tutorial');
 
   return (
-    <div className="main-container" style={{ backgroundColor: 'transparent' }}>
-      <div className="simulator-container" style={{ backgroundColor: 'transparent' }}>
-        <div className="simulator-tabs" role="tablist" aria-label="Yuk Literasi Sections">
+    <div className="yuk-literasi-tabs">
+      <div className="simulator-tabs" role="tablist" aria-label="Yuk Literasi Sections">
           <button
             className={`simulator-tab ${activeTab === 'tutorial' ? 'active' : ''}`}
             onClick={() => setActiveTab('tutorial')}
@@ -57,7 +55,13 @@ export default function YukLiterasiTabs({ stories = [], quizzes = [] }) {
               role="tabpanel"
               aria-labelledby="tab-tutorial"
               className="simulator-section"
-              style={{ backgroundColor: 'transparent' }}
+              style={{ 
+                backgroundColor: 'transparent',
+                padding: 0,
+                margin: 0,
+                maxWidth: '100%',
+                width: '100%'
+              }}
             >
               <TutorialList />
             </div>
@@ -69,7 +73,13 @@ export default function YukLiterasiTabs({ stories = [], quizzes = [] }) {
               role="tabpanel"
               aria-labelledby="tab-cerita"
               className="simulator-section"
-              style={{ backgroundColor: 'transparent' }}
+              style={{ 
+                backgroundColor: 'transparent',
+                padding: 0,
+                margin: 0,
+                maxWidth: '100%',
+                width: '100%'
+              }}
             >
               <h2 style={{ fontSize: '1.75rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ fontSize: '1.2em', marginRight: '6px' }}>💡</span>
@@ -88,7 +98,13 @@ export default function YukLiterasiTabs({ stories = [], quizzes = [] }) {
               role="tabpanel"
               aria-labelledby="tab-kuis"
               className="simulator-section"
-              style={{ backgroundColor: 'transparent' }}
+              style={{ 
+                backgroundColor: 'transparent',
+                padding: 0,
+                margin: 0,
+                maxWidth: '100%',
+                width: '100%'
+              }}
             >
               {Array.isArray(quizzes) && quizzes.length > 0 ? (
                 <div className="mini-quiz-container">
@@ -106,7 +122,6 @@ export default function YukLiterasiTabs({ stories = [], quizzes = [] }) {
             </div>
           )}
         </div>
-      </div>
     </div>
   );
 }

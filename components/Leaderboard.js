@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useMode } from '@/context/ModeContext';
-import "../styles/leaderboard.css";
+// CSS now loaded through layout.js in proper order
 
 export default function Leaderboard({ quizId, pageSize = 10, autoRotateMs = 5000, title = "Leaderboard", refreshToken = 0 }) {
   const [items, setItems] = useState([]);

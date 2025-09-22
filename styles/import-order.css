@@ -1,0 +1,43 @@
+/* ========================================
+   CSS Import Order - Load in this sequence
+   ======================================== */
+
+/* 1. Variables FIRST - Foundation for all other styles */
+@import './variables.css';
+
+/* 2. Base styles - Global defaults and reset */
+@import './base.css';
+
+/* 3. Layout systems - Grid, flexbox, containers */
+@import './responsive.css';
+
+/* 4. Component styles - Specific components */
+@import './buttons.css';
+@import './cards.css';
+@import './leaderboard.css';
+@import './simulator.css';
+
+/* 5. Page-specific styles */
+@import './hero-text.css';
+@import './home.css';
+@import './homepage.css';
+@import './header.css';
+@import './footer.css';
+
+/* 6. Utility and override styles LAST */
+@import './misc.css';
+
+/* 
+   Import Order Explanation:
+   ========================
+   
+   1. Variables: Define all CSS custom properties first
+   2. Base: Global styles that use the variables
+   3. Layout: Responsive and container systems
+   4. Components: Reusable UI components
+   5. Pages: Page-specific styling
+   6. Utilities: Helper classes and overrides
+   
+   This order prevents CSS specificity conflicts and ensures
+   variables are available when other files need them.
+*/

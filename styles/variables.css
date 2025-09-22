@@ -1,0 +1,142 @@
+/* ========================================
+   CSS Variables - Single Source of Truth
+   ======================================== */
+
+:root {
+  /* ===== Color System ===== */
+  --bg-color: #f8f9fa;
+  --surface-color: #ffffff;
+  --text-color: #0f172a; /* Slate 900 */
+  --text-muted: #64748b; /* Slate 500 */
+  --border-color: #e2e8f0; /* Slate 200 */
+  --primary-color: #2563eb; /* Blue 600 */
+  --primary-text-color: #ffffff;
+  --friendly-color: #ff9800; /* Orange 500 */
+  --moderate-color: #8e24aa; /* Purple 600 */
+  
+  /* ===== Shadows & Effects ===== */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.1);
+  --ring-color: rgba(37, 99, 235, 0.35);
+  
+  /* ===== Button System ===== */
+  --btn-bg: var(--primary-color);
+  --btn-text: var(--primary-text-color);
+  --btn-border-radius: 12px;
+  --btn-border-radius-sm: 10px;
+  --btn-padding: 0.85rem 1.05rem;
+  --btn-padding-sm: 0.6rem 0.8rem;
+  --btn-padding-lg: 1rem 1.2rem;
+  
+  /* ===== Layout & Spacing ===== */
+  --navbar-height: 60px;
+  --container-max-width: 1120px;
+  --container-padding: clamp(0.75rem, 3vw, 1.5rem);
+  --gap-sm: 0.5rem;
+  --gap: 1rem;
+  --gap-lg: 1.5rem;
+  --gap-xl: 2rem;
+  
+  /* ===== Hero Sizing ===== */
+  --hero-height-min: 220px;
+  --hero-height-fluid: 28vw;
+  --hero-height-max: 380px;
+  
+  /* ===== Grid System ===== */
+  --grid-gap: 1.5rem;
+  --grid-min-width: 280px;
+  --grid-columns: repeat(auto-fit, minmax(var(--grid-min-width), 1fr));
+  
+  /* ===== Border Radius ===== */
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  
+  /* ===== Transition Timing ===== */
+  --transition-fast: 0.15s ease;
+  --transition: 0.2s ease;
+  --transition-slow: 0.3s ease;
+}
+
+/* ===== Dark Mode Overrides ===== */
+html.dark {
+  --bg-color: #0f172a; /* Slate 900 */
+  --surface-color: #1e293b; /* Slate 800 */
+  --text-color: #f1f5f9; /* Slate 100 */
+  --text-muted: #94a3b8; /* Slate 400 */
+  --border-color: #334155; /* Slate 700 */
+  --primary-color: #3b82f6; /* Blue 500 */
+  --friendly-color: #ff9800; /* Orange 500 */
+  --moderate-color: #8e24aa; /* Purple 600 */
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.3);
+  --ring-color: rgba(96, 165, 250, 0.45);
+}
+
+/* ===== Mode-specific Overrides ===== */
+html.mode-friendly:root { 
+  --primary-color: var(--friendly-color); 
+}
+
+html.mode-moderate:root { 
+  --primary-color: var(--moderate-color); 
+}
+
+/* ===== Responsive Container Variables ===== */
+@media (min-width: 1280px) {
+  :root {
+    --container-max-width: 1200px;
+    --hero-height-fluid: 25vw;
+    --hero-height-max: 520px;
+  }
+}
+
+@media (min-width: 2560px) {
+  :root {
+    --container-max-width: 2000px;
+    --hero-height-min: 380px;
+    --hero-height-fluid: 22vw;
+    --hero-height-max: 600px;
+  }
+}
+
+/* ===== Chart-specific Variables (untuk Chart.js) ===== */
+:root {
+  --chart-text-color: var(--text-color);
+  --chart-bg-color: var(--surface-color);
+  --chart-border-color: rgba(0, 0, 0, 0.08);
+  --chart-grid-color: rgba(0, 0, 0, 0.05);
+}
+
+html.dark {
+  --chart-text-color: var(--text-color);
+  --chart-bg-color: var(--bg-color);
+  --chart-border-color: rgba(255, 255, 255, 0.06);
+  --chart-grid-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ===== Leaderboard-specific Variables ===== */
+:root {
+  --leaderboard-max-width: 900px;
+  --leaderboard-grid-columns: 60px minmax(100px, 2fr) minmax(120px, 1fr) 80px;
+  --leaderboard-gap: 16px;
+  --leaderboard-padding: 0 16px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --leaderboard-grid-columns: 48px minmax(80px, 1.5fr) minmax(80px, 1fr) 64px;
+    --leaderboard-gap: 10px;
+    --leaderboard-padding: 0 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  :root {
+    --leaderboard-grid-columns: 40px minmax(60px, 1.2fr) minmax(70px, 0.8fr) 50px;
+    --leaderboard-gap: 8px;
+    --leaderboard-padding: 0 8px;
+  }
+}

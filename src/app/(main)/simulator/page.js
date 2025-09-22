@@ -7,7 +7,7 @@ import LoanSimulator from "@/components/LoanSimulator";
 import ExpenseForm from "@/components/ExpenseForm";
 import PieChartVisualization from "@/components/PieChartVisualization";
 import FriendlyReminder from "@/components/FriendlyReminder";
-import "@/styles/simulator.css";
+// CSS now loaded through layout.js in proper order
 
 export default function SimulatorPage() {
   const [activeTab, setActiveTab] = useState("tabungan");

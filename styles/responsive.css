@@ -1,4 +1,4 @@
-/* responsive.css - Pengaturan responsif untuk semua tampilan */
+/* responsive.css - Pengaturan responsif menggunakan centralized variables */
 
 /* Extra small devices (≤ 360px) */
 @media (max-width: 360px) {
@@ -23,12 +23,12 @@
   }
 
   .article-card {
-    padding: 1rem;
+    padding: var(--gap);
     font-size: 0.9rem;
   }
 
   .hero-content {
-    padding: 1rem;
+    padding: var(--gap);
     text-align: center;
   }
   
@@ -60,31 +60,31 @@
   .options-grid { 
     width: min(100%, 480px); /* Lebar maksimum pada mobile */
     margin-inline: auto;
-    gap: 1rem !important; 
+    gap: var(--gap) !important; 
     grid-template-columns: 1fr !important; /* Stack vertikal pada mobile */
   }
   
   /* Mode cards (welcome page) */
   .mode-card {
     padding: 1.15rem !important;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--gap-sm);
   }
   
   .welcome-head {
     width: 92%;
-    margin-bottom: 1rem;
+    margin-bottom: var(--gap);
   }
   
-  /* Hero Banner di welcome page */
+  /* Hero Banner di welcome page - menggunakan variables */
   .hero.hero--welcome {
     height: auto !important;
     min-height: 0 !important;
     aspect-ratio: var(--hero-ar, 16/9);
-    margin-bottom: 1rem; /* Margin bawah lebih besar di mobile */
-    border-radius: 12px; /* Rounded corners di mobile */
+    margin-bottom: var(--gap); 
+    border-radius: var(--radius); 
     overflow: hidden;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-    width: min(100%, 520px); /* Batasi lebar pada mobile */
+    box-shadow: var(--shadow);
+    width: min(100%, 520px); 
     margin-inline: auto;
   }
   
@@ -92,19 +92,19 @@
   .hero.hero--welcome .hero-img {
     object-fit: contain !important;
     object-position: center;
-    transition: transform 0.2s ease-out;
+    transition: transform var(--transition);
   }
   
   /* Hero Media Background */
   .hero.hero--welcome .hero-media { 
     background: var(--surface-color);
-    border-radius: inherit; /* Mengikuti border radius parent */
+    border-radius: inherit; 
   }
   
   /* Hero Overlay */
   .hero.hero--welcome .hero-overlay {
     background: linear-gradient(180deg, rgba(2,6,23,.35), rgba(2,6,23,.45) 40%, rgba(2,6,23,.55));
-    border-radius: inherit; /* Mengikuti border radius parent */
+    border-radius: inherit; 
   }
   
   /* Brand Banner responsif */
@@ -112,7 +112,7 @@
     position: relative;
     width: min(100%, 520px);
     margin-inline: auto;
-    margin-bottom: 1rem;
+    margin-bottom: var(--gap);
   }
   
   /* Brand Badge Responsive Mobile */
@@ -165,28 +165,20 @@
   /* Mode cards layout responsif */
   .mode-card {
     padding: 1.2rem 1.4rem !important; /* Padding lebih nyaman pada tablet */
-    transition: transform .18s ease-out, box-shadow .18s ease-out;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   }
   
   /* Brand banner pada tablet */
   .brand-banner {
     max-width: 860px;
     margin-inline: auto;
-    border-radius: 14px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
-  }
-  
-  /* Container width */
-  .container {
-    width: min(100%, 1100px);
-    padding-inline: clamp(1rem, 3vw, 1.5rem);
   }
 }
 
 /* Large devices (≥ 992px) */
 @media (min-width: 992px) {
-  /* placeholder untuk konsistensi */
-  
   /* Hero animation for desktop */
   @media (prefers-reduced-motion: no-preference) {
     .hero:hover .hero-img {
@@ -197,13 +189,6 @@
 
 /* Large desktop (≥ 1280px) */
 @media (min-width: 1280px) {
-  :root {
-    --container-max: 1200px;
-    --hero-h-fluid: 25vw;
-    --hero-h-max: 520px;
-  }
-  .container { max-width: var(--container-max); }
-  
   .hero h1 { font-size: 56px; }
   
   /* Brand banner container */
@@ -215,37 +200,31 @@
   
   /* Hero banner */
   .hero {
-    border-radius: 16px; /* Rounded corners untuk layar besar */
-    min-height: clamp(var(--hero-h-min, 220px), var(--hero-h-fluid, 25vw), var(--hero-h-max, 520px));
-    max-width: var(--container-max);
+    border-radius: var(--radius-lg); 
+    min-height: clamp(var(--hero-height-min), var(--hero-height-fluid), var(--hero-height-max));
+    max-width: var(--container-max-width);
     margin-inline: auto;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    box-shadow: var(--shadow);
   }
   
   /* Mode card responsive */
   .mode-card {
-    transition: transform .2s ease-out, box-shadow .2s ease-out;
+    transition: transform var(--transition), box-shadow var(--transition);
   }
   
   .mode-card:hover {
     transform: translateY(-6px); /* Efek hover lebih terasa pada layar besar */
-    box-shadow: var(--shadow-lg, 0 10px 25px -5px rgba(0, 0, 0, 0.1)); /* Shadow lebih terasa */
+    box-shadow: var(--shadow-lg); 
   }
 }
 
 /* 4K and ultra-wide screens (≥ 2560px) */
 @media (min-width: 2560px) {
-  :root {
-    --container-max: 2000px;
-    --hero-h-min: 380px;
-    --hero-h-fluid: 22vw;
-    --hero-h-max: 600px;
-  }
-  .brand-banner { max-width: var(--container-max); }
+  .brand-banner { max-width: var(--container-max-width); }
   .hero {
-    min-height: clamp(var(--hero-h-min), var(--hero-h-fluid), var(--hero-h-max));
-    max-width: var(--container-max);
-    border-radius: 20px; /* Border radius lebih besar pada layar besar */
+    min-height: clamp(var(--hero-height-min), var(--hero-height-fluid), var(--hero-height-max));
+    max-width: var(--container-max-width);
+    border-radius: var(--radius-xl); 
   }
   
   .welcome-title {
@@ -254,10 +233,6 @@
   
   .welcome-subtitle {
     font-size: clamp(1.125rem, 1rem + 0.3vw, 1.3rem); /* Font proporsional dengan layar */
-  }
-  
-  .container {
-    max-width: 2000px;
   }
 }
 
@@ -357,23 +332,23 @@
   height: 0; 
 }
 
-/* Container responsif untuk semua ukuran */
+/* Container responsif menggunakan centralized variables */
 .container {
-  width: min(var(--container-max, 1120px), 92%);
+  width: min(var(--container-max-width), 92%);
   margin-inline: auto;
-  padding-inline: var(--container-pad, clamp(1rem, 3vw, 2rem));
+  padding-inline: var(--container-padding);
 }
 
 /* Transisi yang lebih halus untuk semua elemen responsif */
 .hero, .hero-img, .mode-card, .container, .options-grid,
 .welcome-title, .welcome-subtitle, .brand-badge {
-  transition: all 0.3s ease-out;
+  transition: all var(--transition-slow);
 }
 
 /* Transisi yang lebih cepat untuk interaksi */
 @media (prefers-reduced-motion: no-preference) {
   .mode-card:hover, .mode-card:active,
   .hero:hover .hero-img {
-    transition-duration: 0.2s;
+    transition-duration: var(--transition);
   }
 }

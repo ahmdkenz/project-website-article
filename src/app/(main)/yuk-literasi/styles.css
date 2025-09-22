@@ -1,5 +1,106 @@
-.container {
-  max-width: 1200px;
+/* Yuk-literasi specific styling following articles-compact pattern */
+
+/* Main container styling - mirroring articles-compact pattern */
+.yuk-literasi-compact {
+  /* Ensure proper container behavior */
+  width: 100%;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 var(--container-padding);
+  box-sizing: border-box;
+}
+
+/* Tab system styling */
+.yuk-literasi-tabs {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Remove all excessive padding and ensure center alignment */
+.yuk-literasi-tabs .simulator-container,
+.yuk-literasi-tabs .simulator-section,
+.yuk-literasi-tabs .simulator-content {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Tutorial grid styling - following articles-compact pattern */
+.yuk-literasi-tabs .tutorial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--grid-gap);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Stories grid alignment */
+.yuk-literasi-tabs .stories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--grid-gap);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Quiz container alignment */
+.yuk-literasi-tabs .mini-quiz-container {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.yuk-literasi-tabs .quiz-item {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 2rem;
+}
+
+/* Leaderboard alignment */
+.yuk-literasi-tabs .leaderboard-container {
+  margin: 0 auto;
+  padding: var(--leaderboard-padding);
+  max-width: var(--leaderboard-max-width);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Section titles alignment */
+.yuk-literasi-tabs h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.yuk-literasi-tabs .muted {
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .yuk-literasi-compact {
+    padding: 0 var(--gap);
+  }
+  
+  .yuk-literasi-tabs .tutorial-grid,
+  .yuk-literasi-tabs .stories-grid {
+    grid-template-columns: 1fr;
+    gap: var(--gap);
+  }
+  
+  .yuk-literasi-tabs .leaderboard-container {
+    padding: 0 var(--gap-sm);
+  }
 }

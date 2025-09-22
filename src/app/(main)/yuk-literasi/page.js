@@ -37,10 +37,21 @@ export default async function YukLiterasiPage() {
         </div>
       </section>
 
-      {/* Tabs container mirroring Simulator */}
-      <div className="container" style={{ marginTop: '2rem', marginBottom: '3rem' }}>
+      {/* Hero content section - mirroring articles page structure */}
+      <section className="hero-content" aria-labelledby="yuk-literasi-title">
+        <h1 id="yuk-literasi-title" style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
+          <span style={{fontSize:'1.2em',marginRight:6}}>📚</span>
+          Yuk Literasi Keuangan
+        </h1>
+        <p className="muted" style={{textAlign:'center'}}>
+          Pelajari konsep keuangan melalui tutorial, cerita relatable, dan mini quiz yang interaktif.
+        </p>
+      </section>
+
+      {/* Main content container - using same pattern as articles */}
+      <section className="yuk-literasi-compact container" aria-labelledby="literasi-content">
         <YukLiterasiTabs stories={stories} quizzes={quizzes} />
-      </div>
+      </section>
     </>
   );
 }

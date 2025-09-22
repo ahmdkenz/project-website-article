@@ -1,16 +1,21 @@
 .tutorial-list-section {
-  margin: 3rem 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .section-title {
   font-size: 1.8rem;
   margin-bottom: 0.5rem;
   text-align: center;
+  color: var(--text-color);
 }
 
 .section-description {
   text-align: center;
-  color: #666;
+  color: var(--text-muted);
   margin-bottom: 2rem;
 }
 
@@ -18,6 +23,10 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
+  /* Ensure grid doesn't overflow container */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .tutorial-card-link {
@@ -26,19 +35,24 @@
 }
 
 .tutorial-card {
-  border: 1px solid #eaeaea;
-  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
   padding: 1.5rem;
-  transition: all 0.3s ease;
+  transition: all var(--transition-slow);
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: var(--surface-color);
+  /* Prevent card overflow */
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
 }
 
 .tutorial-card:hover {
-  border-color: #0070f3;
+  border-color: var(--primary-color);
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .tutorial-icon {
@@ -49,58 +63,63 @@
 .tutorial-title {
   margin: 0.5rem 0;
   font-size: 1.3rem;
+  color: var(--text-color);
 }
 
 .tutorial-description {
-  color: #666;
+  color: var(--text-muted);
   margin-bottom: 1.5rem;
   flex-grow: 1;
 }
 
 .tutorial-action {
   margin-top: auto;
-  color: #0070f3;
+  color: var(--primary-color);
   font-weight: 500;
 }
 
 .list-footer {
   display: flex;
   justify-content: center;
-  margin-top: 5rem;
-  gap: 1rem;
+  margin-top: 2rem;
+  gap: var(--gap);
+  width: 100%;
 }
 
 .btn {
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  padding: var(--btn-padding-sm);
+  border-radius: var(--btn-border-radius-sm);
   cursor: pointer;
   font-size: 0.9rem;
-  transition: background-color 0.3s ease;
+  transition: all var(--transition-slow);
+  border: 1px solid var(--border-color);
 }
 
 .btn-outline {
   background-color: transparent;
-  border: 1px solid #0070f3;
-  color: #0070f3;
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .btn-outline:hover {
-  background-color: #0070f3;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--primary-text-color);
 }
 
 .btn-ghost {
   background-color: transparent;
-  color: #666;
+  color: var(--text-muted);
+  border-color: transparent;
 }
 
 .btn-ghost:hover {
-  color: #fff;
+  color: var(--text-color);
+  background-color: var(--surface-color);
 }
 
 .list-hint {
-  margin-top: 0.5rem;
+  margin-top: var(--gap-sm);
   text-align: center;
   font-size: 0.85rem;
-  color: #fff;
+  color: var(--text-muted);
 }

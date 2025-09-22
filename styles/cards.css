@@ -1,47 +1,79 @@
+/* Card System - uses centralized variables from variables.css */
+
 .card-grid, .options-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: var(--grid-columns);
+  gap: var(--grid-gap);
 }
+
 .article-card, .option-card, .mode-card {
   background-color: var(--surface-color);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 1.5rem;
+  border-radius: var(--radius);
+  padding: var(--gap-lg);
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
+  transition: all var(--transition-slow);
+  /* Prevent overflow in grid containers */
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
+
 .article-card:hover, .option-card:hover, .mode-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-lg);
 }
+
+/* Dark mode hover effects */
 html.dark .article-card:hover,
 html.dark .option-card:hover,
-html.dark .mode-card:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
-.card-actions { margin-top: auto; padding-top: 1rem; }
+html.dark .mode-card:hover { 
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3); 
+}
+
+.card-actions { 
+  margin-top: auto; 
+  padding-top: var(--gap); 
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+  align-items: center;
+}
+
 .list-footer {
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: var(--gap);
 }
 
 .list-footer .btn {
   min-width: 180px;
 }
 
-/* Allow action buttons to stack when card column is narrow */
-.article-card, .option-card, .mode-card { container-type: inline-size; }
+/* Container queries for responsive card actions */
+.article-card, .option-card, .mode-card { 
+  container-type: inline-size; 
+}
+
 @container (max-width: 420px) {
-  .card-actions { display: grid; grid-template-columns: 1fr; gap: .75rem; }
-  .card-actions .btn { width: 100%; max-width: 100%; min-width: 0; }
+  .card-actions { 
+    display: grid; 
+    grid-template-columns: 1fr; 
+    gap: var(--gap-sm); 
+  }
+  .card-actions .btn { 
+    width: 100%; 
+    max-width: 100%; 
+    min-width: 0; 
+  }
 }
 
 .list-hint {
-  margin-top: 0.5rem;
+  margin-top: var(--gap-sm);
   text-align: center;
   font-size: 0.85rem;
-  color: var(--muted-color);
+  color: var(--text-muted);
 }
 

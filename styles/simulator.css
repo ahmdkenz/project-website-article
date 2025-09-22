@@ -1,48 +1,29 @@
 /* ============================
-   Theme + Chart CSS Variables
+   Simulator CSS - uses centralized variables from variables.css
    ============================
-   Tambahan ini kompatibel dengan PieChartVisualization.js yang membaca
-   CSS variables via getComputedStyle(document.documentElement).
-   Jangan hapus bagian ini — ini hanya mendefinisikan variabel tema.
+   Variables untuk Chart.js yang membaca CSS variables via getComputedStyle
 */
+
+/* Chart-specific vars (Chart.js akan membaca ini via JS) */
 :root{
+  /* Simulator-specific aliases for backward compatibility */
+  --text-default: var(--text-color);
+  --muted: var(--text-muted);
+  --surface: var(--surface-color);
+  --result-item-bg: var(--surface-color);
+  
   /* Primary gradient (dipakai oleh tombol/tab aktif) */
-  --primary: linear-gradient(135deg, #4CAF50, #43a047);
-
-  /* General theme */
-  --result-item-bg: #ffffff;      /* card bg in light mode */
-  --text-default: #111827;        /* slate-800 / dark text on light mode */
-  --muted: #666666;
-  --surface: #f5f5f5;
-
-  /* Chart specific vars (Chart.js akan membaca ini via JS) */
-  --chart-text: #111827;
-  --chart-bg: #ffffff;
-  --chart-border: rgba(0,0,0,0.08);
+  --primary-gradient: linear-gradient(135deg, #4CAF50, #43a047);
 }
 
 /* Dark mode overrides */
 html.dark {
-  --primary: linear-gradient(135deg, #8e24aa, #7b1fa2);
-  --result-item-bg: #333333;      /* darker card bg in dark mode */
-  --text-default: #f0f0f0;
-  --muted: #bbbbbb;
-  --surface: #3b3b3b;
-
-  /* Chart-specific overrides for dark theme */
-  --chart-text: #f0f0f0;
-  --chart-bg: #111827;
-  --chart-border: rgba(255,255,255,0.06);
+  --primary-gradient: linear-gradient(135deg, #8e24aa, #7b1fa2);
 }
 
 /* Optional explicit light class if you toggle html.light */
 html.light {
-  --primary: linear-gradient(135deg, #4CAF50, #43a047);
-  --result-item-bg: #ffffff;
-  --text-default: #111827;
-  --chart-text: #111827;
-  --chart-bg: #ffffff;
-  --chart-border: rgba(0,0,0,0.08);
+  --primary-gradient: linear-gradient(135deg, #4CAF50, #43a047);
 }
 
 /* ============================
@@ -51,19 +32,19 @@ html.light {
    ============================ */
 
 .simulator-container {
-  max-width: 1000px; /* Reduced max width */
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 1.5rem 1rem; /* Reduced padding */
-  border-radius: 8px; /* Slightly smaller border radius */
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  padding: var(--gap-lg) var(--gap);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
   color: var(--text-default);
 }
 
 .simulator-title {
   text-align: center;
-  margin-bottom: 1.5rem; /* Reduced margin */
-  font-size: 2rem; /* Slightly smaller font size */
-  font-weight: 600; /* Slightly lighter font weight */
+  margin-bottom: var(--gap-lg);
+  font-size: 2rem;
+  font-weight: 600;
   background: linear-gradient(90deg, #4CAF50, #2196F3);
   -webkit-background-clip: text;
   background-clip: text;
@@ -74,29 +55,29 @@ html.light {
 .simulator-tabs {
   display: flex;
   justify-content: center;
-  gap: 0.5rem; /* Reduced gap */
-  margin-bottom: 1.5rem; /* Reduced margin */
+  gap: var(--gap-sm);
+  margin-bottom: var(--gap-lg);
   flex-wrap: wrap;
 }
 
 .simulator-tab {
-  padding: 0.5rem 1rem; /* Reduced padding */
+  padding: var(--gap-sm) var(--gap);
   background-color: #f8f9fa;
   border: none;
-  border-radius: 8px; /* Smaller border radius */
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.9rem; /* Slightly smaller font size */
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  font-size: 0.9rem;
+  transition: all var(--transition-slow);
+  box-shadow: var(--shadow-sm);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--gap-sm);
   color: var(--text-default);
 }
 
 .simulator-tab.active {
-  background: var(--primary);
+  background: var(--primary-gradient);
   color: white;
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
@@ -112,18 +93,18 @@ html.light {
 }
 
 .simulator-content {
-  min-height: 300px; /* Reduced minimum height */
+  min-height: 300px;
 }
 
 .simulator-section {
   animation: fadeIn 0.5s ease;
   max-width: 800px;
   margin: 0 auto;
-  padding: 1rem; /* Reduced padding */
-  background-color: rgba(240, 240, 240, 0.9); /* Softer neutral background */
+  padding: var(--gap);
+  background-color: rgba(240, 240, 240, 0.9);
   backdrop-filter: blur(10px);
-  border-radius: 12px; /* Slightly smaller border radius */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
   color: var(--text-default);
 }
 
@@ -138,16 +119,16 @@ html.light {
   }
 }
 
-/* Simplified Form Styles */
+/* Simplified Form Styles menggunakan centralized variables */
 .expense-form {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem; /* Reduced gap */
-  margin-bottom: 2rem;
+  gap: var(--gap-sm);
+  margin-bottom: var(--gap-xl);
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: var(--gap);
 }
 
 .input-icon-wrapper {
@@ -165,13 +146,13 @@ html.light {
 
 .modern-input {
   width: 100%;
-  padding: 10px 10px 10px 40px; /* Reduced padding */
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  font-size: 14px; /* Slightly smaller font size */
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  background: white;
+  padding: 10px 10px 10px 40px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  transition: all var(--transition-slow);
+  box-shadow: var(--shadow-sm);
+  background: var(--surface-color);
   color: var(--text-default);
 }
 
@@ -185,16 +166,16 @@ html.light {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 10px 20px; /* Reduced padding */
-  background: linear-gradient(135deg, #4CAF50, #43a047);
+  gap: var(--gap-sm);
+  padding: 10px 20px;
+  background: var(--primary-gradient);
   color: white;
   border: none;
-  border-radius: 10px;
-  font-size: 14px; /* Slightly smaller font size */
+  border-radius: var(--radius-sm);
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-slow);
   box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
 }
 
@@ -221,31 +202,31 @@ html.light {
   max-width: 500px;
 }
 
-/* Simplified Calculation Results Styles */
+/* Simplified Calculation Results menggunakan centralized variables */
 .calculation-results {
-  margin: 1.5rem 0;
-  padding: 0.75rem; /* Reduced padding */
-  background-color: var(--surface); /* Subtle light gray */
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin: var(--gap-lg) 0;
+  padding: var(--gap-sm);
+  background-color: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
   color: var(--text-default);
 }
 
 .results-container {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  gap: var(--gap-sm);
+  margin-top: var(--gap);
 }
 
 .result-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.75rem; /* Reduced padding */
-  background-color: var(--result-item-bg); /* Use CSS variable for theme */
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: var(--gap-sm) var(--gap-sm);
+  background-color: var(--result-item-bg);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
 }
 
 .result-label {
@@ -257,37 +238,24 @@ html.light {
   font-weight: 500;
 }
 
-/* Dark mode styles for calculation results (kept for compatibility) */
-html.dark .calculation-results {
-  background-color: #444; /* Subtle dark gray */
-}
-
-html.dark .result-item {
-  background-color: var(--result-item-bg); /* stays driven by var */
-}
-
-html.dark .result-label {
-  color: var(--text-default);
-}
-
-/* Reminder Styles */
+/* Reminder Styles menggunakan centralized variables */
 .friendly-reminder {
-  margin-top: 2rem;
-  padding: 1rem; /* Reduced padding */
+  margin-top: var(--gap-xl);
+  padding: var(--gap);
   background-color: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
 }
 
 .reminder-card {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 0.75rem; /* Reduced padding */
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  margin-bottom: 1.5rem;
+  gap: var(--gap);
+  padding: var(--gap-sm);
+  background-color: var(--surface-color);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--gap-lg);
 }
 
 .reminder-icon {
@@ -297,27 +265,27 @@ html.dark .result-label {
 .reminder-tips {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--gap-sm);
 }
 
 .tip-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem; /* Reduced padding */
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  gap: var(--gap-sm);
+  padding: var(--gap-sm);
+  background-color: var(--surface-color);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
 }
 
-/* Dark Mode Styles */
+/* Dark Mode Styles menggunakan centralized variables */
 html.dark .simulator-tab {
   background-color: #444;
   color: var(--text-default);
 }
 
 html.dark .simulator-tab.active {
-  background: linear-gradient(135deg, #8e24aa, #7b1fa2);
+  background: var(--primary-gradient);
 }
 
 html.dark .simulator-tab:hover {
@@ -329,7 +297,7 @@ html.dark .simulator-tab.active:hover {
 }
 
 html.dark .simulator-section {
-  background-color: rgba(50, 50, 50, 0.8); /* Softer dark background */
+  background-color: rgba(50, 50, 50, 0.8);
 }
 
 html.dark .modern-input {
@@ -348,7 +316,7 @@ html.dark .modern-input:focus {
 }
 
 html.dark .modern-button {
-  background: linear-gradient(135deg, #8e24aa, #7b1fa2);
+  background: var(--primary-gradient);
   box-shadow: 0 4px 8px rgba(142, 36, 170, 0.3);
 }
 
@@ -364,6 +332,18 @@ html.dark .friendly-reminder {
 html.dark .reminder-card,
 html.dark .tip-item {
   background-color: #444;
+  color: var(--text-default);
+}
+
+html.dark .calculation-results {
+  background-color: #444;
+}
+
+html.dark .result-item {
+  background-color: var(--result-item-bg);
+}
+
+html.dark .result-label {
   color: var(--text-default);
 }
 

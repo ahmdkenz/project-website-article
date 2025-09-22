@@ -1,140 +1,133 @@
-/* Leaderboard Styles */
+/* Leaderboard Styles - uses centralized variables from variables.css */
 
 /* Container for centering the leaderboard */
 .leaderboard-container {
-  max-width: 800px;
-  margin: 0 auto; /* Center horizontally */
-  padding: 0 16px; /* Add padding for smaller screens */
-  color: var(--text-color); /* Use theme text color */
+  width: 100%;
+  max-width: var(--leaderboard-max-width);
+  margin: 0 auto;
+  padding: var(--leaderboard-padding);
+  box-sizing: border-box;
+  color: var(--text-color);
 }
 
+/* Header dan row pakai grid dengan variables */
 .leaderboard-header,
 .leaderboard-row {
   display: grid;
-  grid-template-columns: 60px minmax(100px, 2fr) minmax(120px, 1fr) 80px; /* No. | Name | Badge | Score */
+  grid-template-columns: var(--leaderboard-grid-columns);
   align-items: center;
-  gap: 16px; /* Increased gap for better spacing */
+  gap: var(--leaderboard-gap);
 }
 
+/* Header */
 .leaderboard-header {
   font-weight: 600;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border-color); /* Use theme border color */
-  color: var(--muted-color); /* Use theme muted color */
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-muted);
 }
 
+/* Entries wrapper */
 .leaderboard-entries {
   margin-top: 8px;
 }
 
+/* Row */
 .leaderboard-row {
-  padding: 6px 0;
-  color: var(--text-color); /* Use theme text color */
+  padding: 8px 0;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
-/* Let grid children shrink within columns */
+/* Biarkan grid children bisa shrink */
 .leaderboard-row,
 .leaderboard-row > * {
   min-width: 0;
   max-width: 100%;
 }
 
-.col-rank {
+/* Kolom rank */
+.leaderboard-container .col-rank {
   text-align: right;
   padding-right: 8px;
-  color: var(--muted-color); /* Use theme muted color */
-  font-size: clamp(14px, 2.5vw, 16px); /* Responsive font size */
+  color: var(--text-muted);
+  font-size: clamp(14px, 2.5vw, 16px);
 }
 
-.col-name {
-  min-width: 0; /* allow text to truncate */
+/* Kolom nama */
+.leaderboard-container .col-name {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding-right: 8px; /* Added padding to prevent text running into badge column */
-  font-size: clamp(14px, 2.5vw, 16px); /* Responsive font size that scales with viewport width */
-  color: var(--text-color); /* Use theme text color */
+  padding-right: 8px;
+  font-size: clamp(14px, 2.5vw, 16px);
+  color: var(--text-color);
+  text-align: left;
 }
 
-.col-badge {
+/* Kolom badge */
+.leaderboard-container .col-badge {
   text-align: center;
-  min-width: 0; /* Allow content to shrink if needed */
-  overflow: hidden; /* Prevent overflow */
-  font-weight: 500; /* Make badge text slightly bolder */
-  color: var(--text-color); /* Use theme text color */
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 500;
+  color: var(--text-color);
 }
 
-.badge-pill {
+/* Badge pill */
+.leaderboard-container .badge-pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--text-color); /* Use theme text color */
-  font-size: clamp(11px, 2vw, 12px); /* Responsive font size */
+  color: var(--text-color);
+  font-size: clamp(11px, 2vw, 12px);
   white-space: nowrap;
-  max-width: 100%; /* Ensure it doesn't exceed its container */
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.badge-pill .emoji {
+.leaderboard-container .badge-pill .emoji {
   display: inline-block;
-  font-size: 1.2em; /* Make emoji slightly larger than text */
-  margin-right: 2px; /* Small spacing between emoji and text */
+  font-size: 1.2em;
+  margin-right: 2px;
 }
 
-.col-score {
+/* Kolom skor */
+.leaderboard-container .col-score {
   text-align: right;
   font-variant-numeric: tabular-nums;
-  font-size: clamp(14px, 2.5vw, 16px); /* Responsive font size */
-  color: var(--text-color); /* Use theme text color */
+  font-size: clamp(14px, 2.5vw, 16px);
+  color: var(--text-color);
 }
 
-/* Responsive adjustments for mobile */
+/* Leaderboard-specific button styling to prevent conflicts */
+.leaderboard-container .btn,
+.leaderboard-container .btn-sm {
+  /* Use existing button styles but ensure they work in leaderboard context */
+  font-size: 0.875rem;
+  padding: var(--btn-padding-sm);
+  border-radius: var(--btn-border-radius-sm);
+}
+
+/* Responsive adjustments using CSS variables */
 @media (max-width: 640px) {
-  .leaderboard-container {
-    padding: 0 12px; /* Slightly reduced padding on smaller screens */
-  }
-  
-  .leaderboard-header,
-  .leaderboard-row {
-    grid-template-columns: 48px minmax(80px, 1.5fr) minmax(80px, 1fr) 64px; /* No. | Name | Badge | Score */
-    gap: 10px; /* Adjusted gap for mobile */
-    text-align: justify; /* Justify text for mobile */
+  .leaderboard-container .col-name {
+    padding-right: 6px;
   }
 
-  .col-name {
-    padding-right: 6px; /* Add padding to prevent overlap */
-    text-align: justify; /* Justify text for names */
-  }
-
-  .col-score {
-    font-size: 13px; /* Slightly smaller text for scores */
-    text-align: justify; /* Justify text for scores */
-  }
-  
-  .col-badge {
-    padding-left: 4px; /* Add some padding on the left */
-    text-align: justify; /* Justify text for badges */
+  .leaderboard-container .col-score {
+    font-size: 13px;
   }
 }
 
-/* Extra small devices */
 @media (max-width: 380px) {
-  .leaderboard-container {
-    padding: 0 8px; /* Minimal padding on very small screens */
-  }
-  
-  .leaderboard-header,
-  .leaderboard-row {
-    grid-template-columns: 40px minmax(60px, 1.2fr) minmax(70px, 0.8fr) 50px; /* No. | Name | Badge | Score */
-    gap: 8px; /* Minimal gap for very small screens */
-  }
-
-  .col-rank {
+  .leaderboard-container .col-rank {
     padding-right: 4px;
   }
-  
-  .badge-pill {
+
+  .leaderboard-container .badge-pill {
     padding: 2px 6px;
   }
 }
