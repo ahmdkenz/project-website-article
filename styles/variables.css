@@ -120,23 +120,39 @@ html.dark {
 /* ===== Leaderboard-specific Variables ===== */
 :root {
   --leaderboard-max-width: 900px;
-  --leaderboard-grid-columns: 60px minmax(100px, 2fr) minmax(120px, 1fr) 80px;
-  --leaderboard-gap: 16px;
+  --leaderboard-grid-columns: 50px minmax(120px, 2fr) minmax(80px, 1fr) minmax(100px, 1fr) 70px;
+  --leaderboard-gap: 12px;
   --leaderboard-padding: 0 16px;
 }
 
 @media (max-width: 640px) {
   :root {
-    --leaderboard-grid-columns: 48px minmax(80px, 1.5fr) minmax(80px, 1fr) 64px;
-    --leaderboard-gap: 10px;
+    --leaderboard-grid-columns: 35px minmax(100px, 2fr) minmax(55px, 0.7fr) minmax(65px, 0.9fr) 55px;
+    --leaderboard-gap: 6px;
     --leaderboard-padding: 0 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --leaderboard-grid-columns: 30px minmax(90px, 2.2fr) minmax(45px, 0.6fr) minmax(55px, 0.8fr) 45px;
+    --leaderboard-gap: 4px;
+    --leaderboard-padding: 0 8px;
   }
 }
 
 @media (max-width: 380px) {
   :root {
-    --leaderboard-grid-columns: 40px minmax(60px, 1.2fr) minmax(70px, 0.8fr) 50px;
-    --leaderboard-gap: 8px;
-    --leaderboard-padding: 0 8px;
+    --leaderboard-grid-columns: 25px minmax(80px, 2.5fr) minmax(40px, 0.5fr) minmax(50px, 0.7fr) 40px;
+    --leaderboard-gap: 3px;
+    --leaderboard-padding: 0 6px;
+  }
+}
+
+@media (max-width: 320px) {
+  :root {
+    --leaderboard-grid-columns: 20px minmax(70px, 3fr) minmax(35px, 0.4fr) minmax(45px, 0.6fr) 35px;
+    --leaderboard-gap: 2px;
+    --leaderboard-padding: 0 4px;
   }
 }

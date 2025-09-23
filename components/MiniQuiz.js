@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 
 // NOTE: We won't add new folders. CSS is imported globally from styles in app/layout. This local import is a no-op placeholder.
 
-export default function MiniQuiz({ title = 'Mini Quiz', questions = [], pointsPerCorrect = 10, onFinish }) {
+export default function MiniQuiz({ title = 'Mini Quiz', questions = [], pointsPerCorrect = 10, onFinish, onReset, enableLevelSelection = false }) {
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
   const [answers, setAnswers] = useState([]); // {choiceIndex, correct}
@@ -61,10 +61,16 @@ export default function MiniQuiz({ title = 'Mini Quiz', questions = [], pointsPe
   };
 
   const reset = () => {
-    setCurrent(0);
-    setSelected(null);
-    setAnswers([]);
-    setFinished(false);
+    if (enableLevelSelection && onReset) {
+      // If level selection is enabled, call onReset to go back to level selection
+      onReset();
+    } else {
+      // Normal reset behavior
+      setCurrent(0);
+      setSelected(null);
+      setAnswers([]);
+      setFinished(false);
+    }
   };
 
   return (
@@ -108,7 +114,9 @@ export default function MiniQuiz({ title = 'Mini Quiz', questions = [], pointsPe
             <span className="mq-badge" aria-label={`Badge ${badge}`}>🏅 {badge}</span>
           </div>
           <div style={{ marginTop: '1rem' }}>
-            <button className="mq-btn" onClick={reset}>Ulangi</button>
+            <button className="mq-btn" onClick={reset}>
+              {enableLevelSelection ? "Pilih Ulang Lagi" : "Ulangi"}
+            </button>
           </div>
         </div>
       )}

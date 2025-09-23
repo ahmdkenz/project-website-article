@@ -44,6 +44,7 @@ export async function GET(req) {
           name: String(data.name || "Anon"),
           score: Number(data.score || 0),
           badge: data.badge || "",
+          level: data.level || "Unknown", // Include level in response
           createdAt: data.createdAt?.toMillis ? data.createdAt.toMillis() : null,
         };
       });
@@ -59,6 +60,7 @@ export async function GET(req) {
             name: String(data.name || "Anon"),
             score: Number(data.score || 0),
             badge: data.badge || "",
+            level: data.level || "Unknown", // Include level in response
             createdAt: data.createdAt?.toMillis ? data.createdAt.toMillis() : null,
           };
         });
@@ -74,7 +76,7 @@ export async function GET(req) {
   }
 }
 
-// POST /api/leaderboard  body: { quizId, name, score, maxScore }
+// POST /api/leaderboard  body: { quizId, name, score, maxScore, level }
 export async function POST(req) {
   try {
     const body = await req.json();
@@ -82,6 +84,7 @@ export async function POST(req) {
     const nameRaw = String(body?.name || "").trim();
     const score = Number(body?.score || 0);
     const maxScore = Number(body?.maxScore || 100); // Default maxScore to 100
+    const level = String(body?.level || "").trim(); // Get level from request
 
     if (!quizId) return NextResponse.json({ error: "quizId is required" }, { status: 400 });
     if (!Number.isFinite(score) || score < 0) return NextResponse.json({ error: "invalid score" }, { status: 400 });
@@ -94,6 +97,7 @@ export async function POST(req) {
       name: name.slice(0, 50),
       score,
       badge, // Save badge
+      level: level || "Unknown", // Save level
       createdAt: serverTimestamp(),
     });
 

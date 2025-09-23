@@ -8,6 +8,15 @@
   padding: var(--leaderboard-padding);
   box-sizing: border-box;
   color: var(--text-color);
+  overflow-x: auto; /* Allow horizontal scrolling on very small screens */
+}
+
+/* Ensure table doesn't break layout on tiny screens */
+@media (max-width: 320px) {
+  .leaderboard-container {
+    padding: 0 4px;
+    font-size: 12px;
+  }
 }
 
 /* Header dan row pakai grid dengan variables */
@@ -25,6 +34,29 @@
   padding: 10px 0;
   border-bottom: 1px solid var(--border-color);
   color: var(--text-muted);
+  font-size: clamp(12px, 2.5vw, 14px);
+}
+
+/* Make header text smaller on mobile */
+@media (max-width: 640px) {
+  .leaderboard-header {
+    font-size: clamp(10px, 3vw, 12px);
+    padding: 8px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .leaderboard-header {
+    font-size: clamp(9px, 3.5vw, 11px);
+    padding: 6px 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .leaderboard-header {
+    font-size: clamp(8px, 4vw, 10px);
+    padding: 4px 0;
+  }
 }
 
 /* Entries wrapper */
@@ -52,6 +84,7 @@
   padding-right: 8px;
   color: var(--text-muted);
   font-size: clamp(14px, 2.5vw, 16px);
+  font-variant-numeric: tabular-nums;
 }
 
 /* Kolom nama */
@@ -64,6 +97,67 @@
   font-size: clamp(14px, 2.5vw, 16px);
   color: var(--text-color);
   text-align: left;
+  word-break: break-all; /* Fallback for very long names */
+  cursor: help; /* Indicate that hover shows full name */
+  transition: var(--transition-fast);
+}
+
+.leaderboard-container .col-name:hover {
+  color: var(--primary-color);
+}
+
+/* Improved name handling for mobile */
+@media (max-width: 640px) {
+  .leaderboard-container .col-name {
+    font-size: clamp(12px, 3vw, 14px);
+    padding-right: 4px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .leaderboard-container .col-name {
+    font-size: clamp(11px, 3.5vw, 13px);
+    padding-right: 2px;
+  }
+}
+
+@media (max-width: 380px) {
+  .leaderboard-container .col-name {
+    font-size: clamp(10px, 4vw, 12px);
+    padding-right: 1px;
+  }
+}
+
+/* Kolom level */
+.leaderboard-container .col-level {
+  text-align: center;
+  font-size: clamp(11px, 2vw, 13px);
+  font-weight: 500;
+  color: var(--text-muted);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Mobile level column adjustments */
+@media (max-width: 640px) {
+  .leaderboard-container .col-level {
+    font-size: clamp(9px, 2.5vw, 11px);
+  }
+}
+
+@media (max-width: 480px) {
+  .leaderboard-container .col-level {
+    font-size: clamp(8px, 3vw, 10px);
+  }
+}
+
+@media (max-width: 380px) {
+  .leaderboard-container .col-level {
+    font-size: clamp(7px, 3.5vw, 9px);
+  }
 }
 
 /* Kolom badge */
@@ -92,6 +186,43 @@
   display: inline-block;
   font-size: 1.2em;
   margin-right: 2px;
+  flex-shrink: 0; /* Prevent emoji from shrinking */
+}
+
+/* Mobile badge adjustments */
+@media (max-width: 640px) {
+  .leaderboard-container .badge-pill {
+    font-size: clamp(9px, 2.5vw, 11px);
+    gap: 3px;
+  }
+  
+  .leaderboard-container .badge-pill .emoji {
+    font-size: 1.1em;
+    margin-right: 1px;
+  }
+}
+
+@media (max-width: 480px) {
+  .leaderboard-container .badge-pill {
+    font-size: clamp(8px, 3vw, 10px);
+    gap: 2px;
+  }
+  
+  .leaderboard-container .badge-pill .emoji {
+    font-size: 1em;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .leaderboard-container .badge-pill {
+    font-size: clamp(7px, 3.5vw, 9px);
+    gap: 1px;
+  }
+  
+  .leaderboard-container .badge-pill .emoji {
+    font-size: 0.9em;
+  }
 }
 
 /* Kolom skor */
@@ -100,6 +231,7 @@
   font-variant-numeric: tabular-nums;
   font-size: clamp(14px, 2.5vw, 16px);
   color: var(--text-color);
+  font-weight: 600;
 }
 
 /* Leaderboard-specific button styling to prevent conflicts */
@@ -117,14 +249,35 @@
     padding-right: 6px;
   }
 
+  .leaderboard-container .col-rank {
+    font-size: clamp(12px, 3vw, 14px);
+    padding-right: 4px;
+  }
+
   .leaderboard-container .col-score {
-    font-size: 13px;
+    font-size: clamp(12px, 3vw, 14px);
+  }
+}
+
+@media (max-width: 480px) {
+  .leaderboard-container .col-rank {
+    font-size: clamp(11px, 3.5vw, 13px);
+    padding-right: 2px;
+  }
+  
+  .leaderboard-container .col-score {
+    font-size: clamp(11px, 3.5vw, 13px);
   }
 }
 
 @media (max-width: 380px) {
   .leaderboard-container .col-rank {
-    padding-right: 4px;
+    font-size: clamp(10px, 4vw, 12px);
+    padding-right: 1px;
+  }
+
+  .leaderboard-container .col-score {
+    font-size: clamp(10px, 4vw, 12px);
   }
 
   .leaderboard-container .badge-pill {

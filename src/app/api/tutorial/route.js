@@ -30,7 +30,10 @@ export async function GET(request) {
     const filePathMd = path.join(process.cwd(), 'content', 'yuk-literasi', `${cleanSlug}.md`);
     const filePathMdx = path.join(process.cwd(), 'content', 'yuk-literasi', `${cleanSlug}.mdx`);
     
-    console.log(`Looking for files:`, { filePathMd, filePathMdx }); // Log file paths
+    // Juga cek di folder quizzes
+    const quizFilePathMdx = path.join(process.cwd(), 'content', 'quizzes', `${cleanSlug}.mdx`);
+    
+    console.log(`Looking for files:`, { filePathMd, filePathMdx, quizFilePathMdx }); // Log file paths
 
     // Periksa apakah file ada (md atau mdx)
     let filePath = null;
@@ -40,6 +43,9 @@ export async function GET(request) {
     } else if (fs.existsSync(filePathMdx)) {
       filePath = filePathMdx;
       console.log(`Found MDX file: ${filePathMdx}`);
+    } else if (fs.existsSync(quizFilePathMdx)) {
+      filePath = quizFilePathMdx;
+      console.log(`Found Quiz MDX file: ${quizFilePathMdx}`);
     } else {
       console.error(`File not found for slug: ${cleanSlug}`); // Log file not found
       return NextResponse.json({ error: 'Tutorial tidak ditemukan' }, { status: 404 });

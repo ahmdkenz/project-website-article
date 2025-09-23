@@ -8,34 +8,140 @@ function slugify(str) {
   return String(str || "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "quiz";
 }
 
-export default function QuizWithLeaderboard({ quiz, defaultName = "" }) {
-  const quizId = useMemo(() => (quiz?.id ? String(quiz.id) : slugify(quiz?.title || "quiz")), [quiz?.id, quiz?.title]);
+// Define quiz data for each level
+const QUIZ_LEVELS = {
+  'Newbie': {
+    id: 'quiz-makro-dasar',
+    title: 'Mini Quiz Makro Dasar',
+    description: 'Kuis singkat untuk pemahaman dasar ekonomi makro.',
+    pointsPerCorrect: 10
+  },
+  'Amateur': {
+    id: 'quiz-amatir-ekonomi',
+    title: 'Mini Quiz Ekonomi Amatir',
+    description: 'Kuis dasar untuk pemahaman ekonomi tingkat amatir.',
+    pointsPerCorrect: 10
+  },
+  'Expert': {
+    id: 'quiz-expert-ekonomi',
+    title: 'Mini Quiz Ekonomi Expert',
+    description: 'Kuis lanjutan untuk pemahaman ekonomi tingkat expert.',
+    pointsPerCorrect: 15
+  },
+  'Pro': {
+    id: 'quiz-pro-ekonomi',
+    title: 'Mini Quiz Ekonomi Pro',
+    description: 'Kuis tingkat profesional untuk pemahaman ekonomi tingkat pro.',
+    pointsPerCorrect: 20
+  }
+};
+
+export default function QuizWithLeaderboard({ quiz, defaultName = "", enableLevelSelection = false }) {
+  const quizId = useMemo(() => {
+    if (enableLevelSelection) return "multi-level-quiz"; // Semua level menggunakan quizId yang sama
+    return quiz?.id ? String(quiz.id) : slugify(quiz?.title || "quiz");
+  }, [quiz?.id, quiz?.title, enableLevelSelection]);
   const [name, setName] = useState(() => {
     try { return localStorage.getItem("quiz_name") || defaultName; } catch { return defaultName; }
   });
+  const [selectedLevel, setSelectedLevel] = useState(null);
+  const [selectedQuiz, setSelectedQuiz] = useState(null);
+  const [showLevelSelection, setShowLevelSelection] = useState(false);
   const [started, setStarted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [refreshToken, setRefreshToken] = useState(0);
+  const [loadingQuiz, setLoadingQuiz] = useState(false);
 
   const handleStart = () => {
     if (!name.trim()) return;
     try { localStorage.setItem("quiz_name", name.trim()); } catch {}
+    
+    if (enableLevelSelection) {
+      // Show level selection after name is entered
+      setShowLevelSelection(true);
+      return;
+    }
+    
     setStarted(true);
+  };
+
+  const handleLevelSelect = async (level) => {
+    if (!name.trim()) return;
+    
+    setSelectedLevel(level);
+    setLoadingQuiz(true);
+    
+    try {
+      // Load quiz data from API
+      const response = await fetch(`/api/tutorial?slug=${QUIZ_LEVELS[level].id}`);
+      if (!response.ok) {
+        throw new Error(`Failed to load quiz: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      setSelectedQuiz({
+        id: QUIZ_LEVELS[level].id,
+        title: data.metadata.title || QUIZ_LEVELS[level].title,
+        questions: data.metadata.questions || [],
+        pointsPerCorrect: data.metadata.pointsPerCorrect || QUIZ_LEVELS[level].pointsPerCorrect
+      });
+      
+      setStarted(true);
+    } catch (error) {
+      console.error('Error loading quiz:', error);
+      // Fallback to default quiz structure if API fails
+      setSelectedQuiz({
+        id: QUIZ_LEVELS[level].id,
+        title: QUIZ_LEVELS[level].title,
+        questions: [],
+        pointsPerCorrect: QUIZ_LEVELS[level].pointsPerCorrect
+      });
+      setStarted(true);
+    } finally {
+      setLoadingQuiz(false);
+    }
+  };
+
+  const handleReset = () => {
+    // Reset to level selection
+    setStarted(false);
+    setShowLevelSelection(true);
+    setSelectedLevel(null);
+    setSelectedQuiz(null);
   };
 
   const handleFinish = useCallback(async ({ score, answers }) => {
     // Submit to API
     try {
       setSubmitting(true);
+      // Use selected quiz or fallback to original quiz
+      const currentQuiz = selectedQuiz || quiz;
+      const currentQuizId = enableLevelSelection ? quizId : (selectedQuiz ? selectedQuiz.id : quizId);
+      
       // Hitung maxScore sama seperti MiniQuiz
-      const maxScore = (quiz?.questions || []).reduce(
-        (acc, q) => acc + (q.points ?? quiz?.pointsPerCorrect ?? 10),
+      const maxScore = (currentQuiz?.questions || []).reduce(
+        (acc, q) => acc + (q.points ?? currentQuiz?.pointsPerCorrect ?? 10),
         0
       );
+      
+      // Prepare payload with level information
+      const payload = {
+        quizId: currentQuizId,
+        name: name.trim() || "Anon",
+        score,
+        maxScore
+      };
+      
+      // Add level if using level selection
+      if (enableLevelSelection && selectedLevel) {
+        payload.level = selectedLevel;
+      }
+      
       await fetch("/api/leaderboard", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quizId, name: name.trim() || "Anon", score, maxScore }),
+        body: JSON.stringify(payload),
       });
     } catch (e) {
       console.error("Submit score failed", e);
@@ -43,11 +149,11 @@ export default function QuizWithLeaderboard({ quiz, defaultName = "" }) {
       setSubmitting(false);
       setRefreshToken((x) => x + 1);
     }
-  }, [quizId, name, quiz?.questions, quiz?.pointsPerCorrect]);
+  }, [quizId, name, quiz, selectedQuiz, enableLevelSelection, selectedLevel]);
 
   return (
     <div>
-      {!started && (
+      {!started && !showLevelSelection && (
         <div className="mini-quiz" style={{
           display: "flex",
           flexDirection: "column",
@@ -77,7 +183,7 @@ export default function QuizWithLeaderboard({ quiz, defaultName = "" }) {
             style={{ 
               width: "100%",
               display: "block",
-              textAlign: "center" // Default teks berada di tengah
+              textAlign: "center"
             }}
           />
           <button 
@@ -91,7 +197,76 @@ export default function QuizWithLeaderboard({ quiz, defaultName = "" }) {
               marginTop: ".25rem"
             }}
           >
-            Mulai Kuis
+            {enableLevelSelection ? "Mulai Kuis" : "Mulai Kuis"}
+          </button>
+        </div>
+      )}
+
+      {showLevelSelection && !started && (
+        <div className="mini-quiz" style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: ".75rem",
+          alignItems: "center",
+          textAlign: "center",
+          margin: "0 0 1rem 0",
+          padding: "1.25rem",
+          border: "1px dashed var(--border-color)",
+          borderRadius: ".75rem",
+          maxWidth: "420px",
+          marginLeft: "auto",
+          marginRight: "auto"
+        }}>
+          <div style={{ 
+            fontWeight: 600, 
+            marginBottom: ".5rem",
+            width: "100%"
+          }}>
+            Halo, {name}! 👋
+          </div>
+          <div style={{ 
+            fontWeight: 600, 
+            marginBottom: ".5rem",
+            width: "100%"
+          }}>Pilih Level Kuis:</div>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: ".5rem",
+            width: "100%"
+          }}>
+            {Object.keys(QUIZ_LEVELS).map((level) => (
+              <button
+                key={level}
+                className="mq-btn"
+                onClick={() => handleLevelSelect(level)}
+                disabled={loadingQuiz}
+                style={{ 
+                  padding: ".5rem",
+                  fontSize: ".875rem",
+                  borderRadius: ".375rem"
+                }}
+              >
+                {loadingQuiz ? "..." : level}
+              </button>
+            ))}
+          </div>
+          <div style={{ fontSize: ".75rem", color: "var(--text-muted)", marginTop: ".5rem" }}>
+            Pilih level yang sesuai dengan kemampuan Anda
+          </div>
+          <button 
+            onClick={() => setShowLevelSelection(false)}
+            style={{ 
+              background: "none",
+              border: "none",
+              color: "var(--text-muted)",
+              fontSize: ".75rem",
+              cursor: "pointer",
+              textDecoration: "underline",
+              marginTop: ".25rem"
+            }}
+          >
+            ← Kembali
           </button>
         </div>
       )}
@@ -99,10 +274,12 @@ export default function QuizWithLeaderboard({ quiz, defaultName = "" }) {
       {/* Render MiniQuiz tanpa mengubah logika/tampilan */}
       {started && (
         <MiniQuiz
-          title={quiz?.title}
-          questions={quiz?.questions || []}
-          pointsPerCorrect={quiz?.pointsPerCorrect}
+          title={(selectedQuiz || quiz)?.title}
+          questions={(selectedQuiz || quiz)?.questions || []}
+          pointsPerCorrect={(selectedQuiz || quiz)?.pointsPerCorrect}
           onFinish={handleFinish}
+          onReset={enableLevelSelection ? handleReset : undefined}
+          enableLevelSelection={enableLevelSelection}
         />
       )}
 
@@ -111,7 +288,10 @@ export default function QuizWithLeaderboard({ quiz, defaultName = "" }) {
       </div>
 
       {/* Leaderboard di bawah konten mini quizzes */}
-  <Leaderboard quizId={quizId} refreshToken={refreshToken} />
+      <Leaderboard 
+        quizId={quizId} 
+        refreshToken={refreshToken} 
+      />
     </div>
   );
 }

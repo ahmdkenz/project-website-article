@@ -104,10 +104,11 @@ export default function Leaderboard({ quizId, pageSize = 10, autoRotateMs = 5000
 
       {!loading && !error && (
         <div className="leaderboard">
-          {/* Header Section: 4 columns (No., Nama, Badge, Skor) */}
+          {/* Header Section: 5 columns (No., Nama, Level, Badge, Skor) */}
           <div className="leaderboard-header">
             <span className="col-rank">No.</span>
             <span className="col-name">Nama</span>
+            <span className="col-level">Level</span>
             <span className="col-badge">Badge</span>
             <span className="col-score">Skor</span>
           </div>
@@ -119,7 +120,12 @@ export default function Leaderboard({ quizId, pageSize = 10, autoRotateMs = 5000
               currentItems.map((it, idx) => (
                 <div key={it.id || idx} className="leaderboard-row">
                   <span className="col-rank">{page * pageSize + idx + 1}.</span>
-                  <span className="col-name">{it.name || "Anon"}</span>
+                  <span className="col-name" title={it.name || "Anon"}>
+                    {it.name || "Anon"}
+                  </span>
+                  <span className="col-level" title={it.level || "Unknown"}>
+                    {it.level || "Unknown"}
+                  </span>
                   <span className="col-badge">{renderBadge(it.badge)}</span>
                   <span className="col-score">{it.score}</span>
                 </div>

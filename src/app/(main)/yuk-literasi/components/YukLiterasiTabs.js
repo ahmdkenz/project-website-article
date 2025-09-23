@@ -5,6 +5,7 @@ import TutorialList from './TutorialList';
 import StoriesShowMoreClient from '@/components/StoriesShowMoreClient';
 // import MiniQuiz from '@/components/MiniQuiz';
 import QuizWithLeaderboard from '@/components/QuizWithLeaderboard';
+import QuizLevelSelector from '@/components/QuizLevelSelector';
 // CSS now loaded through layout.js in proper order
 
 export default function YukLiterasiTabs({ stories = [], quizzes = [] }) {
@@ -106,19 +107,12 @@ export default function YukLiterasiTabs({ stories = [], quizzes = [] }) {
                 width: '100%'
               }}
             >
-              {Array.isArray(quizzes) && quizzes.length > 0 ? (
-                <div className="mini-quiz-container">
-                  {quizzes.map((quiz, idx) => (
-                    <div key={idx} className="quiz-item" style={{ marginBottom: '2rem' }}>
-                      <h2>{quiz.title}</h2>
-                      {quiz.description && <p className="muted">{quiz.description}</p>}
-                      <QuizWithLeaderboard quiz={quiz} />
-                    </div>
-                  ))}
+              <div className="mini-quiz-container">
+                {/* Multi Level Quiz Selector */}
+                <div className="quiz-item">
+                  <QuizLevelSelector />
                 </div>
-              ) : (
-                <p className="muted">Belum ada kuis untuk ditampilkan.</p>
-              )}
+              </div>
             </div>
           )}
         </div>
