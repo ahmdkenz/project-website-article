@@ -91,14 +91,19 @@
 }
 
 .step-navigation button {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
   cursor: pointer;
   border: 1px solid var(--border-color);
   background: var(--surface-color);
   color: var(--text-color);
-  border-radius: 6px;
+  border-radius: 4px;
   transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .step-navigation button:hover:enabled {
@@ -112,24 +117,18 @@
   cursor: not-allowed;
 }
 
-.step-dots {
+.step-indicator {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  flex: 1;
 }
 
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1px solid var(--border-color);
-  background: var(--surface-color);
-  cursor: pointer;
-}
-
-.dot.active {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
+.step-counter {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  font-weight: 500;
+  padding: 0 1rem;
 }
 
 .step-slide {
@@ -153,4 +152,190 @@
 @keyframes slideInLeft {
   from { opacity: 0; transform: translateX(-24px); }
   to { opacity: 1; transform: translateX(0); }
+}
+
+/* Mobile Responsiveness (≤ 640px) */
+@media (max-width: 640px) {
+  .tutorial-container {
+    padding: 0 0.5rem;
+    margin: 1rem auto;
+  }
+
+  .tutorial-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .tutorial-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .btn-back {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tutorial-content {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .tutorial-content h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .tutorial-content h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .step-navigation {
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.5rem;
+  }
+
+  .step-navigation button {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: 1.1rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-indicator {
+    flex: 1;
+    justify-content: center;
+    padding: 0 0.75rem;
+    min-width: 0;
+  }
+
+  .step-counter {
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  .sg-progress {
+    height: 8px;
+    margin: 16px 0 24px;
+  }
+
+  .step-slide h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Tablet Responsiveness (641px - 1024px) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .tutorial-container {
+    max-width: 720px;
+    padding: 0 1.5rem;
+  }
+
+  .tutorial-header {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .tutorial-meta {
+    font-size: 0.85rem;
+  }
+
+  .tutorial-content {
+    font-size: 1.05rem;
+  }
+
+  .step-navigation {
+    gap: 1rem;
+  }
+
+  .step-navigation button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.95rem;
+  }
+
+  .step-counter {
+    font-size: 0.9rem;
+  }
+}
+
+/* Large Desktop (≥ 1280px) */
+@media (min-width: 1280px) {
+  .tutorial-container {
+    max-width: 900px;
+    margin: 3rem auto;
+  }
+
+  .tutorial-content {
+    font-size: 1.15rem;
+    line-height: 1.9;
+  }
+
+  .tutorial-content h1 {
+    font-size: 2rem;
+  }
+
+  .tutorial-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .step-navigation button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.05rem;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .step-navigation {
+    padding: 0.25rem;
+  }
+
+  .step-navigation button {
+    min-height: 44px;
+    min-width: 44px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.5rem;
+    min-width: 0;
+  }
+
+  .step-counter {
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .btn-back {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+  }
 }

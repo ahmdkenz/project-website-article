@@ -226,21 +226,11 @@ function TutorialPage({ params: paramsPromise }) {
                 </div>
 
                 <div className="step-navigation">
-                  <button onClick={handlePreviousStep} disabled={currentStep === 0} aria-label="Langkah sebelumnya">Sebelumnya</button>
-                  <div className="step-dots" role="tablist" aria-label="Navigasi langkah">
-                    {steps.map((_, idx) => (
-                      <button
-                        key={idx}
-                        role="tab"
-                        aria-selected={idx === currentStep}
-                        className={`dot ${idx === currentStep ? 'active' : ''}`}
-                        onClick={() => goToStep(idx)}
-                        aria-label={`Pergi ke langkah ${idx + 1}`}
-                        title={`Langkah ${idx + 1}`}
-                      />
-                    ))}
+                  <button onClick={handlePreviousStep} disabled={currentStep === 0} aria-label="Langkah sebelumnya">←</button>
+                  <div className="step-indicator">
+                    <span className="step-counter">{currentStep + 1} / {stepsCount}</span>
                   </div>
-                  <button onClick={handleNextStep} disabled={currentStep === stepsCount - 1} aria-label="Langkah berikutnya">Berikutnya</button>
+                  <button onClick={handleNextStep} disabled={currentStep === stepsCount - 1} aria-label="Langkah berikutnya">→</button>
                 </div>
               </div>
             ) : (
