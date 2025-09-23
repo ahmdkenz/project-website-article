@@ -12,8 +12,8 @@ import Chart from "chart.js/auto";
 export default function PieChartVisualization({ data = { needs: 50, wants: 30, savings: 20 } }) {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
-  const { mode } = useMode();
-  const isDarkMode = mode === "dark";
+  const { theme } = useMode();
+  const isDarkMode = theme === "dark";
 
   useEffect(() => {
     // Destroy previous chart instance if exists
@@ -25,10 +25,12 @@ export default function PieChartVisualization({ data = { needs: 50, wants: 30, s
     // Read CSS variables from :root / html
     // This must run client-side (inside useEffect) so document is available
     const rootStyles = typeof window !== "undefined" ? getComputedStyle(document.documentElement) : null;
+    
+    // Force correct colors based on theme for reliable label visibility
     const css = {
-      chartText: rootStyles?.getPropertyValue("--chart-text")?.trim() || (isDarkMode ? "#f0f0f0" : "#111827"),
-      chartBg: rootStyles?.getPropertyValue("--chart-bg")?.trim() || (isDarkMode ? "#111827" : "#ffffff"),
-      chartBorder: rootStyles?.getPropertyValue("--chart-border")?.trim() || (isDarkMode ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.08)"),
+      chartText: isDarkMode ? "#f1f5f9" : "#0f172a", // Use theme colors directly
+      chartBg: isDarkMode ? "#1e293b" : "#ffffff", // Force correct tooltip background
+      chartBorder: rootStyles?.getPropertyValue("--chart-border-color")?.trim() || (isDarkMode ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.08)"),
       primaryGradient: rootStyles?.getPropertyValue("--primary")?.trim() || (isDarkMode ? "linear-gradient(135deg, #8e24aa, #7b1fa2)" : "linear-gradient(135deg, #4CAF50, #43a047)"),
     };
 
@@ -110,7 +112,7 @@ export default function PieChartVisualization({ data = { needs: 50, wants: 30, s
         chartInstance.current = null;
       }
     };
-  }, [isDarkMode, data.needs, data.wants, data.savings]);
+  }, [isDarkMode, theme, data.needs, data.wants, data.savings]);
 
   return (
     <div className="chart-container">
