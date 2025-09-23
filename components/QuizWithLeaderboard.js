@@ -58,15 +58,27 @@ export default function QuizWithLeaderboard({ quiz, defaultName = "" }) {
           padding: "1.25rem",
           border: "1px dashed var(--border-color)",
           borderRadius: ".75rem",
+          maxWidth: "420px",
+          marginLeft: "auto",
+          marginRight: "auto"
         }}>
-          <label htmlFor={`${quizId}-name`} style={{ fontWeight: 600, marginBottom: ".25rem" }}>Nama Anda:</label>
+          <label htmlFor={`${quizId}-name`} style={{ 
+            fontWeight: 600, 
+            marginBottom: ".25rem",
+            display: "block",
+            width: "100%"
+          }}>Nama Anda:</label>
           <input
             id={`${quizId}-name`}
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Tulis nama untuk leaderboard"
-            style={{ width: "100%" }}
+            style={{ 
+              width: "100%",
+              display: "block",
+              textAlign: "center" // Default teks berada di tengah
+            }}
           />
           <button 
             className="mq-btn primary" 
@@ -75,7 +87,8 @@ export default function QuizWithLeaderboard({ quiz, defaultName = "" }) {
             style={{ 
               minWidth: "120px",
               padding: ".75rem 1.5rem",
-              borderRadius: ".5rem"
+              borderRadius: ".5rem",
+              marginTop: ".25rem"
             }}
           >
             Mulai Kuis

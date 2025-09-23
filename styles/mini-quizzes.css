@@ -56,28 +56,26 @@
   padding: .75rem .9rem;
   border: 1px solid var(--mq-border);
   border-radius: .75rem;
-  background: var(--bg-color, #fafafa);
+  background: var(--mq-bg, #fafafa);
   color: var(--mq-text);
   cursor: pointer;
-  transition: background .2s ease, border-color .2s ease, transform .05s ease-in-out;
+  transition: all .2s ease;
 }
 
 .mq-option:hover {
-  background: #f3f4f6;
+  background: var(--mq-bg, #f3f4f6);
+  border-color: var(--mq-primary);
+  color: var(--mq-text);
 }
 
 .mq-option[aria-pressed="true"] {
   border-color: var(--mq-primary);
 }
 
-.mq-option.correct {
-  border-color: var(--mq-correct);
-  background: #ecfdf5;
-}
-
-.mq-option.wrong {
-  border-color: var(--mq-wrong);
-  background: #fef2f2;
+.mq-option.selected {
+  border-color: var(--mq-primary);
+  background: var(--mq-primary);
+  color: #ffffff;
 }
 
 .mq-controls {
@@ -151,7 +149,8 @@
   color: var(--mq-text);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem auto; /* Center horizontally with auto margins */
+  display: block; /* Ensure block display for auto margin centering */
 }
 
 .mini-quiz input[type="text"]:hover {
