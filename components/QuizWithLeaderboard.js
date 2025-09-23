@@ -48,27 +48,38 @@ export default function QuizWithLeaderboard({ quiz, defaultName = "" }) {
   return (
     <div>
       {!started && (
-        <div style={{
+        <div className="mini-quiz" style={{
           display: "flex",
-          gap: ".5rem",
+          flexDirection: "column",
+          gap: ".75rem",
           alignItems: "center",
-          flexWrap: "wrap",
+          textAlign: "center",
           margin: "0 0 1rem 0",
-          padding: ".75rem",
+          padding: "1.25rem",
           border: "1px dashed var(--border-color)",
-          borderRadius: ".5rem",
+          borderRadius: ".75rem",
         }}>
-          <label htmlFor={`${quizId}-name`} style={{ fontWeight: 600 }}>Nama Anda:</label>
+          <label htmlFor={`${quizId}-name`} style={{ fontWeight: 600, marginBottom: ".25rem" }}>Nama Anda:</label>
           <input
             id={`${quizId}-name`}
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Tulis nama untuk leaderboard"
-            className="input"
-            style={{ flex: "1 1 240px", minWidth: 200 }}
+            style={{ width: "100%" }}
           />
-          <button className="btn primary" onClick={handleStart} disabled={!name.trim()}>Mulai Kuis</button>
+          <button 
+            className="mq-btn primary" 
+            onClick={handleStart} 
+            disabled={!name.trim()}
+            style={{ 
+              minWidth: "120px",
+              padding: ".75rem 1.5rem",
+              borderRadius: ".5rem"
+            }}
+          >
+            Mulai Kuis
+          </button>
         </div>
       )}
 

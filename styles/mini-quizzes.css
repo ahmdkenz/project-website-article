@@ -140,30 +140,54 @@
 
 /* Style for the name input field */
 .mini-quiz input[type="text"] {
-  padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db; /* Light gray border */
-  border-radius: 0.5rem; /* Rounded corners */
+  padding: 0.875rem 1.25rem;
+  border: 2px solid var(--mq-border);
+  border-radius: 0.75rem;
   font-size: 1rem;
+  font-weight: 500;
   width: 100%;
-  max-width: 300px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Subtle shadow */
-  transition: border-color 0.2s, box-shadow 0.2s;
+  max-width: 250px !important; /* !important untuk mengatasi aturan base.css */
+  background: var(--mq-bg);
+  color: var(--mq-text);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 1rem;
+}
+
+.mini-quiz input[type="text"]:hover {
+  border-color: var(--mq-primary);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
 }
 
 .mini-quiz input[type="text"]:focus {
-  border-color: #2563eb; /* Blue border on focus */
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); /* Blue focus ring */
-  outline: none; /* Remove default outline */
+  border-color: var(--mq-primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+  outline: none;
+  transform: translateY(-1px);
 }
 
-/* Add some spacing around the input field */
-.mini-quiz input[type="text"] {
-  margin-bottom: 1rem;
+.mini-quiz input[type="text"]::placeholder {
+  color: var(--muted-color, #9ca3af);
+  font-weight: 400;
 }
 
 @media (max-width: 640px) {
   .mini-quiz {
     padding: .75rem;
     border-radius: 10px;
+  }
+  
+  /* Input tetap dengan ukuran yang sama di mobile */
+  .mini-quiz input[type="text"] {
+    max-width: 250px !important; /* !important untuk mengatasi aturan base.css */
+    padding: 0.75rem 1rem; /* Sedikit lebih kecil padding untuk mobile */
+  }
+  
+  /* Tombol lebih compact di mobile */
+  .mini-quiz .mq-btn {
+    padding: .65rem 1.25rem !important;
+    font-size: .9rem;
+    min-width: 100px !important;
   }
 }
