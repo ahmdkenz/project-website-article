@@ -57,19 +57,21 @@
 }
 
 .choice-button {
-  background-color: var(--button-bg, #f0f0f0);
-  color: var(--button-text, var(--text-color));
-  border: 1px solid var(--border-color);
+  background-color: transparent;
+  color: #333; /* Teks hitam di mode terang */
+  border: 1px solid #555; /* Border di mode terang */
   border-radius: 4px;
   padding: 0.75rem 1rem;
   font-size: 1rem;
   text-align: left;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .choice-button:hover {
-  background-color: var(--button-hover-bg, #e0e0e0);
+  background-color: #2e7ef8; /* Background biru saat hover */
+  color: white; /* Teks putih saat hover */
+  border-color: #2e7ef8;
 }
 
 .choice-button.selected {
@@ -79,27 +81,27 @@
 }
 
 .feedback {
-  background-color: var(--card-bg, #f8f8f8);
-  border: 1px solid var(--border-color);
+  background-color: transparent; /* Background transparan */
+  border: 1px solid #555; /* Border di mode terang */
   border-radius: 4px;
   padding: 1rem;
   margin-top: 1rem;
 }
 
 .correct-feedback {
-  color: #2e7d32;
+  color: #333; /* Teks hitam di mode terang */
 }
 
 html.dark .correct-feedback {
-  color: #81c784;
+  color: #ffffff; /* Teks putih di mode gelap */
 }
 
 .incorrect-feedback {
-  color: #c62828;
+  color: #333; /* Teks hitam di mode terang */
 }
 
 html.dark .incorrect-feedback {
-  color: #ef5350;
+  color: #ffffff; /* Teks putih di mode gelap */
 }
 
 .reset-button, .close-modal {
@@ -113,7 +115,7 @@ html.dark .incorrect-feedback {
   font-size: 0.9rem;
   transition: background-color 0.2s;
 }
-
+/* Removed prefers-color-scheme override for hover to avoid conflicts with theme toggle */
 .reset-button:hover, .close-modal:hover {
   background-color: #1565c0;
 }
@@ -131,34 +133,31 @@ html.dark .story-modal-content {
 }
 
 html.dark .choice-button {
-  background-color: var(--button-bg, #333);
-  color: var(--button-text, var(--text-color));
+  background-color: transparent;
+  color: #fff; /* Teks putih di mode gelap */
+  border-color: #777; /* Border di mode gelap */
 }
 
 html.dark .choice-button:hover {
-  background-color: var(--button-hover-bg, #444);
+  background-color: #2e7ef8; /* Background biru saat hover */
+  color: white; /* Teks putih saat hover */
+  border-color: #2e7ef8;
 }
 
 html.dark .feedback {
-  background-color: var(--card-bg, #333);
+  background-color: transparent; /* Background transparan */
+  border-color: #777; /* Border di mode gelap */
 }
 
+/* Remove OS-level dark preference overrides for buttons/feedback to respect theme toggle */
 @media (prefers-color-scheme: dark) {
   .story-modal-content {
     background-color: var(--surface-color);
     color: var(--text-color);
   }
+}
 
-  .choice-button {
-    background-color: var(--button-bg, #333);
-    color: var(--button-text, var(--text-color));
-  }
-
-  .choice-button:hover {
-    background-color: var(--button-hover-bg, #444);
-  }
-
-  .feedback {
-    background-color: var(--card-bg, #333);
-  }
+/* Ensure light theme text is black only when not hovered/selected, without blocking hover color */
+html:not(.dark) .choice-button:not(:hover):not(.selected) {
+  color: #333; /* Teks hitam di mode terang */
 }
