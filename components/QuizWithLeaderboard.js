@@ -111,10 +111,16 @@ export default function QuizWithLeaderboard({ quiz, defaultName = "", enableLeve
     setSelectedQuiz(null);
   };
 
+  const [submitMessage, setSubmitMessage] = useState("");
+  const [messageType, setMessageType] = useState("info"); // 'info', 'success', 'warning'
+  
   const handleFinish = useCallback(async ({ score, answers }) => {
     // Submit to API
     try {
       setSubmitting(true);
+      setSubmitMessage("");
+      setMessageType("info");
+      
       // Use selected quiz or fallback to original quiz
       const currentQuiz = selectedQuiz || quiz;
       const currentQuizId = enableLevelSelection ? quizId : (selectedQuiz ? selectedQuiz.id : quizId);
@@ -138,16 +144,36 @@ export default function QuizWithLeaderboard({ quiz, defaultName = "", enableLeve
         payload.level = selectedLevel;
       }
       
-      await fetch("/api/leaderboard", {
+      const response = await fetch("/api/leaderboard", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+      
+      const result = await response.json();
+      
+      if (result.message) {
+        setSubmitMessage(result.message);
+        
+        // Set message type based on response
+        if (result.updated) {
+          setMessageType("success"); // Skor diupdate
+        } else if (result.noUpdate) {
+          setMessageType("warning"); // Skor tidak diupdate karena lebih rendah
+        } else {
+          setMessageType("info"); // Skor baru disimpan
+        }
+      }
     } catch (e) {
       console.error("Submit score failed", e);
+      setSubmitMessage("Gagal menyimpan skor. Silakan coba lagi.");
+      setMessageType("warning");
     } finally {
       setSubmitting(false);
-      setRefreshToken((x) => x + 1);
+      // Tunggu sebentar sebelum refresh leaderboard untuk memastikan data terupdate
+      setTimeout(() => {
+        setRefreshToken((x) => x + 1);
+      }, 500);
     }
   }, [quizId, name, quiz, selectedQuiz, enableLevelSelection, selectedLevel]);
 
@@ -283,8 +309,29 @@ export default function QuizWithLeaderboard({ quiz, defaultName = "", enableLeve
         />
       )}
 
-      <div aria-live="polite" className="muted" style={{ marginTop: ".5rem" }}>
-        {submitting ? "Menyimpan skor..." : " "}
+      <div 
+        aria-live="polite" 
+        className={`${submitMessage ? 'quiz-message' : 'muted'}`} 
+        style={{ 
+          marginTop: ".5rem",
+          padding: submitMessage ? ".5rem" : 0,
+          borderRadius: "4px",
+          backgroundColor: submitMessage ? (
+            messageType === "success" ? "var(--success-bg, rgba(0, 170, 0, 0.1))" : 
+            messageType === "warning" ? "var(--warning-bg, rgba(255, 170, 0, 0.1))" :
+            "var(--bg-highlight)"
+          ) : "transparent",
+          color: submitMessage ? (
+            messageType === "success" ? "var(--success-text, #005500)" :
+            messageType === "warning" ? "var(--warning-text, #663300)" :
+            "var(--text-color)"
+          ) : "var(--text-muted)",
+          fontWeight: submitMessage ? "500" : "normal",
+          transition: "all 0.3s ease",
+          textAlign: "center"
+        }}
+      >
+        {submitting ? "Menyimpan skor..." : (submitMessage ? submitMessage : " ")}
       </div>
 
       {/* Leaderboard di bawah konten mini quizzes */}

@@ -7,6 +7,7 @@ import {
   getDocs,
   orderBy,
   query,
+  where,
   limit as limitFn,
 } from "firebase/firestore";
 
@@ -48,6 +49,23 @@ export async function GET(req) {
           createdAt: data.createdAt?.toMillis ? data.createdAt.toMillis() : null,
         };
       });
+      
+      // Hapus duplikat nama+level dari hasil (ambil hanya skor tertinggi)
+      // Ini adalah safety net jika masih ada duplikat di database
+      const uniqueItems = [];
+      const seen = new Map(); // Map untuk menyimpan kombinasi nama+level yang sudah dilihat
+      
+      items.forEach(item => {
+        const key = `${item.name}-${item.level}`;
+        if (!seen.has(key) || item.score > seen.get(key).score) {
+          // Jika belum ada atau skornya lebih tinggi, perbarui map
+          seen.set(key, item);
+        }
+      });
+      
+      // Konversi map ke array dan urutkan berdasarkan skor
+      items = Array.from(seen.values()).sort((a, b) => b.score - a.score);
+      
     } catch (err) {
       // Fallback jika index komposit belum dibuat
       if (err?.code === "failed-precondition") {
@@ -64,6 +82,19 @@ export async function GET(req) {
             createdAt: data.createdAt?.toMillis ? data.createdAt.toMillis() : null,
           };
         });
+        
+        // Hapus duplikat di sini juga
+        const uniqueItems = [];
+        const seen = new Map();
+        
+        items.forEach(item => {
+          const key = `${item.name}-${item.level}`;
+          if (!seen.has(key) || item.score > seen.get(key).score) {
+            seen.set(key, item);
+          }
+        });
+        
+        items = Array.from(seen.values()).sort((a, b) => b.score - a.score);
       } else {
         throw err;
       }
@@ -91,17 +122,102 @@ export async function POST(req) {
 
     const name = nameRaw || "Anon";
     const badge = calculateBadge(score, maxScore); // Calculate badge with floor
-
+    
+    // Cari apakah user dengan nama ini sudah pernah submit skor sebelumnya
+    // untuk quiz level yang sama
     const entriesRef = collection(db, "leaderboards", quizId, "entries");
-    await addDoc(entriesRef, {
-      name: name.slice(0, 50),
-      score,
-      badge, // Save badge
-      level: level || "Unknown", // Save level
-      createdAt: serverTimestamp(),
-    });
-
-    return NextResponse.json({ ok: true });
+    let existingEntries = [];
+    let highestScore = 0;
+    let existingEntryId = null;
+    
+    try {
+      // Query untuk mencari entri dengan nama dan level yang sama
+      const nameQuery = query(
+        entriesRef,
+        where("name", "==", name.slice(0, 50)),
+        where("level", "==", level || "Unknown")
+      );
+      
+      const querySnapshot = await getDocs(nameQuery);
+      
+      if (!querySnapshot.empty) {
+        // Kumpulkan semua entri yang ada dan temukan skor tertinggi
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          existingEntries.push({ 
+            id: doc.id, 
+            score: data.score,
+            badge: data.badge 
+          });
+          
+          if (data.score > highestScore) {
+            highestScore = data.score;
+            existingEntryId = doc.id;
+          }
+        });
+      }
+    } catch (queryError) {
+      console.warn("[Leaderboard][POST] Query existing entries failed:", queryError);
+    }
+    
+    // Tentukan apakah perlu update
+    const shouldUpdate = score > highestScore;
+    
+    try {
+      // Jika skor baru lebih tinggi dari skor tertinggi sebelumnya
+      if (shouldUpdate) {
+        // 1. Import modul yang diperlukan
+        const { doc, updateDoc, deleteDoc } = await import("firebase/firestore");
+        
+        // 2. Jika entri sebelumnya ada, update entri dengan skor tertinggi
+        if (existingEntryId) {
+          // Update entri dengan skor tertinggi
+          await updateDoc(doc(entriesRef, existingEntryId), {
+            score,
+            badge,
+            updatedAt: serverTimestamp(),
+          });
+          
+          // 3. Hapus semua entri lain untuk nama dan level yang sama
+          // (kecuali entri yang baru kita update)
+          for (const entry of existingEntries) {
+            if (entry.id !== existingEntryId) {
+              await deleteDoc(doc(entriesRef, entry.id));
+            }
+          }
+          
+          return NextResponse.json({ 
+            ok: true, 
+            updated: true,
+            message: `Skor tertinggi diperbarui dari ${highestScore} menjadi ${score}!`
+          });
+        } else {
+          // Jika tidak ada entri sebelumnya, buat entri baru
+          await addDoc(entriesRef, {
+            name: name.slice(0, 50),
+            score,
+            badge,
+            level: level || "Unknown",
+            createdAt: serverTimestamp(),
+          });
+          
+          return NextResponse.json({ 
+            ok: true, 
+            message: "Skor berhasil disimpan!"
+          });
+        }
+      } else {
+        // Jika skor tidak lebih tinggi, kirim pesan ke user
+        return NextResponse.json({ 
+          ok: true, 
+          noUpdate: true,
+          message: `Skor sebelumnya (${highestScore}) lebih tinggi. Coba lagi!` 
+        });
+      }
+    } catch (e) {
+      console.error("[Leaderboard][POST] Error updating entries:", e);
+      return NextResponse.json({ error: "Failed to update leaderboard entries" }, { status: 500 });
+    }
   } catch (e) {
     console.error("[Leaderboard][POST]", e);
     return NextResponse.json({ error: "Failed to submit score" }, { status: 500 });
