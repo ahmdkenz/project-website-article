@@ -10,6 +10,9 @@ import '@/styles/base.css';
 // 3. Layout systems - Grid, flexbox, containers
 import '@/styles/responsive.css';
 
+// Browser compatibility
+import '@/styles/safari-compatibility.css';
+
 // 4. Component styles - Komponen spesifik
 import '@/styles/buttons.css';
 import '@/styles/cards.css';
@@ -39,6 +42,9 @@ import '@/styles/misc.css';
 
 import { ModeProvider } from '@/context/ModeContext'; // <-- 1. IMPORT PROVIDER
 
+// Import ClientWrapper yang akan menangani dynamic imports
+import ClientWrapper from '@/components/ClientWrapper';
+
 export const metadata = {
   title: "Mudamelekfinansial",
   description: "Belajar finansial dengan cara menyenangkan",
@@ -54,11 +60,16 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="id">
+      <head>
+        {/* Tidak ada inline script di sini - semua pindah ke ClientWrapper */}
+      </head>
       <body>
-        {/* 2. BUNGKUS SEMUANYA DENGAN MODEPROVIDER */}
-        <ModeProvider>
-          {children}
-        </ModeProvider>
+        {/* Gunakan ClientWrapper untuk menangani semua dynamic imports */}
+        <ClientWrapper>
+          <ModeProvider>
+            {children}
+          </ModeProvider>
+        </ClientWrapper>
       </body>
     </html>
   );

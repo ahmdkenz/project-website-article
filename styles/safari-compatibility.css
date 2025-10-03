@@ -1,0 +1,73 @@
+/* Safari-specific CSS fixes */
+/* Catatan: Class .safari akan ditambahkan oleh JavaScript di browser Safari */
+
+/* Fix for flexbox issues in Safari */
+.safari .flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+
+/* Fix for CSS grid issues in Safari */
+.safari .grid {
+  display: -webkit-grid;
+  display: grid;
+}
+
+/* Fallback tanpa mengandalkan class .safari untuk kebutuhan mendesak */
+@supports (-webkit-touch-callout: none) {
+  .flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+  }
+  
+  .grid {
+    display: -webkit-grid;
+    display: grid;
+  }
+}
+
+/* Fix for sticky positioning in Safari */
+.safari .sticky {
+  position: -webkit-sticky;
+  position: sticky;
+}
+
+/* Fix untuk CSS animations di Safari */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@-webkit-keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Fix for backdrop-filter in Safari */
+.safari .glassmorphism {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* Fix for clamp() function in Safari */
+.safari .responsive-font {
+  font-size: 16px; /* Fallback untuk browser yang tidak mendukung clamp */
+  font-size: min(max(14px, 3vw), 22px); /* Alternatif untuk clamp */
+}
+
+/* Fix layout untuk Safari jika diperlukan */
+.safari .layout-fix {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Mobile Safari fixes for 100vh issue */
+@supports (-webkit-touch-callout: none) {
+  .full-height {
+    height: -webkit-fill-available;
+  }
+}
