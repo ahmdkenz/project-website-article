@@ -144,7 +144,9 @@ export default function QuizWithLeaderboard({ quiz, defaultName = "", enableLeve
         payload.level = selectedLevel;
       }
       
-      const response = await fetch("/api/leaderboard", {
+      console.log("Submitting quiz score:", payload);
+      
+      const response = await fetch("/api/leaderboard?debug=1", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -152,16 +154,33 @@ export default function QuizWithLeaderboard({ quiz, defaultName = "", enableLeve
       
       const result = await response.json();
       
+      // Log debug info jika tersedia
+      if (result.debug) {
+        console.log("Leaderboard submission debug info:", result.debug);
+      }
+      
+      // Log status error jika ada
+      if (result.errorCode) {
+        console.warn(`Leaderboard submission error code: ${result.errorCode}`);
+      }
+      
+      if (result.simulated) {
+        console.warn("Leaderboard submission was simulated due to Firebase permission issues");
+      }
+      
       if (result.message) {
         setSubmitMessage(result.message);
         
         // Set message type based on response
         if (result.updated) {
           setMessageType("success"); // Skor diupdate
+          console.log("Score updated successfully");
         } else if (result.noUpdate) {
           setMessageType("warning"); // Skor tidak diupdate karena lebih rendah
+          console.log("Score not updated (current score is lower)");
         } else {
           setMessageType("info"); // Skor baru disimpan
+          console.log("New score saved successfully");
         }
       }
     } catch (e) {

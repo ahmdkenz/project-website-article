@@ -34,8 +34,8 @@ export default function Leaderboard({ quizId, pageSize = 10, autoRotateMs = 5000
       setLoading(true);
       setError("");
       try {
-        // Tambahkan timestamp untuk mencegah caching
-        const res = await fetch(`/api/leaderboard?quizId=${encodeURIComponent(quizId)}&limit=100&_=${Date.now()}`);
+        // Tambahkan timestamp untuk mencegah caching dan debug=1 untuk mendapatkan info tambahan
+        const res = await fetch(`/api/leaderboard?quizId=${encodeURIComponent(quizId)}&limit=100&debug=1&_=${Date.now()}`);
         
         // Jika server error dan masih bisa retry
         if (res.status === 500 && retryCount < maxRetries) {
@@ -49,9 +49,25 @@ export default function Leaderboard({ quizId, pageSize = 10, autoRotateMs = 5000
         
         const data = await res.json();
         
+        // Log debug info jika tersedia
+        if (data.debug) {
+          console.log("Leaderboard debug info:", data.debug);
+        }
+        
+        // Log status error jika ada
+        if (data.errorCode) {
+          console.warn(`Leaderboard error code: ${data.errorCode}`);
+        }
+        
         if (!cancelled) {
-          // Jika API mengembalikan data kosong karena masalah izin, masih tetap tampilkan
-          setItems(Array.isArray(data.items) ? data.items : []);
+          if (Array.isArray(data.items) && data.items.length > 0) {
+            console.log(`Leaderboard loaded: ${data.items.length} items`);
+            setItems(data.items);
+          } else {
+            console.warn("Leaderboard returned empty items array");
+            // Jika API mengembalikan data kosong, masih tetap tampilkan array kosong
+            setItems([]);
+          }
         }
       } catch (e) {
         console.error("Leaderboard error:", e);
