@@ -26,21 +26,45 @@ export default function Leaderboard({ quizId, pageSize = 10, autoRotateMs = 5000
 
   useEffect(() => {
     let cancelled = false;
+    let retryCount = 0;
+    const maxRetries = 3;
+    
     async function load() {
       if (!quizId) return;
       setLoading(true);
       setError("");
       try {
+        // Tambahkan timestamp untuk mencegah caching
         const res = await fetch(`/api/leaderboard?quizId=${encodeURIComponent(quizId)}&limit=100&_=${Date.now()}`);
+        
+        // Jika server error dan masih bisa retry
+        if (res.status === 500 && retryCount < maxRetries) {
+          retryCount++;
+          console.warn(`Retry attempt ${retryCount} for leaderboard`);
+          setTimeout(load, 1000 * retryCount); // Retry dengan delay progressif
+          return;
+        }
+        
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        
         const data = await res.json();
-        if (!cancelled) setItems(Array.isArray(data.items) ? data.items : []);
+        
+        if (!cancelled) {
+          // Jika API mengembalikan data kosong karena masalah izin, masih tetap tampilkan
+          setItems(Array.isArray(data.items) ? data.items : []);
+        }
       } catch (e) {
-        if (!cancelled) setError("Gagal memuat leaderboard");
+        console.error("Leaderboard error:", e);
+        if (!cancelled) {
+          setError("Gagal memuat leaderboard");
+          // Set empty array to prevent UI error
+          setItems([]);
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
     }
+    
     load();
     return () => { cancelled = true; };
   }, [quizId, refreshToken]);
